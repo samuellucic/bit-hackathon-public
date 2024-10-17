@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: Rental App
+  threads:
+    virtual:
+      enabled: true
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yml
+    enabled: true
+    contexts: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bit
+    username: bituser
+    password: bituser
+  jpa:
+    hibernate:
+      ddl-auto: none
+---
+spring:
+  config:
+    activate:
+      on-profile: samuel
+  liquibase:
+    contexts: dev,samuel
+  jpa:
+    show-sql: true
+---
+spring:
+  config:
+    activate:
+      on-profile: matej
+  liquibase:
+    contexts: dev
+---
+spring:
+  config:
+    activate:
+      on-profile: filip
+  liquibase:
+    contexts: dev
+---
+spring:
+  config:
+    activate:
+      on-profile: adrian
+  liquibase:
+    contexts: dev
+---
+spring:
+  config:
+    activate:
+      on-profile: vatroslav
+  liquibase:
+    contexts: dev
