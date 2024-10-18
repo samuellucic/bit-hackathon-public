@@ -1,0 +1,82 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+:root {
+    --blue-green-1: #00b99d;
+    --blue-green-2: #1f7f76;
+
+    --grey-1: #f9f9f9;
+    --grey-2: #eceeee;
+    --grey-3: #364342;
+    --grey-4: #304140;
+    --grey-5: #28302f;
+
+    --green-1: #d4fbd1;
+    --green-2: #51d971;
+    --green-main: #20c156;
+    --green-4: #108a51;
+
+    --blue-main: #1c72ea;
+
+
+    --orange-1: #ffe199;
+    --orange-2: #ffcb66;
+    --orange-main: #ff9400;
+    --orange-3: #b75a00;
+    --orange-4: #934200;
+
+    --red-1: #fdd7d3;
+    --red-2: #f47a7a;
+    --red-main: #e21010;
+    --red-4: #9e0039;
+    --red-5: #690707;
+
+    --main: #262626;
+    --hover: #303030;
+    --current: rgba(31, 38, 46, 1);
+}
+
+html,
+body {
+    height: 100vh;
+    max-width: 100vw;
+    overflow-x: hidden;
+
+    background: var(--main);
+
+    color: white;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    all: unset;
+}
+
+button {
+    border: unset;
+    background: unset;
+    padding-inline: unset;
+    padding-block: unset;
+    color: unset;
+    line-height: unset;
+    outline: unset;
+    cursor: pointer;
+}
+
+p {
+    display: unset;
+    margin-block: unset;
+    margin-inline: unset;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-block: unset;
+    margin-inline: unset;
+}
