@@ -1,8 +1,20 @@
 'use client';
 
 import React, { useState } from 'react';
-import { AppBar, Button, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
+import {
+  AppBar,
+  Button,
+  createTheme,
+  CssBaseline,
+  IconButton,
+  Menu,
+  MenuItem,
+  ThemeProvider,
+  Toolbar,
+  Typography,
+} from '@mui/material';
 import Link from 'next/link';
+import { Brightness4, Brightness7 } from '@mui/icons-material';
 import styles from './Header.module.css';
 
 type SubmenuItem = {
@@ -33,6 +45,7 @@ const headerItems: HeaderItem[] = [
 const Header: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentSubmenu, setCurrentSubmenu] = useState<string | null>(null);
+  const [isDarkMode, setIsDarkMode] = useState(false); // Track theme mode
 
   const handleClick = (event: React.MouseEvent<HTMLElement>, label: string) => {
     setAnchorEl(event.currentTarget);
@@ -44,42 +57,60 @@ const Header: React.FC = () => {
     setCurrentSubmenu(null);
   };
 
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  const theme = createTheme({
+    palette: {
+      mode: isDarkMode ? 'dark' : 'light',
+    },
+  });
+
   return (
-    <AppBar position="static" className={styles.appBar}>
-      <Toolbar>
-        <Typography variant="h6" className={styles.title}>
-          Welcome to Our Hackathon Project
-        </Typography>
-        {headerItems.map(({ label, url, submenu }) => (
-          <div key={url}>
-            {submenu ? (
-              <>
-                <Button
-                  aria-controls={currentSubmenu === label ? 'simple-menu' : undefined}
-                  aria-haspopup="true"
-                  onClick={(e) => handleClick(e, label)}
-                  className={styles.menuButton}>
-                  {label}
-                </Button>
-                <Menu id="simple-menu" anchorEl={anchorEl} open={currentSubmenu === label} onClose={handleClose}>
-                  {submenu.map(({ label, url }) => (
-                    <MenuItem key={url} onClick={handleClose}>
-                      <Link href={url} className={styles.submenuLink}>
-                        {label}
-                      </Link>
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </>
-            ) : (
-              <Link href={url} className={styles.link}>
-                <Button className={styles.menuButton}>{label}</Button>
-              </Link>
-            )}
-          </div>
-        ))}
-      </Toolbar>
-    </AppBar>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AppBar position="static" className={styles.appBar}>
+        <Toolbar>
+          <Typography variant="h6" className={styles.title}>
+            Welcome to Our Hackathon Project
+          </Typography>
+
+          <IconButton onClick={toggleTheme} color="inherit" sx={{ marginLeft: 'auto' }}>
+            {isDarkMode ? <Brightness7 /> : <Brightness4 />}
+          </IconButton>
+
+          {headerItems.map(({ label, url, submenu }) => (
+            <div key={url}>
+              {submenu ? (
+                <>
+                  <Button
+                    aria-controls={currentSubmenu === label ? 'simple-menu' : undefined}
+                    aria-haspopup="true"
+                    onClick={(e) => handleClick(e, label)}
+                    className={styles.menuButton}>
+                    {label}
+                  </Button>
+                  <Menu id="simple-menu" anchorEl={anchorEl} open={currentSubmenu === label} onClose={handleClose}>
+                    {submenu.map(({ label, url }) => (
+                      <MenuItem key={url} onClick={handleClose}>
+                        <Link href={url} className={styles.submenuLink}>
+                          {label}
+                        </Link>
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </>
+              ) : (
+                <Link href={url} className={styles.link}>
+                  <Button className={styles.menuButton}>{label}</Button>
+                </Link>
+              )}
+            </div>
+          ))}
+        </Toolbar>
+      </AppBar>
+    </ThemeProvider>
   );
 };
 
