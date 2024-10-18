@@ -1,6 +1,5 @@
-package hr.bithackathon.rental.controller;
+package hr.bithackathon.rental.exception;
 
-import hr.bithackathon.rental.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
