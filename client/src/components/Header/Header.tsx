@@ -1,6 +1,9 @@
+'use client';
+
 import React from 'react';
-import styles from './Header.module.css';
+import { AppBar, Button, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
 import Link from 'next/link';
+import styles from './Header.module.css';
 
 type SubmenuItem = {
   url: string;
@@ -23,38 +26,60 @@ const headerItems: HeaderItem[] = [
       { url: '/about/history', label: 'History' },
     ],
   },
-
   { url: '/contact', label: 'Contact' },
-  { url: '/bithack', label: 'B:IThack' },
+  { url: '/bithack', label: 'B:IT Hack' },
 ];
 
 const Header: React.FC = () => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [currentSubmenu, setCurrentSubmenu] = React.useState<string | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>, label: string) => {
+    setAnchorEl(event.currentTarget);
+    setCurrentSubmenu(label);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setCurrentSubmenu(null);
+  };
+
   return (
-    <header className={styles.header}>
-      <h1>Welcome to Our Hackathon Project</h1>
-      <nav>
-        <ul className={styles.navList}>
-          {headerItems.map(({ label, url, submenu }) => (
-            <li key={url} className={styles.navItem}>
-              <Link href={url} className={styles.navLink}>
-                {label}
-              </Link>
-              {submenu && (
-                <ul className={styles.submenu}>
+    <AppBar position="static" className={styles.appBar}>
+      <Toolbar>
+        <Typography variant="h6" className={styles.title}>
+          Welcome to Our Hackathon Project
+        </Typography>
+        {headerItems.map(({ label, url, submenu }) => (
+          <div key={url}>
+            {submenu ? (
+              <>
+                <Button
+                  aria-controls={currentSubmenu === label ? 'simple-menu' : undefined}
+                  aria-haspopup="true"
+                  onClick={(e) => handleClick(e, label)}
+                  className={styles.menuButton}>
+                  {label}
+                </Button>
+                <Menu id="simple-menu" anchorEl={anchorEl} open={currentSubmenu === label} onClose={handleClose}>
                   {submenu.map(({ label, url }) => (
-                    <li key={url}>
+                    <MenuItem key={url} onClick={handleClose}>
                       <Link href={url} className={styles.submenuLink}>
                         {label}
                       </Link>
-                    </li>
+                    </MenuItem>
                   ))}
-                </ul>
-              )}
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </header>
+                </Menu>
+              </>
+            ) : (
+              <Link href={url} className={styles.link}>
+                <Button className={styles.menuButton}>{label}</Button>
+              </Link>
+            )}
+          </div>
+        ))}
+      </Toolbar>
+    </AppBar>
   );
 };
 
