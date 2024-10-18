@@ -9,6 +9,8 @@ public enum ErrorCode {
 
     UNAUTHORIZED(401, 40101, "Unauthorized"),
 
+    CONFLICT(409, 40901, "Conflict"),
+
     INTERNAL_SERVER_ERROR(500, 50001, "Internal server error."),
 
     SERVICE_UNAVAILABLE(503, 50301, "Service Unavailable.");
