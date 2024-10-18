@@ -16,7 +16,7 @@
             </column>
             <column name="first_name" type="varchar(255)"/>
             <column name="last_name" type="varchar(255)"/>
-            <column name="email" type="varchar(255)"/>
+            <column name="username" type="varchar(255)"/>
             <column name="password" type="varchar(255)"/>
             <column name="oib" type="char(11)">
                 <constraints nullable="true"/>
@@ -125,7 +125,9 @@
             </column>
             <column name="lease" type="double"/>
             <column name="down_payment" type="double"/>
-            <column name="amenities" type="double"/>
+            <column name="amenities" type="double">
+                <constraints nullable="true"/>
+            </column>
             <column name="utilities" type="double"/>
             <column name="total" type="double">
             </column>
@@ -170,5 +172,11 @@
                                  constraintName="fk_record_book__contract_id"
                                  referencedTableName="contract"
                                  referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="20241018-7-samuel" author="samuellucic">
+        <loadData tableName="authority"
+                  file="./db/changelog/data/authorities.csv"
+                  usePreparedStatements="true"/>
     </changeSet>
 </databaseChangeLog>
