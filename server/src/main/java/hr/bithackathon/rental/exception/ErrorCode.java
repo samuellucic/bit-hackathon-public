@@ -6,10 +6,13 @@ import lombok.Getter;
 public enum ErrorCode {
 
     API_CALL_FAILED(400, 40001, "An API call failed."),
+    CONTRACT_NOT_FOUND(400, 40002, "Contract not found."),
+    CONTRACT_CUSTOMER_MISMATCH(400, 40003, "Contract customer mismatch."),
 
     UNAUTHORIZED(401, 40101, "Unauthorized"),
 
     INTERNAL_SERVER_ERROR(500, 50001, "Internal server error."),
+    CANT_CREATE_CONTRACT(500, 50002, "Couldn't crate contract."),
 
     SERVICE_UNAVAILABLE(503, 50301, "Service Unavailable.");
 
