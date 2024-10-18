@@ -2,10 +2,173 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
-    <changeSet id="20241017-1-samuel" author="samuellucic">
-<!--        EXAMPLE DELETE    -->
-        <sql>
-            SELECT 1;
-        </sql>
+    <changeSet id="20241018-1-samuel" author="samuellucic">
+        <createTable tableName="authority">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+        </createTable>
+
+        <createTable tableName="app_user">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="first_name" type="varchar(255)"/>
+            <column name="last_name" type="varchar(255)"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="password" type="varchar(255)"/>
+            <column name="oib" type="char(11)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="phone" type="varchar(20)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="address" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="postal_code" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="city" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="authority_id" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="app_user"
+                                 baseColumnNames="authority_id"
+                                 constraintName="fk_app_user__authority_id"
+                                 referencedTableName="authority"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="20241018-2-samuel" author="samuellucic">
+        <createTable tableName="community_home">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="address" type="VARCHAR(255)"/>
+            <column name="postal_code" type="VARCHAR(20)"/>
+            <column name="area" type="DOUBLE"/>
+            <column name="capacity" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20241018-3-samuel" author="samuellucic">
+        <createTable tableName="community_home_plan">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="lease_cost_per_hour" type="double"/>
+            <column name="amenities_cost_per_hour" type="double"/>
+            <column name="utilities_cost_per_hour" type="double"/>
+            <column name="down_payment" type="VARCHAR(255)"/>
+            <column name="available_hour_from" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="available_hour_to" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="community_home_id" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="community_home_plan"
+                                 baseColumnNames="community_home_id"
+                                 constraintName="fk_community_home_plan__community_home_id"
+                                 referencedTableName="community_home"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="20241018-4-samuel" author="samuellucic">
+        <createTable tableName="reservation">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="key" type="uuid"/>
+            <column name="reason" type="VARCHAR(255)"/>
+            <column name="datetime_from" type="timestamp"/>
+            <column name="datetime_to" type="timestamp"/>
+            <column name="bank" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="IBAN" type="CHAR(34)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="approved" type="boolean">
+                <constraints nullable="true"/>
+            </column>
+            <column name="creation_date" type="timestamp"/>
+            <column name="type" type="varchar(255)"/>
+            <column name="community_home_plan_id" type="bigint"/>
+            <column name="customer_id" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="reservation"
+                                 baseColumnNames="community_home_plan_id"
+                                 constraintName="fk_reservation__community_home_plan_id"
+                                 referencedTableName="community_home_plan"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="reservation"
+                                 baseColumnNames="customer_id"
+                                 constraintName="fk_reservation__customer_id"
+                                 referencedTableName="app_user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="20241018-5-samuel" author="samuellucic">
+        <createTable tableName="contract">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="lease" type="double"/>
+            <column name="down_payment" type="double"/>
+            <column name="amenities" type="double"/>
+            <column name="utilities" type="double"/>
+            <column name="total" type="double">
+            </column>
+            <column name="vat" type="double" defaultValue="0.25"/>
+            <column name="status" type="varchar(255)"/>
+            <column name="reservation_id" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="contract"
+                                 baseColumnNames="reservation_id"
+                                 constraintName="fk_contract__reservation_id"
+                                 referencedTableName="reservation"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="20241018-6-samuel" author="samuellucic">
+        <createTable tableName="record_book">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="state_before" type="text"/>
+            <column name="state_after" type="text">
+                <constraints nullable="true"/>
+            </column>
+            <column name="damage" type="text">
+                <constraints nullable="true"/>
+            </column>
+            <column name="inspection_date" type="date">
+                <constraints nullable="true"/>
+            </column>
+            <column name="contract_id" type="bigint"/>
+            <column name="custodian_id" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="record_book"
+                                 baseColumnNames="custodian_id"
+                                 constraintName="fk_record_book__custodian_id"
+                                 referencedTableName="app_user"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="record_book"
+                                 baseColumnNames="contract_id"
+                                 constraintName="fk_record_book__contract_id"
+                                 referencedTableName="contract"
+                                 referencedColumnNames="id"/>
     </changeSet>
 </databaseChangeLog>
