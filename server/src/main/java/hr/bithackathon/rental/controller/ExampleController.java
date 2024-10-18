@@ -1,4 +1,4 @@
-package hr.bithackathon.rental.common;
+package hr.bithackathon.rental.controller;
 
 import hr.bithackathon.rental.security.AuthoritiesConstants;
 import hr.bithackathon.rental.security.aspect.HasAuthority;

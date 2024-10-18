@@ -1,0 +1,25 @@
+.appBar {
+    background-color: #282c34;
+}
+
+.title {
+    flex-grow: 1;
+}
+
+.menuButton {
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.menuButton:hover {
+    background-color: #61dafb;
+}
+
+.link {
+    text-decoration: none;
+}
+
+.submenuLink {
+    text-decoration: none;
+    color: inherit;
+}

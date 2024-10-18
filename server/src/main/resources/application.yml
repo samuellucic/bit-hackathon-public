@@ -15,6 +15,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+service:
+  free-reservation:
+    freeReservationTypes:
+      - FUNERAL
+      - FIRE_DEPARTMENT
 ---
 spring:
   config:

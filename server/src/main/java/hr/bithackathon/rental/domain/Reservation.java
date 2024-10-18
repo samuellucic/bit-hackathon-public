@@ -32,8 +32,9 @@ public class Reservation {
     private String bank;
     private String iban;
     private Boolean approved;
+    private ReservationType type;
 
-    static Reservation dummy() {
+    public static Reservation dummy() {
         return Reservation.builder()
                 .id(0L)
                 .appUser(AppUser.dummy())
