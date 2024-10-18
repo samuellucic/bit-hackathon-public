@@ -1,15 +1,7 @@
 package hr.bithackathon.rental.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Builder
@@ -22,22 +14,31 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private String firstName;
+    @Column
     private String lastName;
+    @Column
     private String email;
+    @Column
     private String password;
+    @Column
     private String OIB;
+    @Column
     private String phone;
+    @Column
     private String city;
+    @Column
     private String address;
+    @Column
     private String postalCode;
 
     @OneToOne
     private Authority authority;
 
-    static AppUser dummy() {
+    public static AppUser dummy() {
         return AppUser.builder()
-                .id(0L)
+                .id(1L)
                 .firstName("Sam")
                 .lastName("Amuel")
                 .email("sam@amuel.com")

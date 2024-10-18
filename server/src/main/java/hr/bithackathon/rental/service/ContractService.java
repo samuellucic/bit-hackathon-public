@@ -100,12 +100,12 @@ public class ContractService {
     public void signContractMajor(Long contractId) {
         var contract = getContract(contractId);
         contract.setStatus(ContractStatus.MAJOR_SIGNED);
-        notificationService.notifyCustomer(contractId, contract.getReservation().getAppUser().getEmail());
+        notificationService.notifyCustomer(contractId, contract.getReservation().getCustomer().getEmail());
     }
 
     public void signContractCustomer(Long contractId, Long customerId) {
         var contract = getContract(contractId);
-        if (!Objects.equals(contract.getReservation().getAppUser().getId(), customerId)) {
+        if (!Objects.equals(contract.getReservation().getCustomer().getId(), customerId)) {
             throw new RentalException(ErrorCode.CONTRACT_CUSTOMER_MISMATCH);
         }
 
