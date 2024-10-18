@@ -51,6 +51,7 @@
             <column name="name" type="VARCHAR(255)"/>
             <column name="address" type="VARCHAR(255)"/>
             <column name="postal_code" type="VARCHAR(20)"/>
+            <column name="city" type="varchar(255)"/>
             <column name="area" type="DOUBLE"/>
             <column name="capacity" type="INT"/>
         </createTable>
@@ -71,6 +72,7 @@
             <column name="available_hour_to" type="int">
                 <constraints nullable="true"/>
             </column>
+            <column name="created_at" type="timestamp"/>
             <column name="community_home_id" type="bigint"/>
         </createTable>
 
@@ -125,7 +127,9 @@
             </column>
             <column name="lease" type="double"/>
             <column name="down_payment" type="double"/>
-            <column name="amenities" type="double"/>
+            <column name="amenities" type="double">
+                <constraints nullable="true"/>
+            </column>
             <column name="utilities" type="double"/>
             <column name="total" type="double">
             </column>
@@ -170,5 +174,11 @@
                                  constraintName="fk_record_book__contract_id"
                                  referencedTableName="contract"
                                  referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="20241018-7-samuel" author="samuellucic">
+        <loadData tableName="authority"
+                  file="./db/changelog/data/authorities.csv"
+                  usePreparedStatements="true"/>
     </changeSet>
 </databaseChangeLog>

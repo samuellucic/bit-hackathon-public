@@ -60,7 +60,7 @@ public class Contract {
                        .utilities(50.0)
                        .total(2134.2)
                        .vat(0.25)
-                       .status(ContractStatus.DUMMY)
+                       .status(ContractStatus.CREATED)
                        .build();
     }
 
