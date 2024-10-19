@@ -1,7 +1,14 @@
 import api from './instance';
-import { ContractType, CreateReservation, JwtToken, Pageable, PageResponse, ReservationType } from '../types/types';
+import {
+  ContractType,
+  CreateReservation,
+  LoginResponse,
+  Pageable,
+  PageResponse,
+  ReservationType,
+} from '../types/types';
 import { setItem } from './local-storage';
-import { tokenKey } from '../lib/constants';
+import { authorityKey, tokenKey } from '../lib/constants';
 import { endpoints } from './constants';
 
 export type Credentials = {
@@ -10,8 +17,9 @@ export type Credentials = {
 };
 
 export const authenticate = async (credentials: Credentials) => {
-  const res = await api.post<JwtToken>(endpoints.login, credentials);
-  setItem(tokenKey, res.data.idToken);
+  const res = await api.post<LoginResponse>(endpoints.login, credentials);
+  setItem(tokenKey, res.data.jwtToken.idToken);
+  setItem(authorityKey, res.data.authority);
   return res.data;
 };
 

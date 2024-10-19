@@ -32,13 +32,4 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-api.interceptors.response.use(
-  (value) => value,
-  (error) => {
-    console.log(error);
-
-    return Promise.reject(error);
-  }
-);
-
 export default api;

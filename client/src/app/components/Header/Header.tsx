@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { AppBar, Button, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
 import Link from 'next/link';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
 import styles from './Header.module.css';
 import { ThemeType } from '../../types/types';
+import { UserContext } from '../../contexts/UserContext';
+import { useRouter } from 'next/navigation';
 
 type SubmenuItem = {
   url: string;
@@ -32,8 +34,9 @@ const headerItems: HeaderItem[] = [
     ],
   },
   { url: 'https://bithack.tpbj.hr/', label: 'B:IT Hack' },
-  { url: '/login', label: 'Prijava' },
 ];
+
+const loginItem: HeaderItem = { url: '/login', label: 'Prijava' };
 
 export type HeaderProps = {
   theme: ThemeType;
@@ -41,6 +44,9 @@ export type HeaderProps = {
 };
 
 const Header = ({ theme, onThemeChange }: HeaderProps) => {
+  const router = useRouter();
+  const { isLoggedIn, logout } = useContext(UserContext);
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentSubmenu, setCurrentSubmenu] = useState<string | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(theme === 'dark'); // Track theme mode
@@ -61,6 +67,11 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
       return !isDarkMode;
     });
   }, [onThemeChange]);
+
+  const logoutUser = useCallback(() => {
+    logout();
+    router.push('/home');
+  }, [router, logout]);
 
   return (
     <AppBar position={'sticky'} className={styles.appBar}>
@@ -110,6 +121,26 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
             )}
           </div>
         ))}
+        {isLoggedIn ? (
+          <Button
+            sx={{
+              color: 'white',
+            }}
+            className={styles.menuButton}
+            onClick={logoutUser}>
+            Odjava
+          </Button>
+        ) : (
+          <Link href={loginItem.url} className={styles.link}>
+            <Button
+              sx={{
+                color: 'white',
+              }}
+              className={styles.menuButton}>
+              {loginItem.label}
+            </Button>
+          </Link>
+        )}
       </Toolbar>
     </AppBar>
   );

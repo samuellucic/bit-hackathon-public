@@ -4,6 +4,13 @@ export type JwtToken = {
   idToken: string;
 };
 
+export type Authority = 'ADMIN' | 'CUSTODIAN' | 'OFFICIAL' | 'CUSTOMER' | 'MAYOR';
+
+export type LoginResponse = {
+  jwtToken: JwtToken;
+  authority: Authority;
+};
+
 export type ReservationType = 'NORMAL' | 'FUNERAL' | 'FIRE_DEPARTMENT' | 'OTHER';
 
 export type ContractType = 'CREATED' | 'MAJOR_SIGNED' | 'PAYMENT_PENDING' | 'FINALIZED' | 'DECLINED';
