@@ -1,0 +1,6 @@
+id,first_name,last_name,email,password,oib,phone,address,postal_code,city,authority_id
+1,Matej,Istuk,customer@mail.com,$2a$10$wvfbFVHbi0kiy/LxCXlfwOxj.YsMcDR8af9F2jOTlP3N2o2u0Hf9y,97123123,0927459543,ulica 1,10430,Samobor,1
+2,Vatroslav,Jakopec,custodian@mail.com,$2a$10$wvfbFVHbi0kiy/LxCXlfwOxj.YsMcDR8af9F2jOTlP3N2o2u0Hf9y,97123123,0927459543,ulica 2,10430,Samobor,2
+3,Adrian,Babic,official@mail.com,$2a$10$wvfbFVHbi0kiy/LxCXlfwOxj.YsMcDR8af9F2jOTlP3N2o2u0Hf9y,97123123,0927459543,ulica 3,10430,Samobor,3
+4,Filip,Pankretic,mayor@mail.com,$2a$10$wvfbFVHbi0kiy/LxCXlfwOxj.YsMcDR8af9F2jOTlP3N2o2u0Hf9y,97123123,0927459543,ulica 4,10430,Samobor,4
+5,Samuel,Lucic,admin@mail.com,$2a$10$wvfbFVHbi0kiy/LxCXlfwOxj.YsMcDR8af9F2jOTlP3N2o2u0Hf9y,97123123,0927459543,ulica 5,10430,Samobor,5

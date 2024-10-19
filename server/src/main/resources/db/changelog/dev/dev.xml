@@ -10,4 +10,10 @@
         <loadData tableName="community_home_plan"
                   file="./db/changelog/data/community_home_plan.csv" />
     </changeSet>
+    <changeSet id="20241019-1-matej-dev"
+               author="mistuk"
+               context="dev">
+        <loadData tableName="app_user"
+                  file="./db/changelog/data/app_user.csv" />
+    </changeSet>
 </databaseChangeLog>
