@@ -9,6 +9,7 @@ import styles from './page.module.css';
 import { UserContextProvider } from '../contexts/UserContext';
 import RouteProtection from '../components/AppWrappers/RouteProtection';
 import AxiosProvider from '../components/AppWrappers/AxiosProvider';
+import { ThemeWrapper } from '../contexts/ThemeContext';
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<ThemeType>('light');
@@ -16,18 +17,20 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const handleThemeChange = useCallback((theme: ThemeType) => {
     setTheme(theme);
   }, []);
-
+ 
   return (
     <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
-      <CssBaseline />
-      <UserContextProvider>
-        <RouteProtection>
-          <AxiosProvider>
-            <Header theme={theme} onThemeChange={handleThemeChange} />
-            <main className={styles.main}>{children}</main>
-          </AxiosProvider>
-        </RouteProtection>
-      </UserContextProvider>
+      <ThemeWrapper>
+        <CssBaseline />
+        <UserContextProvider>
+          <RouteProtection>
+            <AxiosProvider>
+              <Header theme={theme} onThemeChange={handleThemeChange} />
+              <main className={styles.main}>{children}</main>
+            </AxiosProvider>
+          </RouteProtection>
+        </UserContextProvider>
+      </ThemeWrapper>
     </ThemeProvider>
   );
 };

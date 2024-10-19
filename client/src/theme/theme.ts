@@ -1,8 +1,16 @@
 import { createTheme } from '@mui/material';
 
+export const theme = createTheme({
+  colorSchemes: {
+    dark: true,
+    light: true,
+  },
+});
+
 export const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
+  colorSchemes: {
+    dark: true,
+    light: true,
   },
   components: {
     MuiContainer: {
@@ -64,8 +72,9 @@ export const darkTheme = createTheme({
 });
 
 export const lightTheme = createTheme({
-  palette: {
-    mode: 'light',
+  colorSchemes: {
+    dark: true,
+    light: true,
   },
   components: {
     MuiContainer: {
