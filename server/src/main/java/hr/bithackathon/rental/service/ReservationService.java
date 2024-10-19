@@ -116,3 +116,5 @@ public class ReservationService {
     private boolean isTouchingEnds(TimeRange range, Instant start, Instant end) {
         return range.end().equals(start) || range.start().equals(end);
     }
+
+}
