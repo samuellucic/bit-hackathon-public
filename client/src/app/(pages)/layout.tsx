@@ -7,6 +7,8 @@ import { darkTheme, lightTheme } from '@/theme/theme';
 import Header from '../components/Header/Header';
 import styles from './page.module.css';
 import { UserContextProvider } from '../contexts/UserContext';
+import RouteProtection from '../components/AppWrappers/RouteProtection';
+import AxiosProvider from '../components/AppWrappers/AxiosProvider';
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<ThemeType>('light');
@@ -19,8 +21,12 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
       <CssBaseline />
       <UserContextProvider>
-        <Header theme={theme} onThemeChange={handleThemeChange} />
-        <main className={styles.main}>{children}</main>
+        <RouteProtection>
+          <AxiosProvider>
+            <Header theme={theme} onThemeChange={handleThemeChange} />
+            <main className={styles.main}>{children}</main>
+          </AxiosProvider>
+        </RouteProtection>
       </UserContextProvider>
     </ThemeProvider>
   );

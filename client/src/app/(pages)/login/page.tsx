@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { UserContext } from '../../contexts/UserContext';
 
 export default function Page() {
-  const { setIsLoggedIn } = useContext(UserContext);
+  const { setIsLoggedIn, setAuthority } = useContext(UserContext);
   const router = useRouter();
 
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -18,8 +18,9 @@ export default function Page() {
     async (e: { preventDefault: () => void }) => {
       e.preventDefault();
       if (isLoginMode) {
-        await authenticate({ email, password });
+        const res = await authenticate({ email, password });
         setIsLoggedIn(true);
+        setAuthority(res.authority);
         router.push('/home');
       } else {
         if (password !== confirmPassword) {
