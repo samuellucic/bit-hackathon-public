@@ -13,6 +13,9 @@ public interface RecordBookRepository extends JpaRepository<RecordBook, Long> {
     @Query("SELECT r FROM RecordBook r WHERE r.id = :recordId AND r.contract.reservation.customer.id = :customerId AND r.status = :status")
     Optional<RecordBook> findByIdAndCustomerIdAndStatus(Long recordId, Long customerId, RecordBookStatus status);
 
+    @Query("SELECT r FROM RecordBook r WHERE r.id = :recordId AND r.contract.reservation.customer.id = :customerId")
+    Optional<RecordBook> findByIdAndCustomerId(Long recordId, Long customerId);
+
     Optional<RecordBook> findByIdAndStatus(Long recordId, RecordBookStatus status);
 
     Optional<RecordBook> findByIdAndCustodianId(Long recordId, Long custodianId);

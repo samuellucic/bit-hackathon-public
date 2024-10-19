@@ -39,7 +39,7 @@ public class ContractService {
     }
 
     public Contract getContractForCustodian(Long contractId) {
-        return contractRepository.findByContractIdAndCustodianIdForCommunityHome(contractId, appUserService.getCurrentAppUser().getId())
+        return contractRepository.findByContractIdAndCustodianIdForCommunityHome(contractId, appUserService.getCurrentAppUser())
                 .orElseThrow(() -> new RentalException(ErrorCode.CONTRACT_NOT_FOUND));
     }
 
@@ -130,7 +130,7 @@ public class ContractService {
         contract.setStatus(ContractStatus.MAJOR_SIGNED);
         contractRepository.save(contract);
 
-        notificationService.notifyCustomer(contractId, contract.getReservation().getCustomer().getEmail());
+        notificationService.notifyCustomerForContract(contractId, contract.getReservation().getCustomer().getEmail());
     }
 
     public void signContractByCustomer(Long contractId) {

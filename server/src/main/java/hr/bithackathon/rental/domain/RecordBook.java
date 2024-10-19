@@ -31,7 +31,7 @@ public class RecordBook {
     private String damage;
     @Column
     private LocalDate inspectionDate;
-    @Column
+    @Enumerated(EnumType.STRING)
     private RecordBookStatus status;
 
     public static RecordBook dummy() {

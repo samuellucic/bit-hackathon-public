@@ -1,5 +1,6 @@
 package hr.bithackathon.rental.repository;
 
+import hr.bithackathon.rental.domain.AppUser;
 import hr.bithackathon.rental.domain.Contract;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,6 +28,6 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
 
     @Query("SELECT c FROM Contract c " +
             "WHERE c.id = :contractId " +
-            "AND :custodianId MEMBER OF c.reservation.communityHomePlan.communityHome.custodians")
-    Optional<Contract> findByContractIdAndCustodianIdForCommunityHome(Long contractId, Long custodianId);
+            "AND :custodian MEMBER OF c.reservation.communityHomePlan.communityHome.custodians")
+    Optional<Contract> findByContractIdAndCustodianIdForCommunityHome(Long contractId, AppUser custodian);
 }

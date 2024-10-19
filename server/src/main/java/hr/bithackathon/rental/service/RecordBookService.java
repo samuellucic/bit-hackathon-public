@@ -25,6 +25,7 @@ public class RecordBookService {
     private final RecordBookRepository recordBookRepository;
     private final AppUserService appUserService;
     private final ContractService contractService;
+    private final NotificationService notificationService;
 
     public Long createRecordBook(RecordBookAddRequest recordBookAddRequest) {
         var contract = contractService.getContractForCustodian(recordBookAddRequest.contractId());
@@ -34,21 +35,24 @@ public class RecordBookService {
         return recordBook.getId();
     }
 
-    public RecordBook getRecordBook(Long recordBookId) {
+    public RecordBook getRecordBookForCustodian(Long recordBookId) {
         return recordBookRepository.findByIdAndCustodianId(recordBookId, appUserService.getCurrentAppUser().getId()
                 ).orElseThrow(() -> new RentalException(ErrorCode.RECORD_BOOK_NOT_FOUND));
     }
 
+    public RecordBook getRecordBookForCustomer(Long recordBookId) {
+        return recordBookRepository.findByIdAndCustomerId(recordBookId, appUserService.getCurrentAppUser().getId()
+        ).orElseThrow(() -> new RentalException(ErrorCode.RECORD_BOOK_NOT_FOUND));
+    }
+
     public RecordBook updateRecordBook(Long recordBookId, RecordBookEditRequest recordBookEditRequest) {
-        var recordBook = getRecordBook(recordBookId);
-        if (!recordBookEditRequest.stateAfter().isBlank()) {
-            recordBook.setStateAfter(recordBookEditRequest.stateAfter());
-        }
-        if (!recordBookEditRequest.damage().isBlank()) {
-            recordBook.setDamage(recordBookEditRequest.damage());
-        }
+        var recordBook = getRecordBookForCustodian(recordBookId);
+        recordBook.setStateAfter(recordBookEditRequest.stateAfter());
+        recordBook.setDamage(recordBookEditRequest.damage());
         recordBook.setInspectionDate(LocalDate.now());
-        return recordBookRepository.save(recordBook);
+        var updatedRecordBook = recordBookRepository.save(recordBook);
+        notificationService.notifyCustomerForRecord(recordBook.getId(), "Please sign record!");
+        return updatedRecordBook;
     }
 
     public Page<RecordBook> getAllRecordBooks(Pageable pageable) {
