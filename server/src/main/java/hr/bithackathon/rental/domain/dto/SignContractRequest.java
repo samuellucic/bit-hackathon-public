@@ -1,5 +1,12 @@
 package hr.bithackathon.rental.domain.dto;
 
-public record SignContractRequest(Long contractId) {
+import jakarta.validation.constraints.Positive;
+
+public record SignContractRequest(
+
+    @Positive
+    Long contractId
+
+) {
 
 }

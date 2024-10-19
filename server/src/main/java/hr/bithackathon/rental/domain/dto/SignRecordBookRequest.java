@@ -1,6 +1,13 @@
 package hr.bithackathon.rental.domain.dto;
 
-public record SignRecordBookRequest(Long recordBookId) {
+import jakarta.validation.constraints.Positive;
+
+public record SignRecordBookRequest(
+
+    @Positive
+    Long recordBookId
+
+) {
 
 }
 

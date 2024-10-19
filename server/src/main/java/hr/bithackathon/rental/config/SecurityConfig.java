@@ -4,8 +4,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -24,8 +22,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
-    private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -39,7 +35,12 @@ public class SecurityConfig {
                 auth -> auth.requestMatchers(HttpMethod.POST, "/users", "/auth/authenticate", "/reservations")
                             .permitAll()
                             .requestMatchers(HttpMethod.OPTIONS, "/users", "/auth/authenticate").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/action/reservations/view/**").permitAll()
+                            .requestMatchers(HttpMethod.GET,
+                                             "/action/reservations/view/**",
+                                             "/test/mail",
+                                             "/action/availability/community-homes/**",
+                                             "/action/occupation/community-homes/",
+                                             "/community-homes", "/community-homes/**").permitAll()
                             .requestMatchers("/**").authenticated())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));

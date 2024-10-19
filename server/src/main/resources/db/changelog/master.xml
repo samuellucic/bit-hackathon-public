@@ -14,25 +14,23 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="first_name" type="varchar(255)"/>
-            <column name="last_name" type="varchar(255)"/>
-            <column name="email" type="varchar(255)"/>
-            <column name="password" type="varchar(255)"/>
-            <column name="oib" type="char(11)">
-                <constraints nullable="true"/>
+            <column name="first_name" type="varchar(255)">
+                <constraints nullable="false"/>
             </column>
-            <column name="phone" type="varchar(20)">
-                <constraints nullable="true"/>
+            <column name="last_name" type="varchar(255)">
+                <constraints nullable="false"/>
             </column>
-            <column name="address" type="varchar(255)">
-                <constraints nullable="true"/>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false"/>
             </column>
-            <column name="postal_code" type="varchar(255)">
-                <constraints nullable="true"/>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
             </column>
-            <column name="city" type="varchar(255)">
-                <constraints nullable="true"/>
-            </column>
+            <column name="oib" type="char(11)"/>
+            <column name="phone" type="varchar(20)"/>
+            <column name="address" type="varchar(255)"/>
+            <column name="postal_code" type="varchar(255)"/>
+            <column name="city" type="varchar(255)"/>
             <column name="authority_id" type="bigint"/>
         </createTable>
 
@@ -48,12 +46,24 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="name" type="VARCHAR(255)"/>
-            <column name="address" type="VARCHAR(255)"/>
-            <column name="postal_code" type="VARCHAR(20)"/>
-            <column name="city" type="varchar(255)"/>
-            <column name="area" type="DOUBLE"/>
-            <column name="capacity" type="INT"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="postal_code" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="area" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="capacity" type="INT">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 
@@ -62,17 +72,23 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="lease_cost_per_hour" type="double"/>
-            <column name="amenities_cost_per_hour" type="double"/>
-            <column name="utilities_cost_per_hour" type="double"/>
-            <column name="down_payment" type="VARCHAR(255)"/>
-            <column name="available_hour_from" type="int">
-                <constraints nullable="true"/>
+            <column name="lease_cost_per_hour" type="double">
+                <constraints nullable="false"/>
             </column>
-            <column name="available_hour_to" type="int">
-                <constraints nullable="true"/>
+            <column name="amenities_cost_per_hour" type="double">
+                <constraints nullable="false"/>
             </column>
-            <column name="created_at" type="timestamp"/>
+            <column name="utilities_cost_per_hour" type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="down_payment" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="available_hour_from" type="int"/>
+            <column name="available_hour_to" type="int"/>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
             <column name="community_home_id" type="bigint"/>
         </createTable>
 
@@ -88,21 +104,27 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="key" type="uuid"/>
-            <column name="reason" type="VARCHAR(255)"/>
-            <column name="datetime_from" type="timestamp"/>
-            <column name="datetime_to" type="timestamp"/>
-            <column name="bank" type="varchar(255)">
-                <constraints nullable="true"/>
+            <column name="key" type="uuid">
+                <constraints nullable="false"/>
             </column>
-            <column name="IBAN" type="CHAR(34)">
-                <constraints nullable="true"/>
+            <column name="reason" type="VARCHAR(255)">
+                <constraints nullable="false"/>
             </column>
-            <column name="approved" type="boolean">
-                <constraints nullable="true"/>
+            <column name="datetime_from" type="timestamp">
+                <constraints nullable="false"/>
             </column>
-            <column name="creation_date" type="timestamp"/>
-            <column name="type" type="varchar(255)"/>
+            <column name="datetime_to" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bank" type="varchar(255)"/>
+            <column name="IBAN" type="CHAR(34)"/>
+            <column name="approved" type="boolean"/>
+            <column name="creation_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="community_home_plan_id" type="bigint"/>
             <column name="customer_id" type="bigint"/>
         </createTable>
@@ -125,16 +147,24 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="lease" type="double"/>
-            <column name="down_payment" type="double"/>
-            <column name="amenities" type="double">
-                <constraints nullable="true"/>
+            <column name="lease" type="double">
+                <constraints nullable="false"/>
             </column>
-            <column name="utilities" type="double"/>
+            <column name="down_payment" type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="utilities" type="double">
+                <constraints nullable="false"/>
+            </column>
             <column name="total" type="double">
+                <constraints nullable="false"/>
             </column>
-            <column name="vat" type="double" defaultValue="0.25"/>
-            <column name="status" type="varchar(255)"/>
+            <column name="vat" type="double" defaultValue="0.25">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="reservation_id" type="bigint"/>
         </createTable>
 
@@ -150,16 +180,12 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="state_before" type="text"/>
-            <column name="state_after" type="text">
-                <constraints nullable="true"/>
+            <column name="state_before" type="text">
+                <constraints nullable="false"/>
             </column>
-            <column name="damage" type="text">
-                <constraints nullable="true"/>
-            </column>
-            <column name="inspection_date" type="date">
-                <constraints nullable="true"/>
-            </column>
+            <column name="state_after" type="text"/>
+            <column name="damage" type="text"/>
+            <column name="inspection_date" type="date"/>
             <column name="status" type="varchar(255)"/>
             <column name="contract_id" type="bigint"/>
             <column name="custodian_id" type="bigint"/>

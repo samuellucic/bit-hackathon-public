@@ -26,20 +26,21 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final CommunityHomePlanService communityHomePlanService;
+    private final CommunityHomeService communityHomeService;
     private final AppUserService appUserService;
     private final NotificationService notificationService;
 
     public Long createReservation(ReservationRequest request) {
-        checkPassword(request.user().password());
-
-        AppUser appUser = null;
+        AppUser appUser;
         if (SecurityUtils.isUserLoggedOut()) {
+            checkPassword(request.user().password());
             appUser = appUserService.registerUser(request.user());
         } else {
             appUser = appUserService.getCurrentAppUser();
         }
 
-        var communityHomePlan = communityHomePlanService.getCommunityHomePlan(request.communityHomePlanId());
+        var communityHome = communityHomeService.getCommunityHome(request.communityHomeId());
+        var communityHomePlan = communityHomePlanService.getLatestCommunityHomePlan(communityHome.getId());
 
         var reservation = ReservationRequest.toReservation(request, communityHomePlan, appUser);
         reservation.setCreationDate(LocalDate.now());
@@ -75,10 +76,13 @@ public class ReservationService {
     }
 
     public void editReservation(Long reservationId, ReservationRequest request) {
-        var communityHomePlan = communityHomePlanService.getCommunityHomePlan(request.communityHomePlanId());
+        var communityHome = communityHomeService.getCommunityHome(request.communityHomeId());
+        var communityHomePlan = communityHomePlanService.getLatestCommunityHomePlan(communityHome.getId());
         var customer = appUserService.getCurrentAppUser();
+
         var reservation = ReservationRequest.toReservation(request, communityHomePlan, customer);
         reservation.setId(reservationId);
+
         reservationRepository.save(reservation);
     }
 

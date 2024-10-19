@@ -1,5 +1,6 @@
 package hr.bithackathon.rental.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -12,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.relational.core.mapping.Column;
 
 @Entity
 @Data
@@ -29,39 +29,22 @@ public class Contract {
     @JoinColumn(name = "reservation_id")
     private Reservation reservation;
 
-    @Column
+    @Column(nullable = false)
     private Double lease;
 
-    @Column
+    @Column(nullable = false)
     private Double downPayment;
 
-    @Column
-    private Double amenities;
-
-    @Column
+    @Column(nullable = false)
     private Double utilities;
 
-    @Column
+    @Column(nullable = false)
     private Double total;
 
-    @Column
+    @Column(nullable = false)
     private Double vat;
 
     @Enumerated(EnumType.STRING)
     private ContractStatus status;
-
-    public static Contract dummy() {
-        return Contract.builder()
-                       .id(0L)
-                       .reservation(Reservation.dummy())
-                       .lease(1000.0)
-                       .downPayment(2.0)
-                       .amenities(null)
-                       .utilities(50.0)
-                       .total(2134.2)
-                       .vat(0.25)
-                       .status(ContractStatus.CREATED)
-                       .build();
-    }
 
 }

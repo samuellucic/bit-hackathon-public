@@ -6,17 +6,36 @@ import hr.bithackathon.rental.domain.AppUser;
 import hr.bithackathon.rental.domain.CommunityHomePlan;
 import hr.bithackathon.rental.domain.Reservation;
 import hr.bithackathon.rental.domain.ReservationType;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 public record ReservationRequest(
+
+    @NotNull
     AppUserRequest user,
-    Long communityHomePlanId,
+
+    @Positive
+    Long communityHomeId,
+
+    @Positive
     Long customerId,
+
+    @Size(min = 1, max = 255)
     String reason,
+
+    @NotNull
     Instant datetimeFrom,
+
+    @NotNull
     Instant datetimeTo,
+
+    @NotNull
+    ReservationType type,
+
     String bank,
-    String iban,
-    ReservationType type
+    String iban
+
 ) {
 
     public static Reservation toReservation(ReservationRequest reservationRequest, CommunityHomePlan communityHomePlan, AppUser customer) {
