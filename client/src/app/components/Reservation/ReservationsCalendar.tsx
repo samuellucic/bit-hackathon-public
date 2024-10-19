@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
-import { Calendar, dateFnsLocalizer, View } from 'react-big-calendar';
+import React, { ComponentType, useState } from 'react';
+import { Calendar, dateFnsLocalizer, ToolbarProps, View } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Container, Typography } from '@mui/material';
-/* eslint-disable-next-line */
-// @ts-ignore
-import hrLocale from 'date-fns/locale/hr';
+import { hr } from 'date-fns/locale/hr';
 import { Reservation } from '@/app/components/Reservation/helper';
 import CustomToolbar from '@/app/components/Reservation/CustomToolbar';
 
 const locales = {
-  hr: hrLocale,
+  hr,
 };
 
 const localizer = dateFnsLocalizer({
@@ -62,9 +60,7 @@ const MyCalendar = ({ reservations }: CalendarProps) => {
         selectable={false}
         culture="hr"
         components={{
-          /* eslint-disable-next-line */
-          // @ts-ignore
-          toolbar: CustomToolbar,
+          toolbar: CustomToolbar as ComponentType<ToolbarProps<{ title: string; start: Date; end: Date }, object>>,
         }}
       />
     </Container>
