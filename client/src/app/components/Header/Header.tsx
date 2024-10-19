@@ -1,21 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
-import {
-  AppBar,
-  Button,
-  createTheme,
-  CssBaseline,
-  IconButton,
-  Menu,
-  MenuItem,
-  ThemeProvider,
-  Toolbar,
-  Typography,
-} from '@mui/material';
+import React, { useCallback, useState } from 'react';
+import { AppBar, Button, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
 import Link from 'next/link';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
 import styles from './Header.module.css';
+import { ThemeType } from '../../app/types/types';
 
 type SubmenuItem = {
   url: string;
@@ -42,10 +32,15 @@ const headerItems: HeaderItem[] = [
   { url: '/bithack', label: 'B:IT Hack' },
 ];
 
-const Header: React.FC = () => {
+export type HeaderProps = {
+  theme: ThemeType;
+  onThemeChange: (theme: ThemeType) => void;
+};
+
+const Header = ({ theme, onThemeChange }: HeaderProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentSubmenu, setCurrentSubmenu] = useState<string | null>(null);
-  const [isDarkMode, setIsDarkMode] = useState(false); // Track theme mode
+  const [isDarkMode, setIsDarkMode] = useState(theme === 'dark'); // Track theme mode
 
   const handleClick = (event: React.MouseEvent<HTMLElement>, label: string) => {
     setAnchorEl(event.currentTarget);
@@ -57,60 +52,68 @@ const Header: React.FC = () => {
     setCurrentSubmenu(null);
   };
 
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-  };
-
-  const theme = createTheme({
-    palette: {
-      mode: isDarkMode ? 'dark' : 'light',
-    },
-  });
+  const toggleTheme = useCallback(() => {
+    setIsDarkMode((isDarkMode) => {
+      onThemeChange(!isDarkMode ? 'light' : 'dark');
+      return !isDarkMode;
+    });
+  }, [onThemeChange]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <AppBar position="static" className={styles.appBar}>
-        <Toolbar>
-          <Typography variant="h6" className={styles.title}>
-            Welcome to Our Hackathon Project
-          </Typography>
+    <AppBar
+      sx={{
+        backgroundColor: '#282c34',
+      }}
+      position="static"
+      className={styles.appBar}>
+      <Toolbar>
+        <Typography variant="h6" className={styles.title}>
+          Welcome to Our Hackathon Project
+        </Typography>
 
-          <IconButton onClick={toggleTheme} color="inherit" sx={{ marginLeft: 'auto' }}>
-            {isDarkMode ? <Brightness7 /> : <Brightness4 />}
-          </IconButton>
+        <IconButton onClick={toggleTheme} color="inherit" sx={{ marginLeft: 'auto' }}>
+          {isDarkMode ? <Brightness7 /> : <Brightness4 />}
+        </IconButton>
 
-          {headerItems.map(({ label, url, submenu }) => (
-            <div key={url}>
-              {submenu ? (
-                <>
-                  <Button
-                    aria-controls={currentSubmenu === label ? 'simple-menu' : undefined}
-                    aria-haspopup="true"
-                    onClick={(e) => handleClick(e, label)}
-                    className={styles.menuButton}>
-                    {label}
-                  </Button>
-                  <Menu id="simple-menu" anchorEl={anchorEl} open={currentSubmenu === label} onClose={handleClose}>
-                    {submenu.map(({ label, url }) => (
-                      <MenuItem key={url} onClick={handleClose}>
-                        <Link href={url} className={styles.submenuLink}>
-                          {label}
-                        </Link>
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                </>
-              ) : (
-                <Link href={url} className={styles.link}>
-                  <Button className={styles.menuButton}>{label}</Button>
-                </Link>
-              )}
-            </div>
-          ))}
-        </Toolbar>
-      </AppBar>
-    </ThemeProvider>
+        {headerItems.map(({ label, url, submenu }) => (
+          <div key={url}>
+            {submenu ? (
+              <>
+                <Button
+                  sx={{
+                    color: 'white',
+                  }}
+                  aria-controls={currentSubmenu === label ? 'simple-menu' : undefined}
+                  aria-haspopup="true"
+                  onClick={(e) => handleClick(e, label)}
+                  className={styles.menuButton}>
+                  {label}
+                </Button>
+                <Menu id="simple-menu" anchorEl={anchorEl} open={currentSubmenu === label} onClose={handleClose}>
+                  {submenu.map(({ label, url }) => (
+                    <MenuItem key={url} onClick={handleClose}>
+                      <Link href={url} className={styles.submenuLink}>
+                        {label}
+                      </Link>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </>
+            ) : (
+              <Link href={url} className={styles.link}>
+                <Button
+                  sx={{
+                    color: 'white',
+                  }}
+                  className={styles.menuButton}>
+                  {label}
+                </Button>
+              </Link>
+            )}
+          </div>
+        ))}
+      </Toolbar>
+    </AppBar>
   );
 };
 

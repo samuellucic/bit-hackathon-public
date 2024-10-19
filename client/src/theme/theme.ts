@@ -4,8 +4,12 @@ export const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
+  components: {},
 });
 
-const theme = createTheme({
+export const lightTheme = createTheme({
+  palette: {
+    mode: 'light',
+  },
   components: {},
 });
