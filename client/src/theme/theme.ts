@@ -4,12 +4,41 @@ export const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
-  components: {},
+  components: {
+    MuiContainer: {
+      defaultProps: {
+        sx: {
+          backgroundColor: 'black',
+        },
+      },
+    },
+    MuiTypography: {
+      variants: [
+        {
+          props: { variant: 'h3' } /* component props */,
+          style: {
+            color: 'white',
+          },
+        },
+      ],
+    },
+  },
 });
 
 export const lightTheme = createTheme({
   palette: {
     mode: 'light',
   },
-  components: {},
+  components: {
+    MuiTypography: {
+      variants: [
+        {
+          props: { variant: 'h3' } /* component props */,
+          style: {
+            color: 'black',
+          },
+        },
+      ],
+    },
+  },
 });
