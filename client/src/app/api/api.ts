@@ -1,5 +1,5 @@
 import api from './instance';
-import { CreateReservation, JwtToken } from '../types/types';
+import { CreateReservation, JwtToken, Pageable, PageResponse, ReservationType } from '../types/types';
 import { setItem } from './local-storage';
 import { tokenKey } from '../lib/constants';
 import { endpoints } from './constants';
@@ -19,8 +19,26 @@ export const createReservation = async (reservation: CreateReservation) => {
   return await api.post(endpoints.createReservation, reservation);
 };
 
-export const getReservations = async () => {
-  const res = await api.get(endpoints.getReservations);
+export type ReservationResponse = {
+  reservationId: number;
+  customerId: number;
+  customerFirstName: string;
+  customerLastName: string;
+  communityHomePlanId: number;
+  creationDate: string;
+  reason: string;
+  datetimeFrom: string;
+  datetimeTo: string;
+  bank: string;
+  iban: string;
+  approved: boolean;
+  type: ReservationType;
+};
+
+export const getReservations = async (pageable: Pageable) => {
+  const res = await api.get<PageResponse<ReservationResponse>>(endpoints.getReservations, {
+    params: pageable,
+  });
   return res.data;
 };
 
@@ -29,8 +47,12 @@ export const getReservation = async (id: number) => {
   return res.data;
 };
 
-export const approveReservation = async (id: number) => {
-  return await api.put(endpoints.approveReservation(id));
+export const decideReservation = async (id: number, approve: boolean) => {
+  return await api.patch(endpoints.decideReservation(id), null, {
+    params: {
+      approve,
+    },
+  });
 };
 
 export const getContractDoc = async () => {

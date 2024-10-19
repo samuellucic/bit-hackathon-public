@@ -6,6 +6,7 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import { darkTheme, lightTheme } from '@/theme/theme';
 import Header from '../components/Header/Header';
 import styles from './page.module.css';
+import { UserContextProvider } from '../contexts/UserContext';
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<ThemeType>('light');
@@ -17,8 +18,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
       <CssBaseline />
-      <Header theme={theme} onThemeChange={handleThemeChange} />
-      <main className={styles.main}>{children}</main>
+      <UserContextProvider>
+        <Header theme={theme} onThemeChange={handleThemeChange} />
+        <main className={styles.main}>{children}</main>
+      </UserContextProvider>
     </ThemeProvider>
   );
 };

@@ -1,13 +1,13 @@
-const users = '/api/users';
-const reservations = '/api/reservations';
-const contractAction = `/api/action/contract`;
-const contracts = '/api/contracts';
+const users = '/users';
+const reservations = '/reservations';
+const contractAction = `/action/contract`;
+const contracts = '/contracts';
 
 const reservationEndpoints = {
   createReservation: reservations,
   getReservations: reservations,
   getReservation: (id: number) => `${reservations}/${id}`,
-  approveReservation: (id: number) => `${reservations}/${id}/approve`,
+  decideReservation: (id: number) => `${reservations}/${id}`,
   getUsersReservations: (id: number) => `${users}/${id}/reservations`,
 };
 
@@ -19,7 +19,7 @@ const contractsEndpoints = {
 };
 
 export const endpoints = {
-  login: '/auth/authenticate/',
+  login: '/auth/authenticate',
   ...reservationEndpoints,
   ...contractsEndpoints,
 } as const;

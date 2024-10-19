@@ -1,6 +1,6 @@
 'use client';
-import React, { ChangeEvent, useCallback, useState } from 'react';
-import { Box, List, ListItem, ListItemText, TextField } from '@mui/material';
+import React, { useCallback, useState } from 'react';
+import { Box, Button, List, ListItem, ListItemText } from '@mui/material';
 
 interface SearchItem {
   id: number;
@@ -9,14 +9,24 @@ interface SearchItem {
 }
 
 interface SearchBarProps {
-  value: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  label?: string;
+  // value: string;
+  // onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  // label?: string;
   items: SearchItem[];
   onItemClick: (item: SearchItem) => void;
+  onNext: () => void;
+  hasMore: boolean;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, label = 'Search', items, onItemClick }) => {
+const ScrollBar: React.FC<SearchBarProps> = ({
+  // value,
+  // onChange,
+  // label = 'Search',
+  items,
+  onItemClick,
+  onNext,
+  hasMore,
+}) => {
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
   const [selectedItem, setSelectedItem] = useState<number | null>(null);
 
@@ -38,7 +48,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, label = 'Search'
 
   return (
     <Box p={2}>
-      <TextField label={label} variant="outlined" fullWidth value={value} onChange={onChange} />
+      {/*<TextField label={label} variant="outlined" fullWidth value={value} onChange={onChange} />*/}
 
       <List sx={{ marginTop: '1rem' }}>
         {items.map((item) => (
@@ -58,8 +68,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, label = 'Search'
           </ListItem>
         ))}
       </List>
+
+      {hasMore && (
+        <Button fullWidth onClick={onNext}>
+          Load more
+        </Button>
+      )}
     </Box>
   );
 };
 
-export default SearchBar;
+export default ScrollBar;

@@ -19,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -53,23 +55,23 @@ public class ReservationService {
         return reservationRepository.findAllByCustomerId(appUserId, pageable);
     }
 
-    public Page<Reservation> getAllReservations(Pageable pageable) {
-        return reservationRepository.findAll(pageable);
+    public Page<Reservation> getAllReservations(Pageable pageable, Boolean approved) {
+        return reservationRepository.findAllByApproved(approved, pageable);
     }
 
     public Reservation getReservationForCurrentUser(Long reservationId) {
         return reservationRepository.findByIdAndCustomerId(reservationId, SecurityUtils.getCurrentUserDetails().getId())
-                                    .orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
+                .orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
     }
 
     public Reservation getReservation(Long reservationId) {
         return reservationRepository.findById(reservationId)
-                                    .orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
+                .orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
     }
 
     public Reservation getReservationByKey(UUID key) {
         return reservationRepository.findByKey(key)
-                                    .orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
+                .orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
     }
 
     public void editReservation(Long reservationId, ReservationRequest request) {
@@ -102,15 +104,17 @@ public class ReservationService {
         var startPadded = reservation.getDatetimeFrom().minus(Duration.ofHours(1));
         var endPadded = reservation.getDatetimeTo().plus(Duration.ofHours(1));
         var communityHomePlanId = reservation.getCommunityHomePlan().getId();
-        var reservations = reservationRepository.findAllNotApprovedForCommunityHomePlanAndBetween(communityHomePlanId, startPadded, endPadded);
+        var reservations = reservationRepository.findAllNotApprovedForCommunityHomePlanAndBetween(communityHomePlanId,
+                startPadded, endPadded);
 
         reservations.stream()
-                    .filter(r -> this.isTouchingEnds(new TimeRange(r.getDatetimeFrom(), r.getDatetimeTo()), startPadded, endPadded))
-                    .forEach(r -> {
-                        r.setApproved(false);
-                        notificationService.notifyReservationDeclinedEmail(r.getId(), r.getCustomer().getEmail());
-                        reservationRepository.save(r);
-                    });
+                .filter(r -> this.isTouchingEnds(new TimeRange(r.getDatetimeFrom(), r.getDatetimeTo()), startPadded,
+                        endPadded))
+                .forEach(r -> {
+                    r.setApproved(false);
+                    notificationService.notifyReservationDeclinedEmail(r.getId(), r.getCustomer().getEmail());
+                    reservationRepository.save(r);
+                });
     }
 
     private boolean isTouchingEnds(TimeRange range, Instant start, Instant end) {
