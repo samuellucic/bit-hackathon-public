@@ -1,4 +1,4 @@
-export type LocalStorageKey = 'auth-id-token' | 'reservation-context';
+export type LocalStorageKey = 'auth-id-token';
 
 export function getItem(key: LocalStorageKey): string | null {
   return localStorage.getItem(key);
