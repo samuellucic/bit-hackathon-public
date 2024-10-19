@@ -33,7 +33,7 @@ public class SecurityUtils {
         return SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser");
     }
 
-    public static boolean isLoggedInUserCustomer() {
+    public static boolean isLoggedInCustomer() {
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("CUSTOMER"));
     }
 

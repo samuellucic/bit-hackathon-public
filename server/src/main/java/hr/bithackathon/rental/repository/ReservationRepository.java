@@ -21,11 +21,11 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     Page<Reservation> findAllByApproved(Boolean approved, Pageable pageable);
 
     @Query("SELECT r FROM Reservation r " +
-            "WHERE r.communityHomePlan.communityHome.id = :communityHomeId " +
-            "AND r.approved = null " +
-            "AND ((r.datetimeFrom BETWEEN :start AND :end) OR (r.datetimeTo BETWEEN :start AND :end))")
+        "WHERE r.communityHomePlan.communityHome.id = :communityHomeId " +
+        "AND r.approved = null " +
+        "AND ((r.datetimeFrom BETWEEN :start AND :end) OR (r.datetimeTo BETWEEN :start AND :end))")
     List<Reservation> findAllNotApprovedForCommunityHomePlanAndBetween(@Param("communityHomeId") Long communityHomeId,
-            Instant start, Instant end);
+                                                                       Instant start, Instant end);
 
     Optional<Reservation> findByKey(UUID key);
 

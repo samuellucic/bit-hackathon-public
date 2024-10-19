@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
@@ -21,11 +20,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                              .body(ExceptionResponse.of(errorCode));
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public final ResponseEntity<ExceptionResponse> handleException(Exception ex) {
-//        logger.error(ex.getStackTrace());
-//        return ResponseEntity.status(ErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus())
-//                             .body(ExceptionResponse.of(ErrorCode.INTERNAL_SERVER_ERROR));
-//    }
+    //    @ExceptionHandler(Exception.class)
+    //    public final ResponseEntity<ExceptionResponse> handleException(Exception ex) {
+    //        logger.error(ex.getStackTrace());
+    //        return ResponseEntity.status(ErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus())
+    //                             .body(ExceptionResponse.of(ErrorCode.INTERNAL_SERVER_ERROR));
+    //    }
 
 }

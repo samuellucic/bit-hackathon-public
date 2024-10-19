@@ -1,9 +1,5 @@
 package hr.bithackathon.rental.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -11,6 +7,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.UUID;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -24,6 +24,7 @@ public class NotificationService {
     public void notifyCustomerForContract(Long contractId, String email) {
         mockCall();
     }
+
     public void notifyCustomerForRecord(Long recordId, String email) {
         mockCall();
     }
