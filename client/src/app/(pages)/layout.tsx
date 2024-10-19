@@ -1,10 +1,11 @@
 'use client';
 
 import React, { ReactNode, useCallback, useState } from 'react';
-import Header from '../../components/Header/Header';
 import { ThemeType } from '../types/types';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { darkTheme, lightTheme } from '../../theme/theme';
+import Header from '../components/Header/Header';
+import styles from './page.module.css';
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<ThemeType>('light');
@@ -17,7 +18,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
       <CssBaseline />
       <Header theme={theme} onThemeChange={handleThemeChange} />
-      {children}
+      <main className={styles.main}>{children}</main>
     </ThemeProvider>
   );
 };

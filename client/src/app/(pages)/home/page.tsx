@@ -3,7 +3,7 @@ import { Button, Container, Stack, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
 import styles from './page.module.css';
-import bjelovarDroneShot from '../../../../public/images/bjelovar-drone-shot.jpeg';
+import bjelovarDroneShot from '../../../../public/images/Bjelovar-zima.jpeg';
 import Image from 'next/image';
 
 const Home = () => {

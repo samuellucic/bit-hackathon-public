@@ -5,7 +5,7 @@ import { AppBar, Button, IconButton, Menu, MenuItem, Toolbar, Typography } from 
 import Link from 'next/link';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
 import styles from './Header.module.css';
-import { ThemeType } from '../../app/types/types';
+import { ThemeType } from '../../types/types';
 
 type SubmenuItem = {
   url: string;
@@ -19,7 +19,7 @@ type HeaderItem = {
 };
 
 const headerItems: HeaderItem[] = [
-  { url: '/', label: 'Home' },
+  { url: '/home', label: 'Home' },
   {
     url: '/about',
     label: 'About',
@@ -64,7 +64,7 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
       sx={{
         backgroundColor: '#282c34',
       }}
-      position="static"
+      position={'sticky'}
       className={styles.appBar}>
       <Toolbar>
         <Typography variant="h6" className={styles.title}>
