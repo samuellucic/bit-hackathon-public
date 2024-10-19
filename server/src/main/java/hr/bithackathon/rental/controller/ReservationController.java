@@ -31,7 +31,6 @@ public class ReservationController {
 
     @PostMapping("/reservations")
     @ResponseStatus(HttpStatus.CREATED)
-    @HasAuthority(AuthoritiesConstants.CUSTOMER)
     public ResponseEntity<Void> createReservation(@RequestBody ReservationRequest reservationRequest) {
         Long id = reservationService.createReservation(reservationRequest);
         return Util.getCreateResponse(id);
@@ -52,7 +51,8 @@ public class ReservationController {
     @GetMapping("/reservations/{id}")
     @HasAuthority({ AuthoritiesConstants.CUSTOMER, AuthoritiesConstants.OFFICIAL })
     public ReservationResponse getReservation(@PathVariable("id") Long id) {
-        return ReservationResponse.fromReservation(reservationService.getReservation(id));
+        // TODO rastaviti za ova dva brata
+        return ReservationResponse.fromReservation(reservationService.getReservationForCurrentUser(id));
     }
 
     @PutMapping("/reservations/{id}")

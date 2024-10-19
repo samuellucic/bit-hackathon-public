@@ -21,15 +21,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                              .body(ExceptionResponse.of(errorCode));
     }
 
-    @ExceptionHandler(Exception.class)
-    public final ResponseEntity<ExceptionResponse> handleException(Exception ex) {
-        logger.error(ex.getStackTrace());
-        return ResponseEntity.status(ErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus())
-                             .body(ExceptionResponse.of(ErrorCode.INTERNAL_SERVER_ERROR));
-    }
-
-    ResponseStatus findResponseStatus(Exception ex) {
-        return null;
-    }
+//    @ExceptionHandler(Exception.class)
+//    public final ResponseEntity<ExceptionResponse> handleException(Exception ex) {
+//        logger.error(ex.getStackTrace());
+//        return ResponseEntity.status(ErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus())
+//                             .body(ExceptionResponse.of(ErrorCode.INTERNAL_SERVER_ERROR));
+//    }
 
 }

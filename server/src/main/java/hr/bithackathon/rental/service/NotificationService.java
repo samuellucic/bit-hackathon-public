@@ -1,15 +1,16 @@
 package hr.bithackathon.rental.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -20,11 +21,18 @@ public class NotificationService {
         mockCall();
     }
 
-    public void notifyCustomer(Long contractId, String email) {
+    public void notifyCustomerForContract(Long contractId, String email) {
+        mockCall();
+    }
+    public void notifyCustomerForRecord(Long recordId, String email) {
         mockCall();
     }
 
-    public void notifyGospodarstvo(Long contractId) {
+    public void notifyReservationDeclinedEmail(Long ReservationId, String email) {
+        mockCall();
+    }
+
+    public void notifyMinistry(Long contractId) {
         mockCall();
     }
 
@@ -32,9 +40,13 @@ public class NotificationService {
         mockCall();
     }
 
-    public void notifyFinancesAndMinstry(Long contractId) {
+    public void sendUUIDReservationEmail(String email, UUID uuid) {
+        mockCall();
+    }
+
+    public void notifyFinancesAndMinistry(Long contractId) {
         notifyFinances(contractId);
-        notifyGospodarstvo(contractId);
+        notifyMinistry(contractId);
     }
 
     private void mockCall() {

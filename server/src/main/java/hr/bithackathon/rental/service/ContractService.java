@@ -1,11 +1,5 @@
 package hr.bithackathon.rental.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.List;
-
 import hr.bithackathon.rental.config.FreeReservationConfiguration;
 import hr.bithackathon.rental.domain.Contract;
 import hr.bithackathon.rental.domain.ContractStatus;
@@ -20,6 +14,12 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -30,11 +30,17 @@ public class ContractService {
     private final NotificationService notificationService;
     private final ResourceLoader resourceLoader;
     private final ReservationService reservationService;
+    private final AppUserService appUserService;
 
     static final Double VAT = 0.25;
 
     public Contract getContract(Long contractId) {
         return contractRepository.findById(contractId).orElseThrow(() -> new RentalException(ErrorCode.CONTRACT_NOT_FOUND));
+    }
+
+    public Contract getContractForCustodian(Long contractId) {
+        return contractRepository.findByContractIdAndCustodianIdForCommunityHome(contractId, appUserService.getCurrentAppUser())
+                .orElseThrow(() -> new RentalException(ErrorCode.CONTRACT_NOT_FOUND));
     }
 
     public List<Contract> findAllContractsByCustomerId(Long customerId) {
@@ -124,7 +130,7 @@ public class ContractService {
         contract.setStatus(ContractStatus.MAJOR_SIGNED);
         contractRepository.save(contract);
 
-        notificationService.notifyCustomer(contractId, contract.getReservation().getCustomer().getEmail());
+        notificationService.notifyCustomerForContract(contractId, contract.getReservation().getCustomer().getEmail());
     }
 
     public void signContractByCustomer(Long contractId) {
@@ -140,7 +146,7 @@ public class ContractService {
         contract.setStatus(ContractStatus.PAYMENT_PENDING);
         contractRepository.save(contract);
 
-        notificationService.notifyFinancesAndMinstry(contractId);
+        notificationService.notifyFinancesAndMinistry(contractId);
     }
 
     public void finalizeContract(Long contractId) {

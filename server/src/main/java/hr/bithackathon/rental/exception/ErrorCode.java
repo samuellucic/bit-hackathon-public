@@ -17,6 +17,7 @@ public enum ErrorCode {
     CONTRACT_NOT_SIGNED_BY_CUSTOMER(400, 40010, "Contract not signed by customer."),
     RECORD_BOOK_NOT_FOUND(400, 40011, "Record Book not found."),
     RESERVATION_HAS_APPROVAL_STATUS(400, 40012, "Reservation has approval status."),
+    USER_NOT_FOUND(400, 40013, "User not found."),
 
     UNAUTHORIZED(401, 40101, "Unauthorized"),
 

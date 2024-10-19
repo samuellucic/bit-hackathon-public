@@ -24,12 +24,15 @@ const headerItems: HeaderItem[] = [
     url: '/about',
     label: 'O nama',
     submenu: [
-      { url: '/about/team', label: 'Tim' },
-      { url: '/about/history', label: 'Povijest' },
+      { url: 'https://www.linkedin.com/in/adrian-babic/', label: 'Adrian' },
+      { url: 'https://www.linkedin.com/in/filip-pankretic/', label: 'Filip' },
+      { url: 'https://www.linkedin.com/in/matej-istuk-978b34278/', label: 'Matej' },
+      { url: 'https://www.linkedin.com/in/samuel-luci%C4%87-812b38237/', label: 'Samuel' },
+      { url: 'https://www.linkedin.com/in/vatroslav-jakopec-a83b3229b/', label: 'Vatroslav' },
     ],
   },
-  { url: '/contact', label: 'Kontakt' },
-  { url: '/bithack', label: 'B:IT.hack' },
+  { url: 'https://bithack.tpbj.hr/', label: 'B:IT Hack' },
+  { url: '/login', label: 'Prijava' },
 ];
 
 export type HeaderProps = {
@@ -60,10 +63,15 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
   }, [onThemeChange]);
 
   return (
-    <AppBar position={'sticky'} className={styles.appBar}>
+    <AppBar
+      sx={{
+        backgroundColor: '#282c34',
+      }}
+      position={'sticky'}
+      className={styles.appBar}>
       <Toolbar>
         <Typography variant="h6" className={styles.title}>
-          Rezervacija domova grada Bjelovara
+          Društveni domovi Bjelovar
         </Typography>
 
         <IconButton onClick={toggleTheme} color="inherit" sx={{ marginLeft: 'auto' }}>

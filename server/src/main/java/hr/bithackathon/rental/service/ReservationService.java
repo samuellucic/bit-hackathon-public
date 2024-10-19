@@ -1,8 +1,13 @@
 package hr.bithackathon.rental.service;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.util.UUID;
 
+import hr.bithackathon.rental.domain.AppUser;
 import hr.bithackathon.rental.domain.Reservation;
+import hr.bithackathon.rental.domain.TimeRange;
 import hr.bithackathon.rental.domain.dto.ReservationRequest;
 import hr.bithackathon.rental.exception.ErrorCode;
 import hr.bithackathon.rental.exception.RentalException;
@@ -22,13 +27,25 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final CommunityHomePlanService communityHomePlanService;
     private final AppUserService appUserService;
+    private final NotificationService notificationService;
 
     public Long createReservation(ReservationRequest request) {
+        AppUser appUser = null;
+        if (SecurityUtils.isUserLoggedOut()) {
+            appUser = appUserService.registerUser(request.user());
+        } else {
+            appUser = appUserService.getCurrentAppUser();
+        }
+
         var communityHomePlan = communityHomePlanService.getCommunityHomePlan(request.communityHomePlanId());
-        var customer = appUserService.getCurrentAppUser();
-        var reservation = ReservationRequest.toReservation(request, communityHomePlan, customer);
+
+        var reservation = ReservationRequest.toReservation(request, communityHomePlan, appUser);
         reservation.setCreationDate(LocalDate.now());
+        reservation.setKey(UUID.randomUUID());
         reservation = reservationRepository.save(reservation);
+
+        notificationService.sendUUIDReservationEmail(appUser.getEmail(), reservation.getKey());
+
         return reservation.getId();
     }
 
@@ -40,8 +57,18 @@ public class ReservationService {
         return reservationRepository.findAll(pageable);
     }
 
-    public Reservation getReservation(Long reservationId) {
+    public Reservation getReservationForCurrentUser(Long reservationId) {
         return reservationRepository.findByIdAndCustomerId(reservationId, SecurityUtils.getCurrentUserDetails().getId())
+                                    .orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
+    }
+
+    public Reservation getReservation(Long reservationId) {
+        return reservationRepository.findById(reservationId)
+                                    .orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
+    }
+
+    public Reservation getReservationByKey(UUID key) {
+        return reservationRepository.findByKey(key)
                                     .orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
     }
 
@@ -59,13 +86,35 @@ public class ReservationService {
             throw new RentalException(ErrorCode.RESERVATION_HAS_APPROVAL_STATUS);
         }
 
-        // TODO: Implement logic to see if it clashes with other reservations..
-        // TODO: Deny others
-
         reservation.setApproved(approve);
         reservationRepository.save(reservation);
 
+        // TODO: Implement logic to see if it clashes with other reservations..
+        // TODO: Deny others if it clashes
+        if (approve) {
+            declineOverlaps(reservation);
+        }
+
         return approve;
+    }
+
+    private void declineOverlaps(Reservation reservation) {
+        var startPadded = reservation.getDatetimeFrom().minus(Duration.ofHours(1));
+        var endPadded = reservation.getDatetimeTo().plus(Duration.ofHours(1));
+        var communityHomePlanId = reservation.getCommunityHomePlan().getId();
+        var reservations = reservationRepository.findAllNotApprovedForCommunityHomePlanAndBetween(communityHomePlanId, startPadded, endPadded);
+
+        reservations.stream()
+                    .filter(r -> this.isTouchingEnds(new TimeRange(r.getDatetimeFrom(), r.getDatetimeTo()), startPadded, endPadded))
+                    .forEach(r -> {
+                        r.setApproved(false);
+                        notificationService.notifyReservationDeclinedEmail(r.getId(), r.getCustomer().getEmail());
+                        reservationRepository.save(r);
+                    });
+    }
+
+    private boolean isTouchingEnds(TimeRange range, Instant start, Instant end) {
+        return range.end().equals(start) || range.start().equals(end);
     }
 
 }
