@@ -28,13 +28,14 @@ public class AuthService {
 
     public Long createUser(AppUserRequest appUserRequest) {
         appUserRepository
-                .findOneByEmail(appUserRequest.email())
-                .ifPresent(existingUser -> {
-                    throw new RentalException(ErrorCode.CONFLICT);
-                });
+            .findOneByEmail(appUserRequest.email())
+            .ifPresent(existingUser -> {
+                throw new RentalException(ErrorCode.CONFLICT);
+            });
 
         AppUser appUser = AppUserRequest.toAppUser(appUserRequest);
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         return appUserRepository.save(appUser).getId();
     }
+
 }

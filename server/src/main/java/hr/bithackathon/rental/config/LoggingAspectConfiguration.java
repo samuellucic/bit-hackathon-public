@@ -11,4 +11,5 @@ public class LoggingAspectConfiguration {
     public LoggingAspect loggingAspect() {
         return new LoggingAspect();
     }
+
 }

@@ -1,31 +1,39 @@
 package hr.bithackathon.rental.controller;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+import hr.bithackathon.rental.domain.dto.CreateContractRequest;
 import hr.bithackathon.rental.exception.ErrorCode;
 import hr.bithackathon.rental.exception.RentalException;
+import hr.bithackathon.rental.security.AuthoritiesConstants;
+import hr.bithackathon.rental.security.aspect.HasAuthority;
 import hr.bithackathon.rental.service.ContractService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/contract")
+@RequestMapping("/contract")
 @RequiredArgsConstructor
 public class ContractController {
 
     private final ContractService contractService;
 
-    @PostMapping("/sign")
-    public String createContract(@RequestBody String body) {
-        return body;
+    @PostMapping
+    @HasAuthority(AuthoritiesConstants.OFFICIAL)
+    public Long createContract(@RequestBody CreateContractRequest request) {
+        return contractService.createContract(request.reservationId());
     }
 
-    @GetMapping("/api/doc")
+    @GetMapping("/doc")
     public ResponseEntity<InputStreamResource> file() {
         var docFile = contractService.getContractDocument();
 
@@ -41,10 +49,10 @@ public class ContractController {
             InputStreamResource resource = new InputStreamResource(fis);
 
             return ResponseEntity.ok()
-                    .headers(headers)
-                    .contentLength(docFile.length())
-                    .contentType(MediaType.parseMediaType("application/msword"))
-                    .body(resource);
+                                 .headers(headers)
+                                 .contentLength(docFile.length())
+                                 .contentType(MediaType.parseMediaType("application/msword"))
+                                 .body(resource);
         } catch (FileNotFoundException e) {
             throw new RentalException(ErrorCode.CANT_CREATE_CONTRACT);
         }

@@ -22,10 +22,10 @@ public class AppUserService {
 
     public Long createUser(AppUserRequest appUserRequest) {
         appUserRepository
-                .findOneByEmail(appUserRequest.email())
-                .ifPresent(existingUser -> {
-                    throw new RentalException(ErrorCode.CONFLICT);
-                });
+            .findOneByEmail(appUserRequest.email())
+            .ifPresent(existingUser -> {
+                throw new RentalException(ErrorCode.CONFLICT);
+            });
 
         AppUser appUser = AppUserRequest.toAppUser(appUserRequest);
         appUser.setAuthority(authorityRepository.findByName(AuthoritiesConstants.CUSTOMER));
@@ -34,6 +34,8 @@ public class AppUserService {
     }
 
     public AppUser getCurrentAppUser() {
-        return appUserRepository.findById(SecurityUtils.getCurrentUserDetails().getId()).orElseThrow(() -> new RentalException(ErrorCode.INTERNAL_SERVER_ERROR));
+        return appUserRepository.findById(SecurityUtils.getCurrentUserDetails().getId())
+                                .orElseThrow(() -> new RentalException(ErrorCode.INTERNAL_SERVER_ERROR));
     }
+
 }

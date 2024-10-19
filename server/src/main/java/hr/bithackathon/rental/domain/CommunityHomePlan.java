@@ -1,7 +1,18 @@
 package hr.bithackathon.rental.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Builder
@@ -10,6 +21,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommunityHomePlan {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,11 +44,12 @@ public class CommunityHomePlan {
 
     public static CommunityHomePlan dummy() {
         return CommunityHomePlan.builder()
-                .id(1L)
-                .communityHome(CommunityHome.dummy())
-                .leaseCostPerHour(1000.0)
-                .downPayment(2.0)
-                .amenitiesCostPerHour(50.0)
-                .build();
+                                .id(1L)
+                                .communityHome(CommunityHome.dummy())
+                                .leaseCostPerHour(1000.0)
+                                .downPayment(2.0)
+                                .amenitiesCostPerHour(50.0)
+                                .build();
     }
+
 }

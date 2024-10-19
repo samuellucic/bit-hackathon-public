@@ -20,4 +20,5 @@ public class CommunityHomeService {
     public CommunityHome getCommunityHome(Long communityHomeId) {
         return communityHomeRepository.findById(communityHomeId).orElseThrow();
     }
+
 }

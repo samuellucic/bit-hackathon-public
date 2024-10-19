@@ -1,7 +1,18 @@
 package hr.bithackathon.rental.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Builder
@@ -10,6 +21,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RecordBook {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,12 +41,13 @@ public class RecordBook {
 
     public static RecordBook dummy() {
         return RecordBook.builder()
-                .id(0L)
-                .contract(Contract.dummy())
-                .custodian(AppUser.dummy())
-                .stateBefore("before")
-                .stateAfter("after")
-                .damage("damage")
-                .build();
+                         .id(0L)
+                         .contract(Contract.dummy())
+                         .custodian(AppUser.dummy())
+                         .stateBefore("before")
+                         .stateAfter("after")
+                         .damage("damage")
+                         .build();
     }
+
 }

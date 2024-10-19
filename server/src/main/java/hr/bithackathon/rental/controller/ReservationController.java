@@ -14,9 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
 @AllArgsConstructor
 public class ReservationController {
+
     private ReservationService reservationService;
 
     @PostMapping("/reservations")
@@ -27,7 +27,7 @@ public class ReservationController {
         return Util.getCreateResponse(id);
     }
 
-    @GetMapping(value = "/user/{userId}/reservations", params = { "page", "size" })
+    @GetMapping(value = "/users/{userId}/reservations", params = { "page", "size" })
     @HasAuthority(AuthoritiesConstants.CUSTOMER)
     public PaginationResponse<ReservationResponse> getAllReservationsByUser(@PathVariable("userId") Long userId,
                                                                             @RequestParam("page") int page,
@@ -43,7 +43,7 @@ public class ReservationController {
     }
 
     @GetMapping("/reservations/{reservationId}")
-    @HasAuthority({AuthoritiesConstants.CUSTOMER, AuthoritiesConstants.OFFICIAL})
+    @HasAuthority({ AuthoritiesConstants.CUSTOMER, AuthoritiesConstants.OFFICIAL })
     public ReservationResponse getReservation(@PathVariable("reservationId") Long reservationId) {
         return ReservationResponse.fromReservation(reservationService.getReservation(reservationId));
     }
@@ -60,6 +60,5 @@ public class ReservationController {
     public void approveReservation(@PathVariable("reservationId") Long reservationId) {
         reservationService.approveReservation(reservationId);
     }
-
 
 }

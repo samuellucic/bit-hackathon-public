@@ -1,16 +1,18 @@
 package hr.bithackathon.rental.service;
 
+import java.time.LocalDate;
+
 import hr.bithackathon.rental.domain.AppUser;
 import hr.bithackathon.rental.domain.CommunityHomePlan;
 import hr.bithackathon.rental.domain.Reservation;
 import hr.bithackathon.rental.domain.dto.ReservationRequest;
+import hr.bithackathon.rental.exception.ErrorCode;
+import hr.bithackathon.rental.exception.RentalException;
 import hr.bithackathon.rental.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -39,9 +41,8 @@ public class ReservationService {
         return reservationRepository.findAll(PageRequest.of(page, size));
     }
 
-
     public Reservation getReservation(Long reservationId) {
-        return reservationRepository.findById(reservationId).orElseThrow();
+        return reservationRepository.findById(reservationId).orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
     }
 
     public void editReservation(Long reservationId, ReservationRequest request) {
@@ -59,4 +60,5 @@ public class ReservationService {
         reservation.setApproved(true);
         reservationRepository.save(reservation);
     }
+
 }

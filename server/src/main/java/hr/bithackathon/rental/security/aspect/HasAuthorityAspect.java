@@ -14,10 +14,13 @@ public class HasAuthorityAspect {
     @Before("@annotation(hasAuthorityAnnotation)")
     public void checkValue(JoinPoint joinPoint, HasAuthority hasAuthorityAnnotation) throws Exception {
         String[] allowedAuthorities = hasAuthorityAnnotation.value();
-        if (!SecurityUtils.hasCurrentUserAnyOfAuthorities(allowedAuthorities)) throw new AccessDeniedException(
+        if (!SecurityUtils.hasCurrentUserAnyOfAuthorities(allowedAuthorities)) {
+            throw new AccessDeniedException(
                 HasAuthorityAspect.class.getName() +
-                "Invalid authority" +
-                "User not authorized to access this resource"
-        );
+                    "Invalid authority" +
+                    "User not authorized to access this resource"
+            );
+        }
     }
+
 }

@@ -1,5 +1,7 @@
 package hr.bithackathon.rental.aop.logging;
 
+import java.util.Arrays;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -9,15 +11,13 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-
 @Aspect
 public class LoggingAspect {
 
     @Pointcut(
-            "within(@org.springframework.stereotype.Repository *)" +
-                    " || within(@org.springframework.stereotype.Service *)" +
-                    " || within(@org.springframework.web.bind.annotation.RestController *)"
+        "within(@org.springframework.stereotype.Repository *)" +
+            " || within(@org.springframework.stereotype.Service *)" +
+            " || within(@org.springframework.web.bind.annotation.RestController *)"
     )
     public void springBeanPointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
@@ -27,7 +27,7 @@ public class LoggingAspect {
      * Pointcut that matches all Spring beans in the application's main packages.
      */
     @Pointcut(
-            "within(hr..*)"
+        "within(hr..*)"
     )
     public void applicationPackagePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
@@ -37,6 +37,7 @@ public class LoggingAspect {
      * Retrieves the {@link Logger} associated to the given {@link JoinPoint}.
      *
      * @param joinPoint join point we want the logger for.
+     *
      * @return {@link Logger} associated to the given {@link JoinPoint}.
      */
     private Logger logger(JoinPoint joinPoint) {
@@ -47,24 +48,26 @@ public class LoggingAspect {
      * Advice that logs methods throwing exceptions.
      *
      * @param joinPoint join point for advice.
-     * @param e exception.
+     * @param e         exception.
      */
     @AfterThrowing(pointcut = "applicationPackagePointcut() && springBeanPointcut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
-            logger(joinPoint).error(
-                    "Exception in {}() with cause = '{}' and exception = '{}'",
-                    joinPoint.getSignature().getName(),
-                    e.getCause() != null ? e.getCause() : "NULL",
-                    e.getMessage(),
-                    e
-            );
+        logger(joinPoint).error(
+            "Exception in {}() with cause = '{}' and exception = '{}'",
+            joinPoint.getSignature().getName(),
+            e.getCause() != null ? e.getCause() : "NULL",
+            e.getMessage(),
+            e
+                               );
     }
 
     /**
      * Advice that logs when a method is entered and exited.
      *
      * @param joinPoint join point for advice.
+     *
      * @return result.
+     *
      * @throws Throwable throws {@link IllegalArgumentException}.
      */
     @Around("applicationPackagePointcut() && springBeanPointcut()")
@@ -84,4 +87,5 @@ public class LoggingAspect {
             throw e;
         }
     }
+
 }

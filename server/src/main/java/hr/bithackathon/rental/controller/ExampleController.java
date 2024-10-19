@@ -22,4 +22,5 @@ public class ExampleController {
     public String hello2() {
         return "Check authority";
     }
+
 }

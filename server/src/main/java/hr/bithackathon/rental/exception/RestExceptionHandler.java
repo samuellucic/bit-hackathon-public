@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @Slf4j
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-
     @ExceptionHandler(RentalException.class)
     public final ResponseEntity<ExceptionResponse> handleAddToFlowException(RentalException ex) {
         var errorCode = ex.getErrorCode();
@@ -32,4 +31,5 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     ResponseStatus findResponseStatus(Exception ex) {
         return null;
     }
+
 }

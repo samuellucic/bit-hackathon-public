@@ -12,5 +12,7 @@ import java.lang.annotation.Target;
 @Inherited
 @Documented
 public @interface HasAuthority {
+
     String[] value() default {};
+
 }

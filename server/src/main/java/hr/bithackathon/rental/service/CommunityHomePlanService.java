@@ -20,4 +20,5 @@ public class CommunityHomePlanService {
     public CommunityHomePlan getCommunityHomePlan(Long communityHomePlanId) {
         return communityHomePlanRepository.findById(communityHomePlanId).orElseThrow();
     }
+
 }
