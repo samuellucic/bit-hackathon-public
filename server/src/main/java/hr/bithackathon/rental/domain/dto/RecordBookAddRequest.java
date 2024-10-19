@@ -3,6 +3,7 @@ package hr.bithackathon.rental.domain.dto;
 import hr.bithackathon.rental.domain.AppUser;
 import hr.bithackathon.rental.domain.Contract;
 import hr.bithackathon.rental.domain.RecordBook;
+import hr.bithackathon.rental.domain.RecordBookStatus;
 
 public record RecordBookAddRequest(
         Long contractId,
@@ -14,6 +15,7 @@ public record RecordBookAddRequest(
                 .contract(contract)
                 .custodian(custodian)
                 .stateBefore(recordBookAddRequest.stateBefore())
+                .status(RecordBookStatus.CREATED)
                 .build();
     }
 }

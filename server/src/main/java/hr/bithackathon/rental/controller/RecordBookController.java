@@ -33,7 +33,7 @@ public class RecordBookController {
 
     @GetMapping(value = "/record-book", params = {"page", "size"})
     @HasAuthority(AuthoritiesConstants.CUSTODIAN)
-    public PaginationResponse<RecordBookResponse> getAllReservations(Pageable pageable) {
+    public PaginationResponse<RecordBookResponse> getAllRecordBooks(Pageable pageable) {
         return PaginationResponse.fromPage(recordBookService.getAllRecordBooks(pageable), RecordBookResponse::fromRecordBook);
     }
 
@@ -41,5 +41,11 @@ public class RecordBookController {
     @HasAuthority(AuthoritiesConstants.CUSTOMER)
     public void signRecordBook(@RequestBody SignRecordBookRequest signRecordBookRequest) {
         recordBookService.signRecordBook(signRecordBookRequest);
+    }
+
+    @PostMapping(value = "/action/record-book/down-payment")
+    @HasAuthority(AuthoritiesConstants.OFFICIAL)
+    public void handleDownPayment(@RequestBody HandleDownPaymentRequest handleDownPaymentRequest) {
+        recordBookService.handleDownPayment(handleDownPaymentRequest);
     }
 }

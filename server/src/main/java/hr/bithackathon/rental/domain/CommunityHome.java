@@ -1,15 +1,9 @@
 package hr.bithackathon.rental.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Builder
@@ -29,12 +23,18 @@ public class CommunityHome {
     private String address;
     @Column
     private String postalCode;
-    //    @Column
-    //    private String city;
+    @Column
+    private String city;
     @Column
     private Double area;
     @Column
     private Integer capacity;
+    @ManyToMany
+    @JoinTable(
+            name = "custodian_access_community_home",
+            joinColumns = @JoinColumn(name = "community_home_id"),
+            inverseJoinColumns = @JoinColumn(name = "custodian_id"))
+    private List<AppUser> custodians;
 
     public static CommunityHome dummy() {
         return CommunityHome.builder()

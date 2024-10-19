@@ -52,7 +52,8 @@ public class ReservationController {
     @GetMapping("/reservations/{id}")
     @HasAuthority({ AuthoritiesConstants.CUSTOMER, AuthoritiesConstants.OFFICIAL })
     public ReservationResponse getReservation(@PathVariable("id") Long id) {
-        return ReservationResponse.fromReservation(reservationService.getReservation(id));
+        // TODO rastaviti za ova dva brata
+        return ReservationResponse.fromReservation(reservationService.getReservationForCurrentUser(id));
     }
 
     @PutMapping("/reservations/{id}")
