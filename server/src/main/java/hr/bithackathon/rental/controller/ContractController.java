@@ -32,7 +32,7 @@ public class ContractController {
     private final ContractService contractService;
 
     @GetMapping("/{contractId}")
-    @HasAuthority({ AuthoritiesConstants.CUSgiTOMER, AuthoritiesConstants.MAYOR, AuthoritiesConstants.OFFICIAL })
+    @HasAuthority({ AuthoritiesConstants.CUSTOMER, AuthoritiesConstants.MAYOR, AuthoritiesConstants.OFFICIAL })
     public ContractResponse getContract(@PathVariable Long contractId) {
         if (SecurityUtils.isLoggedInCustomer()) {
             return ContractResponse.of(contractService.getContractAndCheckUserId(contractId, SecurityUtils.getCurrentUserDetails().getId()));
