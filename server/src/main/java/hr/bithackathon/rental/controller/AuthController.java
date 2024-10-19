@@ -5,6 +5,7 @@ import hr.bithackathon.rental.domain.dto.LoginResponse;
 import hr.bithackathon.rental.security.JwtToken;
 import hr.bithackathon.rental.security.TokenProvider;
 import hr.bithackathon.rental.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class AuthController {
     private final TokenProvider tokenProvider;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> authenticate(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authService.authenticate(loginRequest);
         String jwt = tokenProvider.createToken(authentication);
         HttpHeaders httpHeaders = new HttpHeaders();

@@ -5,6 +5,7 @@ import hr.bithackathon.rental.domain.dto.SignContractRequest;
 import hr.bithackathon.rental.security.AuthoritiesConstants;
 import hr.bithackathon.rental.security.aspect.HasAuthority;
 import hr.bithackathon.rental.service.ContractService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,19 +21,19 @@ public class ContractActionController {
 
     @PostMapping("/sign-user")
     @HasAuthority(AuthoritiesConstants.CUSTOMER)
-    public void signContractByUser(@RequestBody SignContractRequest request) {
+    public void signContractByUser(@Valid @RequestBody SignContractRequest request) {
         contractService.signContractByCustomer(request.contractId());
     }
 
     @PostMapping("/sign-mayor")
     @HasAuthority(AuthoritiesConstants.MAYOR)
-    public void signContractByMajor(@RequestBody SignContractRequest request) {
+    public void signContractByMajor(@Valid @RequestBody SignContractRequest request) {
         contractService.signContractByMajor(request.contractId());
     }
 
     @PostMapping("/pay")
     @HasAuthority(AuthoritiesConstants.CUSTOMER)
-    public void payContract(@RequestBody PayContractRequest request) {
+    public void payContract(@Valid @RequestBody PayContractRequest request) {
         contractService.finalizeContract(request.contractId());
     }
 

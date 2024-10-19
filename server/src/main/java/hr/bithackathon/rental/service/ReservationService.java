@@ -82,7 +82,6 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
-    //TODO: TU NESTO!!!
     public boolean approveReservation(Long reservationId, boolean approve) {
         var reservation = getReservation(reservationId);
         if (reservation.getApproved() != null) {
@@ -92,8 +91,6 @@ public class ReservationService {
         reservation.setApproved(approve);
         reservationRepository.save(reservation);
 
-        // TODO: Implement logic to see if it clashes with other reservations..
-        // TODO: Deny others if it clashes
         if (approve) {
             declineOverlaps(reservation);
         }

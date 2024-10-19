@@ -5,6 +5,8 @@ import java.time.ZoneId;
 import java.util.List;
 
 import hr.bithackathon.rental.domain.TimeRange;
+import hr.bithackathon.rental.exception.ErrorCode;
+import hr.bithackathon.rental.exception.RentalException;
 import hr.bithackathon.rental.service.AvailabilityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +26,10 @@ public class AvailabilityController {
     public List<TimeRange> getOccupation(@PathVariable("communityHomeId") Long communityHomeId,
                                          @RequestParam("from") LocalDate from,
                                          @RequestParam("to") LocalDate to) {
+        if (to.isAfter(from)) {
+            throw new RentalException(ErrorCode.INVALID_DATE_RANGE);
+        }
+
         var fromTimestamp = from.atStartOfDay(ZoneId.systemDefault()).toInstant();
         var toTimestamp = to.atStartOfDay(ZoneId.systemDefault()).toInstant();
 
@@ -34,6 +40,10 @@ public class AvailabilityController {
     public boolean isAvailable(@PathVariable("communityHomeId") Long communityHomeId,
                                @RequestParam("from") LocalDate from,
                                @RequestParam("to") LocalDate to) {
+        if (to.isAfter(from)) {
+            throw new RentalException(ErrorCode.INVALID_DATE_RANGE);
+        }
+        
         var fromTimestamp = from.atStartOfDay(ZoneId.systemDefault()).toInstant();
         var toTimestamp = to.atStartOfDay(ZoneId.systemDefault()).toInstant();
 

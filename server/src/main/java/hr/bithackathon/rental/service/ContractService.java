@@ -14,6 +14,7 @@ import hr.bithackathon.rental.domain.TimeRange;
 import hr.bithackathon.rental.exception.ErrorCode;
 import hr.bithackathon.rental.exception.RentalException;
 import hr.bithackathon.rental.repository.ContractRepository;
+import hr.bithackathon.rental.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ResourceLoader;
@@ -155,9 +156,11 @@ public class ContractService {
 
     public void signContractByCustomer(Long contractId) {
         var contract = getContract(contractId);
-        //        if (!Objects.equals(contract.getReservation().getCustomer().getId(), customerId)) {
-        //            throw new RentalException(ErrorCode.CONTRACT_CUSTOMER_MISMATCH);
-        //        }
+        var loggedInUserId = SecurityUtils.getCurrentUserDetails().getId();
+
+        if (contract.getReservation().getCustomer().getId() != loggedInUserId) {
+            throw new RentalException(ErrorCode.UNAUTHORIZED);
+        }
 
         if (contract.getStatus() != ContractStatus.MAJOR_SIGNED) {
             throw new RentalException(ErrorCode.CONTRACT_NOT_SIGNED_BY_MAYOR);
@@ -171,6 +174,11 @@ public class ContractService {
 
     public void finalizeContract(Long contractId) {
         var contract = getContract(contractId);
+        var loggedInUserId = SecurityUtils.getCurrentUserDetails().getId();
+        if (contract.getReservation().getCustomer().getId() != loggedInUserId) {
+            throw new RentalException(ErrorCode.UNAUTHORIZED);
+        }
+
         if (contract.getStatus() != ContractStatus.PAYMENT_PENDING) {
             throw new RentalException(ErrorCode.CONTRACT_NOT_SIGNED_BY_CUSTOMER);
         }
