@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, ReactNode, useCallback, useState } from 'react';
+import { createContext, ReactNode, useCallback, useEffect, useState } from 'react';
 import { getItem, removeItem } from '../api/local-storage';
 import { Authority } from '../types/types';
 import { authorityKey, tokenKey } from '../lib/constants';
@@ -26,14 +26,19 @@ type Props = {
 };
 
 export const UserContextProvider = ({ children }: Props) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(!!getItem(tokenKey));
-  const [authority, setAuthority] = useState<Authority | null>(getItem(authorityKey)! as Authority);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [authority, setAuthority] = useState<Authority | null>(null);
 
   const logout = useCallback(() => {
     setAuthority(null);
     setIsLoggedIn(false);
     removeItem(tokenKey);
     removeItem(authorityKey);
+  }, []);
+
+  useEffect(() => {
+    setIsLoggedIn(!!getItem(tokenKey));
+    setAuthority(getItem(authorityKey)! as Authority);
   }, []);
 
   return (
