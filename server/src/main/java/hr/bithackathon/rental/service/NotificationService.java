@@ -28,6 +28,10 @@ public class NotificationService {
         mockCall();
     }
 
+    public void notifyReservationDeclinedEmail(Long ReservationId, String email) {
+        mockCall();
+    }
+
     public void notifyMinistry(Long contractId) {
         mockCall();
     }

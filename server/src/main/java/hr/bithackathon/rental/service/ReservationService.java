@@ -1,5 +1,7 @@
 package hr.bithackathon.rental.service;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -89,25 +91,28 @@ public class ReservationService {
 
         // TODO: Implement logic to see if it clashes with other reservations..
         // TODO: Deny others if it clashes
-        //        if (approve) {
-        //            declineOverlaps(reservation);
-        //        }
+        if (approve) {
+            declineOverlaps(reservation);
+        }
 
         return approve;
     }
 
     private void declineOverlaps(Reservation reservation) {
-        var timeRange = new TimeRange(reservation.getDatetimeFrom(), reservation.getDatetimeTo());
-        var reservations = reservationRepository.findAllByApprovedIsNullAndCommunityHomePlanId(reservation.getCommunityHomePlan().getId());
+        var startPadded = reservation.getDatetimeFrom().minus(Duration.ofHours(1));
+        var endPadded = reservation.getDatetimeTo().plus(Duration.ofHours(1));
+        var communityHomePlanId = reservation.getCommunityHomePlan().getId();
+        var reservations = reservationRepository.findAllNotApprovedForCommunityHomePlanAndBetween(communityHomePlanId, startPadded, endPadded);
 
-        //        reservations.stream()
-        //                    .map(r -> new TimeRange(r.getDatetimeFrom(), r.getDatetimeTo()))
-        //                    .filter(r -> r.overlaps(timeRange))
-        //                    .forEach(r -> {
+        reservations.stream()
+                    .filter(r -> this.isTouchingEnds(new TimeRange(r.getDatetimeFrom(), r.getDatetimeTo()), startPadded, endPadded))
+                    .forEach(r -> {
+                        r.setApproved(false);
+                        notificationService.notifyReservationDeclinedEmail(r.getId(), r.getCustomer().getEmail());
+                        reservationRepository.save(r);
+                    });
     }
 
-    //    private boolean overlaps(TimeRange original, TimeRange other) {
-    //        return (this.start.isBefore(other.end) && this.end.isAfter(other.start));
-    //    }
-
-}
+    private boolean isTouchingEnds(TimeRange range, Instant start, Instant end) {
+        return range.end().equals(start) || range.start().equals(end);
+    }
