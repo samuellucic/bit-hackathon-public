@@ -12,6 +12,7 @@ const reservationEndpoints = {
 };
 
 const contractsEndpoints = {
+  getContracts: contracts,
   getContractDocument: `${contracts}/doc`,
   payContract: `${contractAction}/pay`,
   signContractMayor: `${contractAction}/sign-major`,

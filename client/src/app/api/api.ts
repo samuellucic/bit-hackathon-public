@@ -1,5 +1,5 @@
 import api from './instance';
-import { CreateReservation, JwtToken, Pageable, PageResponse, ReservationType } from '../types/types';
+import { ContractType, CreateReservation, JwtToken, Pageable, PageResponse, ReservationType } from '../types/types';
 import { setItem } from './local-storage';
 import { tokenKey } from '../lib/constants';
 import { endpoints } from './constants';
@@ -53,6 +53,25 @@ export const decideReservation = async (id: number, approve: boolean) => {
       approve,
     },
   });
+};
+
+export type ContractResponse = {
+  id: number;
+  customerFirstName: string;
+  customerLastName: string;
+  lease: number;
+  downPayment: number;
+  amenities: number;
+  total: number;
+  vat: number;
+  status: ContractType;
+};
+
+export const getContracts = async (pageable: Pageable) => {
+  const res = await api.get<PageResponse<ContractResponse>>(endpoints.getContracts, {
+    params: pageable,
+  });
+  return res.data;
 };
 
 export const getContractDoc = async () => {
