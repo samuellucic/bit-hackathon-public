@@ -1,10 +1,5 @@
 package hr.bithackathon.rental.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.time.Duration;
-import java.util.List;
-
 import hr.bithackathon.rental.config.FreeReservationConfiguration;
 import hr.bithackathon.rental.domain.Contract;
 import hr.bithackathon.rental.domain.ContractStatus;
@@ -17,6 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.List;
 
 @Slf4j
 @Service

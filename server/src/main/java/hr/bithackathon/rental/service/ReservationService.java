@@ -1,7 +1,5 @@
 package hr.bithackathon.rental.service;
 
-import java.time.LocalDate;
-
 import hr.bithackathon.rental.domain.AppUser;
 import hr.bithackathon.rental.domain.CommunityHomePlan;
 import hr.bithackathon.rental.domain.Reservation;
@@ -9,13 +7,18 @@ import hr.bithackathon.rental.domain.dto.ReservationRequest;
 import hr.bithackathon.rental.exception.ErrorCode;
 import hr.bithackathon.rental.exception.RentalException;
 import hr.bithackathon.rental.repository.ReservationRepository;
+import hr.bithackathon.rental.security.SecurityUtils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
@@ -33,31 +36,33 @@ public class ReservationService {
         return reservation.getId();
     }
 
-    public Page<Reservation> getAllReservationsByUser(Long appUserId, int page, int size) {
-        return reservationRepository.findAllByCustomerId(appUserId, PageRequest.of(page, size));
+    public Page<Reservation> getAllReservationsByUser(Long appUserId, Pageable pageable) {
+        return reservationRepository.findAllByCustomerId(appUserId, pageable);
     }
 
-    public Page<Reservation> getAllReservations(int page, int size) {
-        return reservationRepository.findAll(PageRequest.of(page, size));
+    public Page<Reservation> getAllReservations(Pageable pageable) {
+        return reservationRepository.findAll(pageable);
     }
 
     public Reservation getReservation(Long reservationId) {
-        return reservationRepository.findById(reservationId).orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
+        return reservationRepository.findByIdAndCustomerId(reservationId, SecurityUtils.getCurrentUserDetails().getId()).orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
     }
 
-    public void editReservation(Long reservationId, ReservationRequest request) {
+    public Reservation editReservation(Long reservationId, ReservationRequest request) {
         // TODO uncomment
         // CommunityHomePlan communityHomePlan = communityHomePlanService.getCommunityHomePlan(request.communityHomePlanId());
+        // TODO kako ovo u samuelovom sistemu
         CommunityHomePlan communityHomePlan = CommunityHomePlan.dummy();
         AppUser customer = appUserService.getCurrentAppUser();
         Reservation reservation = ReservationRequest.toReservation(request, communityHomePlan, customer);
         reservation.setId(reservationId);
-        reservationRepository.save(reservation);
+        reservation = reservationRepository.save(reservation);
+        return reservation;
     }
 
-    public void approveReservation(Long reservationId) {
+    public void approveReservation(Long reservationId, Boolean approve) {
         Reservation reservation = getReservation(reservationId);
-        reservation.setApproved(true);
+        reservation.setApproved(approve);
         reservationRepository.save(reservation);
     }
 
