@@ -33,30 +33,24 @@ public class RecordBook {
     @OneToOne
     @JoinColumn(name = "contract_id")
     private Contract contract;
+
     @ManyToOne
     @JoinColumn(name = "custodian_id")
     private AppUser custodian;
-    @Column
+
+    @Column(nullable = false)
     private String stateBefore;
+
     @Column
     private String stateAfter;
+
     @Column
     private String damage;
+
     @Column
     private LocalDate inspectionDate;
+
     @Enumerated(EnumType.STRING)
     private RecordBookStatus status;
-
-    public static RecordBook dummy() {
-        return RecordBook.builder()
-                         .id(0L)
-                         .contract(Contract.dummy())
-                         .custodian(AppUser.dummy())
-                         .stateBefore("before")
-                         .stateAfter("after")
-                         .damage("damage")
-                         .inspectionDate(LocalDate.now())
-                         .build();
-    }
 
 }

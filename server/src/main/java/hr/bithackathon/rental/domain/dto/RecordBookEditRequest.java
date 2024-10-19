@@ -1,6 +1,16 @@
 package hr.bithackathon.rental.domain.dto;
 
-public record RecordBookEditRequest(String stateAfter, String damage) {
+import jakarta.validation.constraints.NotEmpty;
+
+public record RecordBookEditRequest(
+
+    @NotEmpty
+    String stateAfter,
+
+    @NotEmpty
+    String damage
+    
+) {
 
 }
 

@@ -143,12 +143,7 @@ public class ContractService {
             throw new RentalException(ErrorCode.CONTRACT_ALREADY_SIGNED);
         }
 
-        // TODO: Add real validation
-        //        if (!Objects.equals(contract.getReservation().getCustomer().getId(), customerId)) {
-        //            throw new RentalException(ErrorCode.CONTRACT_CUSTOMER_MISMATCH);
-        //        }
-
-        contract.setStatus(ContractStatus.MAJOR_SIGNED);
+        contract.setStatus(ContractStatus.MAYOR_SIGNED);
         saveContract(contract);
 
         notificationService.notifyCustomerForContract(contractId, contract.getReservation().getCustomer().getEmail());
@@ -162,7 +157,7 @@ public class ContractService {
             throw new RentalException(ErrorCode.UNAUTHORIZED);
         }
 
-        if (contract.getStatus() != ContractStatus.MAJOR_SIGNED) {
+        if (contract.getStatus() != ContractStatus.MAYOR_SIGNED) {
             throw new RentalException(ErrorCode.CONTRACT_NOT_SIGNED_BY_MAYOR);
         }
 

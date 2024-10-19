@@ -29,27 +29,23 @@ public class CommunityHomePlan {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "community_home_id")
     private CommunityHome communityHome;
-    @Column
+
+    @Column(nullable = false)
     private Double leaseCostPerHour;
-    @Column
+
+    @Column(nullable = false)
     private Double downPayment;
-    @Column
+
+    @Column(nullable = false)
     private Double amenitiesCostPerHour;
-    @Column
+
+    @Column(nullable = false)
     private Double utilitiesCostPerHour;
+
     @Column
     private Integer availableHourFrom;
+
     @Column
     private Integer availableHourTo;
-
-    public static CommunityHomePlan dummy() {
-        return CommunityHomePlan.builder()
-                                .id(1L)
-                                .communityHome(CommunityHome.dummy())
-                                .leaseCostPerHour(1000.0)
-                                .downPayment(2.0)
-                                .amenitiesCostPerHour(50.0)
-                                .build();
-    }
 
 }
