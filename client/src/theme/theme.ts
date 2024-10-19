@@ -100,5 +100,12 @@ export const lightTheme = createTheme({
         },
       ],
     },
+    MuiAppBar: {
+      defaultProps: {
+        sx: {
+          backgroundColor: '#1976d2',
+        },
+      },
+    },
   },
 });
