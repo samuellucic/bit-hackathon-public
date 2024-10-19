@@ -29,7 +29,6 @@ public class ReservationService {
     private final CommunityHomeService communityHomeService;
     private final AppUserService appUserService;
     private final NotificationService notificationService;
-    private final ContractService contractService;
 
     public Long createReservation(ReservationRequest request) {
         AppUser appUser;
@@ -83,7 +82,7 @@ public class ReservationService {
 
         var reservation = ReservationRequest.toReservation(request, communityHomePlan, customer);
         reservation.setId(reservationId);
-        
+
         reservationRepository.save(reservation);
     }
 
