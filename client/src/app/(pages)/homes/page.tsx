@@ -2,7 +2,16 @@ import React from 'react';
 import Link from 'next/link';
 import { Card, CardActions, CardContent, Grid, Typography } from '@mui/material';
 import styles from './page.module.css';
-import { House } from '@/app/(pages)/homes/typings';
+
+type House = {
+  id: number;
+  name: string;
+  address: string;
+  postalCode: string;
+  city: string;
+  area: number;
+  capacity: number;
+};
 
 const mockHouses: House[] = [
   {
