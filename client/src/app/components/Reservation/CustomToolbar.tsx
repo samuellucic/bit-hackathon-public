@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { ToolbarProps } from 'react-big-calendar';
 
 const CustomToolbar = (props: ToolbarProps) => {
-  const goToBack = () => {
+  const goToBack = useCallback(() => {
     props.onNavigate('PREV');
-  };
+  }, [props]);
 
-  const goToNext = () => {
+  const goToNext = useCallback(() => {
     props.onNavigate('NEXT');
-  };
+  }, [props]);
 
-  const goToToday = () => {
+  const goToToday = useCallback(() => {
     props.onNavigate('TODAY');
-  };
+  }, [props]);
 
   return (
     <div className="rbc-toolbar">

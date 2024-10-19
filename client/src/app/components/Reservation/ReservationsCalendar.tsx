@@ -1,4 +1,4 @@
-import React, { ComponentType, useState } from 'react';
+import React, { ComponentType, useCallback, useMemo, useState } from 'react';
 import { Calendar, dateFnsLocalizer, ToolbarProps, View } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -27,19 +27,23 @@ const MyCalendar = ({ reservations }: CalendarProps) => {
   const [view, setView] = useState<View>('month');
   const [date, setDate] = useState(new Date());
 
-  const events = reservations.map((reservation) => ({
-    title: reservation.title,
-    start: reservation.reservationStart,
-    end: reservation.reservationEnd,
-  }));
+  const events = useMemo(
+    () =>
+      reservations.map((reservation) => ({
+        title: reservation.title,
+        start: reservation.reservationStart,
+        end: reservation.reservationEnd,
+      })),
+    [reservations]
+  );
 
-  const handleNavigate = (newDate: Date) => {
+  const handleNavigate = useCallback((newDate: Date) => {
     setDate(newDate);
-  };
+  }, []);
 
-  const handleViewChange = (newView: View) => {
+  const handleViewChange = useCallback((newView: View) => {
     setView(newView);
-  };
+  }, []);
 
   return (
     <Container>
