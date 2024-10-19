@@ -19,17 +19,20 @@ type HeaderItem = {
 };
 
 const headerItems: HeaderItem[] = [
-  { url: '/home', label: 'Home' },
+  { url: '/home', label: 'Početna' },
   {
     url: '/about',
-    label: 'About',
+    label: 'O nama',
     submenu: [
-      { url: '/about/team', label: 'Team' },
-      { url: '/about/history', label: 'History' },
+      { url: 'https://www.linkedin.com/in/adrian-babic/', label: 'Adrian' },
+      { url: 'https://www.linkedin.com/in/filip-pankretic/', label: 'Filip' },
+      { url: 'https://www.linkedin.com/in/matej-istuk-978b34278/', label: 'Matej' },
+      { url: 'https://www.linkedin.com/in/samuel-luci%C4%87-812b38237/', label: 'Samuel' },
+      { url: 'https://www.linkedin.com/in/vatroslav-jakopec-a83b3229b/', label: 'Vatroslav' },
     ],
   },
-  { url: '/contact', label: 'Contact' },
-  { url: '/bithack', label: 'B:IT Hack' },
+  { url: 'https://bithack.tpbj.hr/', label: 'B:IT Hack' },
+  { url: '/login', label: 'Prijava' },
 ];
 
 export type HeaderProps = {
@@ -68,7 +71,7 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
       className={styles.appBar}>
       <Toolbar>
         <Typography variant="h6" className={styles.title}>
-          Welcome to Our Hackathon Project
+          Društveni domovi Bjelovar
         </Typography>
 
         <IconButton onClick={toggleTheme} color="inherit" sx={{ marginLeft: 'auto' }}>
