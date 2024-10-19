@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Card, CardContent, CardActions, Typography, Grid } from '@mui/material';
+import { Card, CardActions, CardContent, Grid, Typography } from '@mui/material';
 import styles from './page.module.css';
 import { House } from '@/app/(pages)/homes/typings';
 
@@ -52,7 +52,7 @@ const ListOfHomes = () => {
       <Grid container spacing={2}>
         {mockHouses.map((house) => (
           <Grid item xs={12} sm={6} md={4} key={house.id}>
-            <Link href={`/home/${house.id}`} passHref>
+            <Link href={`/homes/${house.id}`} passHref>
               <Card variant="outlined" className={styles.card}>
                 <CardContent className={styles.cardContent}>
                   <Typography variant="h5" className={styles.cardTitle}>

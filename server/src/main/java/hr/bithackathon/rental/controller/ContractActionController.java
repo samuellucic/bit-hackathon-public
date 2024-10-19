@@ -23,7 +23,7 @@ public class ContractActionController {
         contractService.signContractByCustomer(request.contractId());
     }
 
-    @PostMapping("/sign-major")
+    @PostMapping("/sign-mayor")
     public void signContractByMajor(@RequestBody SignContractRequest request) {
         contractService.signContractByMajor(request.contractId());
     }
