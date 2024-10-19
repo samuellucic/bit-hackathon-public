@@ -6,7 +6,7 @@ import { Container, Typography } from '@mui/material';
 /* eslint-disable-next-line */
 // @ts-ignore
 import hrLocale from 'date-fns/locale/hr';
-import { Reservation } from '@/app/components/Reservation/typings';
+import { Reservation } from '@/app/components/Reservation/helper';
 import CustomToolbar from '@/app/components/Reservation/CustomToolbar';
 
 const locales = {
