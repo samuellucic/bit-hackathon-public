@@ -1,5 +1,10 @@
 package hr.bithackathon.rental.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.List;
+
 import hr.bithackathon.rental.config.FreeReservationConfiguration;
 import hr.bithackathon.rental.domain.Contract;
 import hr.bithackathon.rental.domain.ContractStatus;
@@ -10,12 +15,8 @@ import hr.bithackathon.rental.repository.ContractRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.io.IOException;
-import java.time.Duration;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -27,6 +28,7 @@ public class ContractService {
     private final NotificationService notificationService;
     private final BankService bankService;
     private final ResourceLoader resourceLoader;
+    private final ReservationService reservationService;
 
     static final Double VAT = 0.25;
 
@@ -34,10 +36,17 @@ public class ContractService {
         return contractRepository.findById(contractId).orElseThrow(() -> new RentalException(ErrorCode.CONTRACT_NOT_FOUND));
     }
 
+    public List<Contract> findAllContractsByCustomerId(Long customerId) {
+        return contractRepository.findAllByCustomerId(customerId);
+    }
+
+    public List<Contract> findAllContractsByCustomerIdAndPage(Long customerId, int page, int size) {
+        return contractRepository.findAllByCustomerId(customerId, PageRequest.of(page, size));
+    }
+
     public Contract saveContract(Contract contract) {
         return contractRepository.save(contract);
     }
-
 
     // TODO: Later when you are ready to implement this logic, extract to its own service
     public File getContractDocument() {
@@ -51,8 +60,7 @@ public class ContractService {
     }
 
     public Long createContract(Long reservationId) {
-        // TODO: Call repository
-        var reservation = Reservation.dummy();
+        var reservation = reservationService.getReservation(reservationId);
 
         if (freeReservationConfiguration.isFreeReservationType(reservation.getType())) {
             var contractId = createFreeContract(reservation);
@@ -70,14 +78,14 @@ public class ContractService {
         var total = lease + utilities + downPayment + vat;
 
         var contract = Contract.builder()
-                .reservation(reservation)
-                .lease(lease)
-                .downPayment(downPayment)
-                .utilities(utilities)
-                .total(total)
-                .vat(vat)
-                .status(ContractStatus.CREATED)
-                .build();
+                               .reservation(reservation)
+                               .lease(lease)
+                               .downPayment(downPayment)
+                               .utilities(utilities)
+                               .total(total)
+                               .vat(vat)
+                               .status(ContractStatus.CREATED)
+                               .build();
 
         var contractId = contractRepository.save(contract).getId();
         notificationService.notifyMajor(contractId);
@@ -85,56 +93,58 @@ public class ContractService {
         return contractId;
     }
 
-    // TODO: Check if it makes sense to extract to its own services
     // TODO: Call this when fetching contracts, and later add scheduled task
     public boolean isContractPaid(Long contractId) {
         var contract = getContract(contractId);
 
         return switch (contract.getStatus()) {
-            case TO_PAY -> bankService.isPaid();
+            case PAYMENT_PENDING -> bankService.isPaid();
             case FINALIZED -> true;
             default -> false;
         };
     }
 
-    public void signContractMajor(Long contractId) {
+    public void signContractByMajor(Long contractId) {
         var contract = getContract(contractId);
+        // TODO: Add real validation
+        //        if (!Objects.equals(contract.getReservation().getCustomer().getId(), customerId)) {
+        //            throw new RentalException(ErrorCode.CONTRACT_CUSTOMER_MISMATCH);
+        //        }
+
         contract.setStatus(ContractStatus.MAJOR_SIGNED);
-        notificationService.notifyCustomer(contractId, contract.getReservation().getAppUser().getEmail());
+        notificationService.notifyCustomer(contractId, contract.getReservation().getCustomer().getEmail());
     }
 
-    public void signContractCustomer(Long contractId, Long customerId) {
+    public void signContractByCustomer(Long contractId) {
         var contract = getContract(contractId);
-        if (!Objects.equals(contract.getReservation().getAppUser().getId(), customerId)) {
-            throw new RentalException(ErrorCode.CONTRACT_CUSTOMER_MISMATCH);
+        //        if (!Objects.equals(contract.getReservation().getCustomer().getId(), customerId)) {
+        //            throw new RentalException(ErrorCode.CONTRACT_CUSTOMER_MISMATCH);
+        //        }
+
+        notificationService.notifyFinancesAndGospodarstvo(contractId);
+
+        contract.setStatus(ContractStatus.PAYMENT_PENDING);
+    }
+
+    public void finalizeContract(Long contractId) {
+        var contract = getContract(contractId);
+        if (contract.getStatus() != ContractStatus.PAYMENT_PENDING) {
+            throw new RentalException(ErrorCode.CONTRACT_NOT_PENDING_PAYMENT);
         }
 
-        contract.setStatus(ContractStatus.TO_PAY);
+        contract.setStatus(ContractStatus.FINALIZED);
     }
 
     private Long createFreeContract(Reservation reservation) {
         var contract = Contract.builder()
-                .reservation(reservation)
-                .lease(0.0)
-                .downPayment(0.0)
-                .utilities(0.0)
-                .total(0.0)
-                .vat(0.0)
-                .status(ContractStatus.CREATED)
-                .build();
-
-        return contractRepository.save(contract).getId();
-    }
-
-    public Long dummy() {
-        var contract = Contract.builder()
-                .lease(0.0)
-                .downPayment(0.0)
-                .utilities(0.0)
-                .total(0.0)
-                .vat(0.0)
-                .status(ContractStatus.CREATED)
-                .build();
+                               .reservation(reservation)
+                               .lease(0.0)
+                               .downPayment(0.0)
+                               .utilities(0.0)
+                               .total(0.0)
+                               .vat(0.0)
+                               .status(ContractStatus.CREATED)
+                               .build();
 
         return contractRepository.save(contract).getId();
     }

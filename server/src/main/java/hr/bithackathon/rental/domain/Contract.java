@@ -50,7 +50,7 @@ public class Contract {
     @Enumerated(EnumType.STRING)
     private ContractStatus status;
 
-    static Contract dummy() {
+    public static Contract dummy() {
         return Contract.builder()
                        .id(0L)
                        .reservation(Reservation.dummy())

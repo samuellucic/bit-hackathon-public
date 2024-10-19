@@ -1,6 +1,7 @@
 package hr.bithackathon.rental.exception;
 
 public class UncheckedBusinessException extends RuntimeException {
+
     public UncheckedBusinessException() {
     }
 
@@ -19,4 +20,5 @@ public class UncheckedBusinessException extends RuntimeException {
     public UncheckedBusinessException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
+
 }

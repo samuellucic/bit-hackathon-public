@@ -29,7 +29,7 @@ type HeaderItem = {
 };
 
 const headerItems: HeaderItem[] = [
-  { url: '/home', label: 'Home' },
+  { url: '/', label: 'Home' },
   {
     url: '/about',
     label: 'About',

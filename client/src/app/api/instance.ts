@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getItem } from './local-storage';
+import { tokenKey } from '../lib/constants';
 
 const baseApiPath = `${process.env.NEXT_PUBLIC_BE_SERVICE_URL}/api`;
 
@@ -8,7 +9,7 @@ const commonHeader = {
 };
 
 export const getAuthorizationHeader = () => {
-  const token = getItem('auth-id-token');
+  const token = getItem(tokenKey);
   return { Authorization: token ? `Bearer ${token}` : undefined };
 };
 
@@ -29,6 +30,15 @@ api.interceptors.request.use(
     return config;
   },
   (error) => Promise.reject(error)
+);
+
+api.interceptors.response.use(
+  (value) => value,
+  (error) => {
+    console.log(error);
+
+    return Promise.reject(error);
+  }
 );
 
 export default api;

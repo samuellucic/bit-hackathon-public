@@ -15,6 +15,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+server:
+  servlet:
+    context-path: "/api"
 service:
   free-reservation:
     freeReservationTypes:
