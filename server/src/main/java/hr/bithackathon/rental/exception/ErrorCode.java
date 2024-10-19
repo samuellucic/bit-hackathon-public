@@ -20,6 +20,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(400, 40013, "User not found."),
     PASSWORD_TOO_WEAK(400, 40014, "Password too weak."),
     RESERVATION_PAST_DATE(400, 40015, "Reservation date is to late."),
+    INVALID_DATE_RANGE(400, 40016, "Invalid date range."),
 
     UNAUTHORIZED(401, 40101, "Unauthorized"),
 

@@ -14,6 +14,7 @@ import hr.bithackathon.rental.security.aspect.HasAuthority;
 import hr.bithackathon.rental.service.ContractService;
 import hr.bithackathon.rental.service.ReservationService;
 import hr.bithackathon.rental.util.Util;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -37,7 +38,12 @@ public class ReservationController {
 
     @PostMapping("/reservations")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> createReservation(@RequestBody ReservationRequest reservationRequest) {
+    public ResponseEntity<Void> createReservation(@Valid @RequestBody ReservationRequest reservationRequest) {
+        if (reservationRequest.datetimeFrom().isAfter(reservationRequest.datetimeTo()) ||
+            Duration.between(reservationRequest.datetimeFrom(), reservationRequest.datetimeTo()).toHours() < 1) {
+            throw new RentalException(ErrorCode.INVALID_DATE_RANGE);
+        }
+
         if (SecurityUtils.isLoggedInCustomer() || SecurityUtils.isUserLoggedOut()) {
             var reservationStart = reservationRequest.datetimeFrom();
             if (reservationStart.isBefore(Instant.now().minus(Duration.ofDays(8)))) {
@@ -75,7 +81,7 @@ public class ReservationController {
 
     @PutMapping("/reservations/{userId}")
     @HasAuthority({ AuthoritiesConstants.CUSTOMER, AuthoritiesConstants.OFFICIAL })
-    public ResponseEntity<Void> editReservation(@PathVariable("userId") Long userId, ReservationRequest reservationRequest) {
+    public ResponseEntity<Void> editReservation(@PathVariable("userId") Long userId, @Valid @RequestBody ReservationRequest reservationRequest) {
         if (SecurityUtils.isLoggedInCustomer() && !userId.equals(SecurityUtils.getCurrentUserDetails().getId())) {
             throw new RentalException(ErrorCode.UNAUTHORIZED);
         }

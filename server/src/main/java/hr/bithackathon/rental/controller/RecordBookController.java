@@ -11,6 +11,7 @@ import hr.bithackathon.rental.security.SecurityUtils;
 import hr.bithackathon.rental.security.aspect.HasAuthority;
 import hr.bithackathon.rental.service.RecordBookService;
 import hr.bithackathon.rental.util.Util;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -32,14 +33,14 @@ public class RecordBookController {
     @PostMapping("/record-books")
     @ResponseStatus(HttpStatus.CREATED)
     @HasAuthority(AuthoritiesConstants.CUSTODIAN)
-    public ResponseEntity<Void> createRecordBook(@RequestBody RecordBookAddRequest recordBookAddRequest) {
+    public ResponseEntity<Void> createRecordBook(@Valid @RequestBody RecordBookAddRequest recordBookAddRequest) {
         var id = recordBookService.createRecordBook(recordBookAddRequest);
         return Util.getCreateResponse(id);
     }
 
     @PatchMapping(value = "/record-books/{id}")
     @HasAuthority(AuthoritiesConstants.CUSTODIAN)
-    public RecordBookResponse updateRecordBook(@PathVariable("id") Long id, @RequestBody RecordBookEditRequest recordBookEditRequest) {
+    public RecordBookResponse updateRecordBook(@PathVariable("id") Long id, @Valid  @RequestBody RecordBookEditRequest recordBookEditRequest) {
         return RecordBookResponse.fromRecordBook(recordBookService.updateRecordBook(id, recordBookEditRequest));
     }
 
@@ -61,13 +62,13 @@ public class RecordBookController {
 
     @PostMapping("/action/record-books/sign")
     @HasAuthority(AuthoritiesConstants.CUSTOMER)
-    public void signRecordBook(@RequestBody SignRecordBookRequest signRecordBookRequest) {
+    public void signRecordBook(@Valid @RequestBody SignRecordBookRequest signRecordBookRequest) {
         recordBookService.signRecordBook(signRecordBookRequest);
     }
 
     @PostMapping(value = "/action/record-books/down-payment")
     @HasAuthority(AuthoritiesConstants.OFFICIAL)
-    public void handleDownPayment(@RequestBody HandleDownPaymentRequest handleDownPaymentRequest) {
+    public void handleDownPayment(@Valid @RequestBody HandleDownPaymentRequest handleDownPaymentRequest) {
         recordBookService.handleDownPayment(handleDownPaymentRequest);
     }
 
