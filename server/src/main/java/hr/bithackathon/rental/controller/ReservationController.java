@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,8 +39,7 @@ public class ReservationController {
 
     @GetMapping(value = "/users/{userId}/reservations", params = { "page", "size" })
     @HasAuthority(AuthoritiesConstants.CUSTOMER)
-    public PaginationResponse<ReservationResponse> getAllReservationsByUser(@PathVariable("userId") Long userId,
-                                                                            Pageable pageable) {
+    public PaginationResponse<ReservationResponse> getAllReservationsByUser(@PathVariable("userId") Long userId, Pageable pageable) {
         return PaginationResponse.fromPage(reservationService.getAllReservationsByUser(userId, pageable), ReservationResponse::fromReservation);
     }
 
@@ -64,11 +64,12 @@ public class ReservationController {
 
     @PatchMapping(value = "/reservations/{id}", params = { "approve" })
     @HasAuthority(AuthoritiesConstants.OFFICIAL)
-    public void approveReservation(@PathVariable("id") Long reservationId) {
-        reservationService.approveReservation(reservationId);
-        //TODO: notify about successful reservation approval
-        //TODO: Disapprove other reservations for the same time
-        contractService.createContract(reservationId);
+    public void approveReservation(@PathVariable("id") Long reservationId, @RequestParam("approve") boolean approve) {
+        var approved = reservationService.approveReservation(reservationId, approve);
+
+        if (approved) {
+            contractService.createContract(reservationId);
+        }
     }
 
 }

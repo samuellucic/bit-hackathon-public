@@ -32,23 +32,32 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private AppUser customer;
+
     @ManyToOne
     @JoinColumn(name = "community_home_plan_id")
     private CommunityHomePlan communityHomePlan;
+
     @Column
     private String reason;
+
     @Column
     private LocalDate creationDate;
+
     @Column
     private Instant datetimeFrom;
+
     @Column
     private Instant datetimeTo;
+
     @Column
     private String bank;
+
     @Column
     private String iban;
-    @Column
+
+    @Column(nullable = true)
     private Boolean approved;
+
     @Column
     private ReservationType type;
 

@@ -49,6 +49,10 @@ public class ContractService {
         return contractRepository.save(contract);
     }
 
+    public List<Contract> findAllBetweenStartAndEnd(Long communityHomeId, Instant start, Instant end) {
+        return contractRepository.findAllBetweenStartAndEnd(communityHomeId, start, end);
+    }
+
     public List<TimeRange> findAllOccupiedTimeRanges(Long communityHomeId, Instant start, Instant end) {
         var contracts = contractRepository.findAllBetweenStartAndEnd(communityHomeId, start, end);
         return contracts.stream()
@@ -68,7 +72,7 @@ public class ContractService {
         }
     }
 
-    public Long createContract(Long reservationId) {
+    public void createContract(Long reservationId) {
         if (contractRepository.existsContractByReservationId(reservationId)) {
             throw new RentalException(ErrorCode.CONTRACT_ALREADY_EXISTS);
         }
@@ -78,7 +82,7 @@ public class ContractService {
         if (freeReservationConfiguration.isFreeReservationType(reservation.getType())) {
             var contractId = createFreeContract(reservation);
             notificationService.notifyMajor(contractId);
-            return contractId;
+            return;
         }
 
         var communityHomePlan = reservation.getCommunityHomePlan();
@@ -104,7 +108,6 @@ public class ContractService {
 
         notificationService.notifyMajor(contractId);
 
-        return contractId;
     }
 
     public void signContractByMajor(Long contractId) {

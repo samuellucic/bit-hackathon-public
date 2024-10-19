@@ -53,10 +53,19 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
-    public void approveReservation(Long reservationId) {
+    public boolean approveReservation(Long reservationId, boolean approve) {
         var reservation = getReservation(reservationId);
-        reservation.setApproved(true);
+        if (reservation.getApproved() != null) {
+            throw new RentalException(ErrorCode.RESERVATION_HAS_APPROVAL_STATUS);
+        }
+
+        // TODO: Implement logic to see if it clashes with other reservations..
+        // TODO: Deny others
+
+        reservation.setApproved(approve);
         reservationRepository.save(reservation);
+
+        return approve;
     }
 
 }
