@@ -46,7 +46,7 @@ const MyCalendar = ({ reservations }: CalendarProps) => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
-        Reservation Calendar
+        Dostupnost doma
       </Typography>
       <Calendar
         localizer={localizer}

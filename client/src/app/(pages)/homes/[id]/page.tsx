@@ -8,17 +8,17 @@ import { Reservation } from '@/app/components/Reservation/typings';
 
 const reservations: Reservation[] = [
   {
-    title: 'Meeting',
+    title: 'Rezervirano',
     reservationStart: new Date('2024-10-21T14:00:00'),
     reservationEnd: new Date('2024-10-21T16:00:00'),
   },
   {
-    title: 'Workshop',
+    title: 'Rezervirano',
     reservationStart: new Date('2024-10-25T09:00:00'),
     reservationEnd: new Date('2024-10-25T12:00:00'),
   },
   {
-    title: 'Conference',
+    title: 'Rezervirano',
     reservationStart: new Date('2024-10-30T18:00:00'),
     reservationEnd: new Date('2024-10-30T20:00:00'),
   },
