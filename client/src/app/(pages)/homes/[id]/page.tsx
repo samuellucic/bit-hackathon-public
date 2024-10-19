@@ -36,7 +36,7 @@ const CommunityHome = () => {
 
   return (
     <Container className={styles.container}>
-      <Typography variant="h4" sx={{ marginBottom: '32px' }}>
+      <Typography variant="h4" sx={{ marginBottom: '2rem' }}>
         Detalji društvenog doma
       </Typography>
       <ReserveDateTimePickers id={Array.isArray(id) ? id[0] : id} />
