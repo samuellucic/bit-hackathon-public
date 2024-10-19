@@ -63,12 +63,7 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
   }, [onThemeChange]);
 
   return (
-    <AppBar
-      sx={{
-        backgroundColor: '#282c34',
-      }}
-      position={'sticky'}
-      className={styles.appBar}>
+    <AppBar position={'sticky'} className={styles.appBar}>
       <Toolbar>
         <Typography variant="h6" className={styles.title}>
           Društveni domovi Bjelovar

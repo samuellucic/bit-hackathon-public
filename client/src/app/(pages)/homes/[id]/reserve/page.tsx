@@ -8,6 +8,7 @@ import SendIcon from '@mui/icons-material/Send';
 import dayjs from 'dayjs';
 import 'dayjs/locale/en-gb';
 import { ReserveFormData, schema } from '@/app/(pages)/homes/[id]/reserve/helper';
+import styles from './page.module.css';
 
 dayjs.locale('en-gb');
 
@@ -25,8 +26,8 @@ const Page = () => {
   }, []);
 
   return (
-    <Container maxWidth="md">
-      <Box sx={{ mt: 4 }}>
+    <Container className={styles.container}>
+      <Box>
         <Typography variant="h4" gutterBottom style={{ marginBottom: '40px' }}>
           Zahtjev za rezervaciju doma
         </Typography>

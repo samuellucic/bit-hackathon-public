@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Card, CardActions, CardContent, Grid, Typography } from '@mui/material';
+import { Card, CardActions, CardContent, Container, Grid, Typography } from '@mui/material';
 import styles from './page.module.css';
 
 type House = {
@@ -18,7 +18,7 @@ const mockHouses: House[] = [
     id: 1,
     name: 'DVD Bjelovar',
     address: 'Vatroslava Velikog 62',
-    postalCode: '12345',
+    postalCode: '43000',
     city: 'Bjelovar',
     area: 2500.0,
     capacity: 8,
@@ -27,7 +27,7 @@ const mockHouses: House[] = [
     id: 2,
     name: 'Crkva Sv. Siniše',
     address: 'Nikole Tesle 321',
-    postalCode: '12345',
+    postalCode: '43000',
     city: 'Bjelovar',
     area: 1200.0,
     capacity: 4,
@@ -36,7 +36,7 @@ const mockHouses: House[] = [
     id: 3,
     name: 'Villa Glamour',
     address: 'Bez imena',
-    postalCode: '12345',
+    postalCode: '43000',
     city: 'Bjelovar',
     area: 5000.0,
     capacity: 12,
@@ -45,7 +45,7 @@ const mockHouses: House[] = [
     id: 4,
     name: 'Litra i voda',
     address: 'Samuela Velikog 232',
-    postalCode: '12345',
+    postalCode: '43000',
     city: 'Bjelovar',
     area: 5000.0,
     capacity: 12,
@@ -54,8 +54,8 @@ const mockHouses: House[] = [
 
 const ListOfHomes = () => {
   return (
-    <div style={{ padding: '20px' }}>
-      <Typography variant="h4" gutterBottom>
+    <Container className={styles.container}>
+      <Typography variant="h3" gutterBottom>
         Dostupni društveni domovi
       </Typography>
       <Grid container spacing={2}>
@@ -72,7 +72,7 @@ const ListOfHomes = () => {
                   </Typography>
                   <Typography className={styles.cardLocation} component={'div'}>
                     <strong>Mjesto: </strong>
-                    {`${house.city}, ${house.postalCode}`}
+                    {`${house.postalCode}, ${house.city}`}
                   </Typography>
                   <Typography className={styles.cardDetails} component={'div'}>
                     <strong>Kvadratura: </strong>
@@ -93,7 +93,7 @@ const ListOfHomes = () => {
           </Grid>
         ))}
       </Grid>
-    </div>
+    </Container>
   );
 };
 

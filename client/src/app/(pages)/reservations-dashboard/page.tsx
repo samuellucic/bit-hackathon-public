@@ -1,7 +1,8 @@
 'use client';
 import React, { useCallback, useMemo, useState } from 'react';
+import styles from './page.module.css';
 import ScrollBar from '../../components/ScrollBar/ScrollBar'; // Import the reusable SearchBar component
-import { Box, Button, Divider, Paper, Typography } from '@mui/material';
+import { Box, Button, Container, Divider, Paper, Typography } from '@mui/material';
 import usePaginated from '../../hooks/usePaginated';
 import { Pageable, ReservationType } from '../../types/types';
 import { decideReservation, getReservations } from '../../api/api';
@@ -87,7 +88,7 @@ export default function CommunityHomeReservations() {
   );
 
   return (
-    <Box display="flex" height="100%" minHeight="0" overflow="hidden">
+    <Container className={styles.container}>
       <Paper elevation={2} sx={{ width: '30%', overflowY: 'auto' }}>
         <ScrollBar items={reservationItems} onItemClick={handleReservationClick} onNext={getNext} hasMore={hasMore} />
       </Paper>
@@ -125,6 +126,6 @@ export default function CommunityHomeReservations() {
           </Box>
         )}
       </Box>
-    </Box>
+    </Container>
   );
 }

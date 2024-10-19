@@ -1,11 +1,12 @@
 'use client';
 
 import React from 'react';
-import { Stack, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import ReservationCalendar from '@/app/components/Reservation/ReservationsCalendar';
 import { Reservation } from '@/app/components/Reservation/helper';
 import ReserveDateTimePickers from '@/app/components/Reservation/ReserveDateTimePickers';
 import { useParams } from 'next/navigation';
+import styles from './page.module.css';
 
 const reservations: Reservation[] = [
   {
@@ -34,11 +35,13 @@ const CommunityHome = () => {
   const { id } = useParams();
 
   return (
-    <Stack spacing={4} sx={{ padding: '20px' }}>
-      <Typography variant="h4">Detalji društvenog doma</Typography>
+    <Container className={styles.container}>
+      <Typography variant="h4" sx={{ marginBottom: '32px' }}>
+        Detalji društvenog doma
+      </Typography>
       <ReserveDateTimePickers id={Array.isArray(id) ? id[0] : id} />
       <ReservationCalendar reservations={reservations} />
-    </Stack>
+    </Container>
   );
 };
 
