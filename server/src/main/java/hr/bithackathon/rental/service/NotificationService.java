@@ -1,13 +1,10 @@
 package hr.bithackathon.rental.service;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.UUID;
 
+import hr.bithackathon.rental.repository.ContractRepository;
+import hr.bithackathon.rental.repository.RecordBookRepository;
+import hr.bithackathon.rental.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,50 +14,85 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class NotificationService {
 
+    private final MailService mailService;
+    private final SmsService smsService;
+    private final ContractRepository contractRepository;
+    private final RecordBookRepository recordBookRepository;
+    private final ReservationRepository reservationRepository;
+
     public void notifyMajor(Long contractId) {
-        mockCall();
+        var contract = contractRepository.findById(contractId).get();
+        var communityHomeLocation = contract.getReservation().getCommunityHomePlan().getCommunityHome().getAddress();
+
+        //var customerEmail = contract.getReservation().getCustomer().getEmail();
+        var customerEmail = "dotne.dotne@gmail.com";
+
+        mailService.sendSimpleMessage(customerEmail,
+                                      "Contract needs to be signed",
+                                      "You need to sign a contract for a community home at " + communityHomeLocation + ".");
     }
 
-    public void notifyCustomerForContract(Long contractId, String email) {
-        mockCall();
+    public void notifyCustomerReservationApproval(Long reservationId) {
+        var reservation = reservationRepository.findById(reservationId).get();
+        var text = "Your reservation has been approved for a community home at " + reservation.getCommunityHomePlan().getCommunityHome().getAddress() + ".";
+
+        smsService.sendSms(reservation.getCustomer().getPhone(), text);
     }
 
-    public void notifyCustomerForRecord(Long recordId, String email) {
-        mockCall();
+    public void notifyCustomerForContract(Long contractId) {
+        var contract = contractRepository.findById(contractId).get();
+        var communityHomeLocation = contract.getReservation().getCommunityHomePlan().getCommunityHome().getAddress();
+
+        //var customerEmail = contract.getReservation().getCustomer().getEmail();
+        var customerEmail = "dotne.dotne@gmail.com";
+
+        mailService.sendSimpleMessage(customerEmail,
+                                      "Contract needs to be signed",
+                                      "You need to sign a contract for a community home at " + communityHomeLocation + ".");
     }
 
-    public void notifyReservationDeclinedEmail(Long ReservationId, String email) {
-        mockCall();
+    public void notifyCustomerForRecord(Long recordBookId) {
+        var recordBook = recordBookRepository.findById(recordBookId).get();
+        var communityHomeLocation = recordBook.getContract().getReservation().getCommunityHomePlan().getCommunityHome().getAddress();
+
+        //var customerEmail = recordBook.getContract().getReservation().getCustomer().getEmail();
+        var customerEmail = "dotne.dotne@gmail.com";
+
+        mailService.sendSimpleMessage(customerEmail,
+                                      "Contract needs to be signed",
+                                      "Your need to sign a record for a community home at " + communityHomeLocation + ".");
     }
 
-    public void notifyMinistry(Long contractId) {
-        mockCall();
-    }
+    public void notifyReservationDeclinedEmail(Long reservationId) {
+        var reservation = reservationRepository.findById(reservationId).get();
+        var communityHomeLocation = reservation.getCommunityHomePlan().getCommunityHome().getAddress();
 
-    public void notifyFinances(Long contractId) {
-        mockCall();
+        //var customerEmail = reservation.getCustomer().getEmail();
+        var customerEmail = "dotne.dotne@gmail.com";
+
+        mailService.sendSimpleMessage(customerEmail,
+                                      "Reservation declined",
+                                      "Your reservation has been declined for a community home at " + communityHomeLocation + ".");
     }
 
     public void sendUUIDReservationEmail(String email, UUID uuid) {
-        mockCall();
+        var customerEmail = "dotne.dotne@gmail.com";
+
+        mailService.sendSimpleMessage(customerEmail,
+                                      "Reservation created",
+                                      "Your can find your reservation at localhost:3000/uuid/" + uuid.toString() + ".");
     }
 
-    public void notifyFinancesAndMinistry(Long contractId) {
-        notifyFinances(contractId);
-        notifyMinistry(contractId);
-    }
+    public void notifyMinistryAndFinances(Long contractId) {
+        var contract = contractRepository.findById(contractId).get();
+        var communityHomeLocation = contract.getReservation().getCommunityHomePlan().getCommunityHome().getAddress();
 
-    private void mockCall() {
-        try (var httpClient = HttpClient.newHttpClient()) {
-            var mockRequest = HttpRequest.newBuilder()
-                                         .uri(new URI("https://www.example.com"))
-                                         .GET()
-                                         .build();
-            httpClient.send(mockRequest, HttpResponse.BodyHandlers.ofString());
-            log.info("Mock call success!");
-        } catch (IOException | InterruptedException | URISyntaxException e) {
-            log.error("Mock call failed!");
-        }
+        //var customerEmail = contract.getReservation().getCustomer().getEmail();
+        var customerEmail = "dotne.dotne@gmail.com";
+
+        mailService.sendSimpleMessage(customerEmail,
+                                      "Contract for community home",
+                                      "Contract for a community home at " + communityHomeLocation + ".");
     }
 
 }

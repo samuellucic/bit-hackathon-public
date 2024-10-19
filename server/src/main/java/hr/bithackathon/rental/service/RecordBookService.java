@@ -46,13 +46,17 @@ public class RecordBookService {
                                                          ).orElseThrow(() -> new RentalException(ErrorCode.RECORD_BOOK_NOT_FOUND));
     }
 
+    public RecordBook getRecordBook(Long recordBookId) {
+        return recordBookRepository.findById(recordBookId).orElseThrow(() -> new RentalException(ErrorCode.RECORD_BOOK_NOT_FOUND));
+    }
+
     public RecordBook updateRecordBook(Long recordBookId, RecordBookEditRequest recordBookEditRequest) {
         var recordBook = getRecordBookForCustodian(recordBookId);
         recordBook.setStateAfter(recordBookEditRequest.stateAfter());
         recordBook.setDamage(recordBookEditRequest.damage());
         recordBook.setInspectionDate(LocalDate.now());
         var updatedRecordBook = recordBookRepository.save(recordBook);
-        notificationService.notifyCustomerForRecord(recordBook.getId(), "Please sign record!");
+        notificationService.notifyCustomerForRecord(recordBook.getId());
         return updatedRecordBook;
     }
 

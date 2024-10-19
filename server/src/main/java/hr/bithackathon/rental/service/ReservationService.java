@@ -48,6 +48,7 @@ public class ReservationService {
         reservation = reservationRepository.save(reservation);
 
         notificationService.sendUUIDReservationEmail(appUser.getEmail(), reservation.getKey());
+        notificationService.notifyCustomerReservationApproval(reservation.getId());
 
         return reservation.getId();
     }
@@ -114,7 +115,7 @@ public class ReservationService {
                                                      endPadded))
                     .forEach(r -> {
                         r.setApproved(false);
-                        notificationService.notifyReservationDeclinedEmail(r.getId(), r.getCustomer().getEmail());
+                        notificationService.notifyReservationDeclinedEmail(r.getId());
                         reservationRepository.save(r);
                     });
     }

@@ -70,3 +70,6 @@ build/
 ### VS Code ###
 .vscode/
 .idea/
+
+application-filip.yml
+

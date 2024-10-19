@@ -146,7 +146,7 @@ public class ContractService {
         contract.setStatus(ContractStatus.MAYOR_SIGNED);
         saveContract(contract);
 
-        notificationService.notifyCustomerForContract(contractId, contract.getReservation().getCustomer().getEmail());
+        notificationService.notifyCustomerForContract(contract.getId());
     }
 
     public void signContractByCustomer(Long contractId) {
@@ -164,7 +164,7 @@ public class ContractService {
         contract.setStatus(ContractStatus.PAYMENT_PENDING);
         saveContract(contract);
 
-        notificationService.notifyFinancesAndMinistry(contractId);
+        notificationService.notifyMinistryAndFinances(contractId);
     }
 
     public void finalizeContract(Long contractId) {
