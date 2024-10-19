@@ -1,9 +1,6 @@
 package hr.bithackathon.rental.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Duration;
@@ -18,26 +15,36 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Reservation {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    private AppUser appUser;
+    @JoinColumn(name = "customer_id")
+    private AppUser customer;
     @ManyToOne
+    @JoinColumn(name = "community_home_plan_id")
     private CommunityHomePlan communityHomePlan;
+    @Column
     private String reason;
+    @Column
     private LocalDate creationDate;
+    @Column
     private Instant datetimeFrom;
+    @Column
     private Instant datetimeTo;
+    @Column
     private String bank;
+    @Column
     private String iban;
+    @Column
     private Boolean approved;
+    @Column
     private ReservationType type;
 
     public static Reservation dummy() {
         return Reservation.builder()
                 .id(0L)
-                .appUser(AppUser.dummy())
+                .customer(AppUser.dummy())
                 .reason("reason")
                 .communityHomePlan(CommunityHomePlan.dummy())
                 .creationDate(LocalDate.now())

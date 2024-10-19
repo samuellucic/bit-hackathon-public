@@ -11,18 +11,23 @@ import lombok.*;
 @AllArgsConstructor
 public class RecordBook {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
+    @JoinColumn(name = "contract_id")
     private Contract contract;
     @ManyToOne
+    @JoinColumn(name = "custodian_id")
     private AppUser custodian;
+    @Column
     private String stateBefore;
+    @Column
     private String stateAfter;
+    @Column
     private String damage;
 
-    static RecordBook dummy() {
+    public static RecordBook dummy() {
         return RecordBook.builder()
                 .id(0L)
                 .contract(Contract.dummy())

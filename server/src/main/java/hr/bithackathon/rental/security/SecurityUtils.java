@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -22,5 +23,9 @@ public class SecurityUtils {
 
     private static Stream<String> getAuthorities(Authentication authentication) {
         return authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority);
+    }
+
+    public static AppUserDetails getCurrentUserDetails() {
+        return AppUserDetails.fromJwtToken((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
 }
