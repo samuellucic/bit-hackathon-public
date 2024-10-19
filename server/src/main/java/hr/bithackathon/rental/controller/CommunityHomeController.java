@@ -23,7 +23,7 @@ public class CommunityHomeController {
     }
 
     @GetMapping("/{communityHomeId}")
-    public CommunityHomeResponse getCommunityHome(@PathVariable String communityHomeId) {
+    public CommunityHomeResponse getCommunityHome(@PathVariable Long communityHomeId) {
         return CommunityHomeResponse.from(communityHomeService.getCommunityHome(communityHomeId));
     }
 
