@@ -1,12 +1,12 @@
-id,name,address,postal_code,city,area,capacity
-1,Dom 1,Ulica nekog imena 1,10000,Bjelovar,150.0,25
-2,Dom 2,Ulica nekog imena 2,10000,Bjelovar,155.0,30
-3,Dom 3,Ulica nekog imena 3,10000,Bjelovar,689.0,45
-4,Dom 4,Ulica nekog imena 4,10000,Bjelovar,523.0,12
-5,Dom 5,Ulica nekog imena 5,10000,Zagreb,346.0,37
-6,Dom 6,Ulica nekog imena 6,10000,Zagreb,35.0,226
-7,Dom 7,Ulica nekog imena 7,10000,Zagreb,576.0,47
-8,Dom 8,Ulica nekog imena 8,10000,Grad17,124.0,68
-9,Dom 9,Ulica nekog imena 9,10000,Grad17,12.0,135
-10,Dom 10,Ulica nekog imena 10,10000,Grad17,256.0,220
-11,Dom 11,Ulica nekog imena 11,10000,Grad17,200.0,78
+name,address,postal_code,city,area,capacity
+Dom 1,Ulica nekog imena 1,10000,Bjelovar,150.0,25
+Dom 2,Ulica nekog imena 2,10000,Bjelovar,155.0,30
+Dom 3,Ulica nekog imena 3,10000,Bjelovar,689.0,45
+Dom 4,Ulica nekog imena 4,10000,Bjelovar,523.0,12
+Dom 5,Ulica nekog imena 5,10000,Zagreb,346.0,37
+Dom 6,Ulica nekog imena 6,10000,Zagreb,35.0,226
+Dom 7,Ulica nekog imena 7,10000,Zagreb,576.0,47
+Dom 8,Ulica nekog imena 8,10000,Grad17,124.0,68
+Dom 9,Ulica nekog imena 9,10000,Grad17,12.0,135
+Dom 10,Ulica nekog imena 10,10000,Grad17,256.0,220
+Dom 11,Ulica nekog imena 11,10000,Grad17,200.0,78
