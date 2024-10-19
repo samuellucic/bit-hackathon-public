@@ -9,6 +9,7 @@ import hr.bithackathon.rental.security.aspect.HasAuthority;
 import hr.bithackathon.rental.service.ReservationService;
 import hr.bithackathon.rental.util.Util;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,35 +31,33 @@ public class ReservationController {
     @GetMapping(value = "/users/{userId}/reservations", params = { "page", "size" })
     @HasAuthority(AuthoritiesConstants.CUSTOMER)
     public PaginationResponse<ReservationResponse> getAllReservationsByUser(@PathVariable("userId") Long userId,
-                                                                            @RequestParam("page") int page,
-                                                                            @RequestParam("size") int size) {
-        return PaginationResponse.fromPage(reservationService.getAllReservationsByUser(userId, page, size), ReservationResponse::fromReservation);
+                                                                            Pageable pageable) {
+        return PaginationResponse.fromPage(reservationService.getAllReservationsByUser(userId, pageable), ReservationResponse::fromReservation);
     }
 
     @GetMapping(value = "/reservations", params = { "page", "size" })
     @HasAuthority(AuthoritiesConstants.OFFICIAL)
-    public PaginationResponse<ReservationResponse> getAllReservations(@RequestParam("page") int page,
-                                                                      @RequestParam("size") int size) {
-        return PaginationResponse.fromPage(reservationService.getAllReservations(page, size), ReservationResponse::fromReservation);
+    public PaginationResponse<ReservationResponse> getAllReservations(Pageable pageable) {
+        return PaginationResponse.fromPage(reservationService.getAllReservations(pageable), ReservationResponse::fromReservation);
     }
 
-    @GetMapping("/reservations/{reservationId}")
+    @GetMapping("/reservations/{id}")
     @HasAuthority({ AuthoritiesConstants.CUSTOMER, AuthoritiesConstants.OFFICIAL })
-    public ReservationResponse getReservation(@PathVariable("reservationId") Long reservationId) {
-        return ReservationResponse.fromReservation(reservationService.getReservation(reservationId));
+    public ReservationResponse getReservation(@PathVariable("id") Long id) {
+        return ReservationResponse.fromReservation(reservationService.getReservation(id));
     }
 
     @PutMapping("/reservations/{id}")
     @HasAuthority(AuthoritiesConstants.CUSTOMER)
-    public ResponseEntity<Void> editReservation(@PathVariable("id") Long id, ReservationRequest reservationRequest) {
-        reservationService.editReservation(id, reservationRequest);
+    public ResponseEntity<Void> editReservation(@PathVariable("id") Long id, @RequestBody ReservationRequest reservationRequest) {
+        Reservation reservation = reservationService.editReservation(id, reservationRequest);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/reservations/{reservationId}/approve")
+    @PatchMapping(value ="/reservations/{id}", params = { "approve" })
     @HasAuthority(AuthoritiesConstants.OFFICIAL)
-    public void approveReservation(@PathVariable("reservationId") Long reservationId) {
-        reservationService.approveReservation(reservationId);
+    public void approveReservation(@PathVariable("id") Long id, @RequestParam("approve") Boolean approve) {
+        reservationService.approveReservation(id, approve);
     }
 
 }

@@ -1,6 +1,6 @@
 'use client';
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
-import { Box, Divider, List, ListItem, ListItemText, Paper, TextField, Typography } from '@mui/material';
+import { Box, Button, Divider, List, ListItem, ListItemText, Paper, TextField, Typography } from '@mui/material';
 
 type Reservation = {
   id: number;
@@ -91,9 +91,9 @@ export default function CommunityHomeReservations() {
         </List>
       </Paper>
       <Divider orientation="vertical" flexItem />
-      <Box p={2} flex={1}>
+      <Box p={2} flex={1} display="flex" justifyContent="space-between" alignItems="flex-start">
         {selectedReservation && (
-          <Box>
+          <Box flexGrow={1}>
             <Typography variant="h6">{selectedReservation.name}</Typography>
             <Typography variant="subtitle1">{selectedReservation.cause}</Typography>
             <Typography variant="body2">Date: {selectedReservation.date}</Typography>
@@ -101,6 +101,17 @@ export default function CommunityHomeReservations() {
               {selectedReservation.startTime} - {selectedReservation.endTime}
             </Typography>
             <Typography variant="body2">Status: {selectedReservation.status}</Typography>
+          </Box>
+        )}
+
+        {selectedReservation && (
+          <Box display="flex" flexDirection="column" alignItems="flex-end" ml={2}>
+            <Button variant="contained" color="primary" sx={{ backgroundColor: 'blue', mb: 1, minWidth: '120px' }}>
+              Accept
+            </Button>
+            <Button variant="contained" color="secondary" sx={{ backgroundColor: 'red', minWidth: '120px' }}>
+              Deny
+            </Button>
           </Box>
         )}
       </Box>
