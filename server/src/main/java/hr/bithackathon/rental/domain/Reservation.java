@@ -1,6 +1,5 @@
 package hr.bithackathon.rental.domain;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -41,16 +40,16 @@ public class Reservation {
     @JoinColumn(name = "community_home_plan_id")
     private CommunityHomePlan communityHomePlan;
 
-    @Column
+    @Column(nullable = false)
     private String reason;
 
-    @Column
+    @Column(nullable = false)
     private LocalDate creationDate;
 
-    @Column
+    @Column(nullable = false)
     private Instant datetimeFrom;
 
-    @Column
+    @Column(nullable = false)
     private Instant datetimeTo;
 
     @Column
@@ -59,22 +58,10 @@ public class Reservation {
     @Column
     private String iban;
 
-    @Column(nullable = true)
+    @Column
     private Boolean approved;
 
-    @Column
+    @Column(nullable = false)
     private ReservationType type;
-
-    public static Reservation dummy() {
-        return Reservation.builder()
-                          .id(0L)
-                          .customer(AppUser.dummy())
-                          .reason("reason")
-                          .communityHomePlan(CommunityHomePlan.dummy())
-                          .creationDate(LocalDate.now())
-                          .datetimeFrom(Instant.now().plus(Duration.ofDays(10)))
-                          .datetimeTo(Instant.now().plus(Duration.ofDays(10)).plus(Duration.ofHours(8)))
-                          .build();
-    }
 
 }

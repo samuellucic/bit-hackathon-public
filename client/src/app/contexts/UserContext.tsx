@@ -26,6 +26,7 @@ type Props = {
 };
 
 export const UserContextProvider = ({ children }: Props) => {
+  const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [authority, setAuthority] = useState<Authority | null>(null);
 
@@ -39,7 +40,12 @@ export const UserContextProvider = ({ children }: Props) => {
   useEffect(() => {
     setIsLoggedIn(!!getItem(tokenKey));
     setAuthority(getItem(authorityKey)! as Authority);
+    setLoading(false);
   }, []);
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <UserContext.Provider

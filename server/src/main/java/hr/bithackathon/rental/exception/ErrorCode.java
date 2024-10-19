@@ -21,6 +21,7 @@ public enum ErrorCode {
     PASSWORD_TOO_WEAK(400, 40014, "Password too weak."),
     RESERVATION_PAST_DATE(400, 40015, "Reservation date is to late."),
     INVALID_DATE_RANGE(400, 40016, "Invalid date range."),
+    COMMUNITY_HOME_PLAN_NOT_FOUND(400, 40017, "Community home plan not found."),
 
     UNAUTHORIZED(401, 40101, "Unauthorized"),
 

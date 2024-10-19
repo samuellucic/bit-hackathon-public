@@ -1,7 +1,6 @@
 package hr.bithackathon.rental.service;
 
 import hr.bithackathon.rental.domain.CommunityHomePlan;
-import hr.bithackathon.rental.domain.Reservation;
 import hr.bithackathon.rental.exception.ErrorCode;
 import hr.bithackathon.rental.exception.RentalException;
 import hr.bithackathon.rental.repository.CommunityHomePlanRepository;
@@ -19,7 +18,8 @@ public class CommunityHomePlanService {
     }
 
     public CommunityHomePlan getLatestCommunityHomePlan(Long communityHomeId) {
-        return communityHomePlanRepository.findB
+        return communityHomePlanRepository.findByCommunityHomeIdOrderByCreatedAtDesc(communityHomeId)
+                                          .orElseThrow(() -> new RentalException(ErrorCode.COMMUNITY_HOME_PLAN_NOT_FOUND));
     }
 
 }

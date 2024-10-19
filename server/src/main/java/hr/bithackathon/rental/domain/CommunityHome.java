@@ -28,18 +28,24 @@ public class CommunityHome {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
-    @Column
+
+    @Column(nullable = false)
     private String address;
-    @Column
+
+    @Column(nullable = false)
     private String postalCode;
-    @Column
+
+    @Column(nullable = false)
     private String city;
-    @Column
+
+    @Column(nullable = false)
     private Double area;
-    @Column
+
+    @Column(nullable = false)
     private Integer capacity;
+
     @ManyToMany
     @JoinTable(
         name = "custodian_access_community_home",

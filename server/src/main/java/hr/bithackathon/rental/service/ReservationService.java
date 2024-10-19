@@ -41,10 +41,9 @@ public class ReservationService {
         }
 
         var communityHome = communityHomeService.getCommunityHome(request.communityHomeId());
-        var communityHomePlan += communityHomePlanService.
-        // TODO: Get latest communityHomePlan
+        var communityHomePlan = communityHomePlanService.getLatestCommunityHomePlan(communityHome.getId());
 
-        var reservation = ReservationRequest.toReservation(request, communityHome.getCom, appUser);
+        var reservation = ReservationRequest.toReservation(request, communityHomePlan, appUser);
         reservation.setCreationDate(LocalDate.now());
         reservation.setKey(UUID.randomUUID());
         reservation = reservationRepository.save(reservation);
@@ -78,10 +77,13 @@ public class ReservationService {
     }
 
     public void editReservation(Long reservationId, ReservationRequest request) {
-        var communityHomePlan = communityHomePlanService.getCommunityHomePlan(request.communityHomePlanId());
+        var communityHome = communityHomeService.getCommunityHome(request.communityHomeId());
+        var communityHomePlan = communityHomePlanService.getLatestCommunityHomePlan(communityHome.getId());
         var customer = appUserService.getCurrentAppUser();
+
         var reservation = ReservationRequest.toReservation(request, communityHomePlan, customer);
         reservation.setId(reservationId);
+        
         reservationRepository.save(reservation);
     }
 

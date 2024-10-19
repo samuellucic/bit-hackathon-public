@@ -32,16 +32,16 @@ public class CommunityHomePlan {
     @JoinColumn(name = "community_home_id")
     private CommunityHome communityHome;
 
-    @Column
+    @Column(nullable = false)
     private Double leaseCostPerHour;
 
-    @Column
+    @Column(nullable = false)
     private Double downPayment;
 
-    @Column
+    @Column(nullable = false)
     private Double amenitiesCostPerHour;
 
-    @Column
+    @Column(nullable = false)
     private Double utilitiesCostPerHour;
 
     @Column
