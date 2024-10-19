@@ -39,6 +39,17 @@ public class ContractService {
         return contractRepository.findById(contractId).orElseThrow(() -> new RentalException(ErrorCode.CONTRACT_NOT_FOUND));
     }
 
+    public Contract getContractAndCheckUserId(Long contractId, Long userId) {
+        var contract = contractRepository.findById(contractId)
+                                         .orElseThrow(() -> new RentalException(ErrorCode.CONTRACT_NOT_FOUND));
+
+        if (!contract.getReservation().getCustomer().getId().equals(userId)) {
+            throw new RentalException(ErrorCode.UNAUTHORIZED);
+        }
+
+        return contract;
+    }
+
     public Contract getContractForCustodian(Long contractId) {
         return contractRepository.findByContractIdAndCustodianIdForCommunityHome(contractId, appUserService.getCurrentAppUser())
                                  .orElseThrow(() -> new RentalException(ErrorCode.CONTRACT_NOT_FOUND));
@@ -119,7 +130,7 @@ public class ContractService {
                                .status(ContractStatus.CREATED)
                                .build();
 
-        var contractId = contractRepository.save(contract).getId();
+        var contractId = saveContract(contract).getId();
 
         notificationService.notifyMajor(contractId);
 
@@ -137,7 +148,7 @@ public class ContractService {
         //        }
 
         contract.setStatus(ContractStatus.MAJOR_SIGNED);
-        contractRepository.save(contract);
+        saveContract(contract);
 
         notificationService.notifyCustomerForContract(contractId, contract.getReservation().getCustomer().getEmail());
     }
@@ -153,7 +164,7 @@ public class ContractService {
         }
 
         contract.setStatus(ContractStatus.PAYMENT_PENDING);
-        contractRepository.save(contract);
+        saveContract(contract);
 
         notificationService.notifyFinancesAndMinistry(contractId);
     }
@@ -165,7 +176,7 @@ public class ContractService {
         }
 
         contract.setStatus(ContractStatus.FINALIZED);
-        contractRepository.save(contract);
+        saveContract(contract);
     }
 
     private Long createFreeContract(Reservation reservation) {
@@ -179,7 +190,7 @@ public class ContractService {
                                .status(ContractStatus.CREATED)
                                .build();
 
-        return contractRepository.save(contract).getId();
+        return saveContract(contract).getId();
     }
 
 }

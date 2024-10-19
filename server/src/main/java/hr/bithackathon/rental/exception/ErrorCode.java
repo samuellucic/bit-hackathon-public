@@ -18,6 +18,8 @@ public enum ErrorCode {
     RECORD_BOOK_NOT_FOUND(400, 40011, "Record Book not found."),
     RESERVATION_HAS_APPROVAL_STATUS(400, 40012, "Reservation has approval status."),
     USER_NOT_FOUND(400, 40013, "User not found."),
+    PASSWORD_TOO_WEAK(400, 40014, "Password too weak."),
+    RESERVATION_PAST_DATE(400, 40015, "Reservation date is to late."),
 
     UNAUTHORIZED(401, 40101, "Unauthorized"),
 

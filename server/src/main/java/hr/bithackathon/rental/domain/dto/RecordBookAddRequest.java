@@ -6,17 +6,18 @@ import hr.bithackathon.rental.domain.RecordBook;
 import hr.bithackathon.rental.domain.RecordBookStatus;
 
 public record RecordBookAddRequest(
-        Long contractId,
-        String stateBefore
+    Long contractId,
+    String stateBefore
 ) {
 
     public static RecordBook toRecordBook(RecordBookAddRequest recordBookAddRequest, Contract contract, AppUser custodian) {
         return RecordBook.builder()
-                .contract(contract)
-                .custodian(custodian)
-                .stateBefore(recordBookAddRequest.stateBefore())
-                .status(RecordBookStatus.CREATED)
-                .build();
+                         .contract(contract)
+                         .custodian(custodian)
+                         .stateBefore(recordBookAddRequest.stateBefore())
+                         .status(RecordBookStatus.CREATED)
+                         .build();
     }
+
 }
 

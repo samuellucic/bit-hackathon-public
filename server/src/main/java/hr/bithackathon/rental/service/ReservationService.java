@@ -19,8 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -32,6 +30,8 @@ public class ReservationService {
     private final NotificationService notificationService;
 
     public Long createReservation(ReservationRequest request) {
+        checkPassword(request.user().password());
+
         AppUser appUser = null;
         if (SecurityUtils.isUserLoggedOut()) {
             appUser = appUserService.registerUser(request.user());
@@ -61,17 +61,17 @@ public class ReservationService {
 
     public Reservation getReservationForCurrentUser(Long reservationId) {
         return reservationRepository.findByIdAndCustomerId(reservationId, SecurityUtils.getCurrentUserDetails().getId())
-                .orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
+                                    .orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
     }
 
     public Reservation getReservation(Long reservationId) {
         return reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
+                                    .orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
     }
 
     public Reservation getReservationByKey(UUID key) {
         return reservationRepository.findByKey(key)
-                .orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
+                                    .orElseThrow(() -> new RentalException(ErrorCode.RESERVATION_NOT_FOUND));
     }
 
     public void editReservation(Long reservationId, ReservationRequest request) {
@@ -82,6 +82,7 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
+    //TODO: TU NESTO!!!
     public boolean approveReservation(Long reservationId, boolean approve) {
         var reservation = getReservation(reservationId);
         if (reservation.getApproved() != null) {
@@ -105,20 +106,38 @@ public class ReservationService {
         var endPadded = reservation.getDatetimeTo().plus(Duration.ofHours(1));
         var communityHomePlanId = reservation.getCommunityHomePlan().getId();
         var reservations = reservationRepository.findAllNotApprovedForCommunityHomePlanAndBetween(communityHomePlanId,
-                startPadded, endPadded);
+                                                                                                  startPadded, endPadded);
 
         reservations.stream()
-                .filter(r -> this.isTouchingEnds(new TimeRange(r.getDatetimeFrom(), r.getDatetimeTo()), startPadded,
-                        endPadded))
-                .forEach(r -> {
-                    r.setApproved(false);
-                    notificationService.notifyReservationDeclinedEmail(r.getId(), r.getCustomer().getEmail());
-                    reservationRepository.save(r);
-                });
+                    .filter(r -> this.isTouchingEnds(new TimeRange(r.getDatetimeFrom(), r.getDatetimeTo()), startPadded,
+                                                     endPadded))
+                    .forEach(r -> {
+                        r.setApproved(false);
+                        notificationService.notifyReservationDeclinedEmail(r.getId(), r.getCustomer().getEmail());
+                        reservationRepository.save(r);
+                    });
     }
 
     private boolean isTouchingEnds(TimeRange range, Instant start, Instant end) {
         return range.end().equals(start) || range.start().equals(end);
+    }
+
+    private void checkPassword(String password) {
+        if (password.length() < 8) {
+            throw new RentalException(ErrorCode.PASSWORD_TOO_WEAK);
+        }
+
+        if (!password.matches(".*[A-Z].*")) {
+            throw new RentalException(ErrorCode.PASSWORD_TOO_WEAK);
+        }
+
+        if (!password.matches(".*[a-z].*")) {
+            throw new RentalException(ErrorCode.PASSWORD_TOO_WEAK);
+        }
+
+        if (!password.matches(".*[0-9].*")) {
+            throw new RentalException(ErrorCode.PASSWORD_TOO_WEAK);
+        }
     }
 
 }

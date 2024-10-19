@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/contract")
+@RequestMapping("/contracts")
 @RequiredArgsConstructor
 public class ContractController {
 
@@ -34,13 +34,16 @@ public class ContractController {
     @GetMapping("/{contractId}")
     @HasAuthority({ AuthoritiesConstants.CUSTOMER, AuthoritiesConstants.MAYOR, AuthoritiesConstants.OFFICIAL })
     public ContractResponse getContract(@PathVariable Long contractId) {
+        if (SecurityUtils.isLoggedInCustomer()) {
+            return ContractResponse.of(contractService.getContractAndCheckUserId(contractId, SecurityUtils.getCurrentUserDetails().getId()));
+        }
         return ContractResponse.of(contractService.getContract(contractId));
     }
 
     @GetMapping()
     @HasAuthority({ AuthoritiesConstants.CUSTOMER, AuthoritiesConstants.MAYOR, AuthoritiesConstants.OFFICIAL })
     public PaginationResponse<ContractResponse> getAllContract(@RequestParam(required = false) ContractStatus status, Pageable page) {
-        if (SecurityUtils.isLoggedInUserCustomer()) {
+        if (SecurityUtils.isLoggedInCustomer()) {
             if (status == null) {
                 return PaginationResponse.fromPage(contractService.findAllContractsByCustomerIdAndPage(SecurityUtils.getCurrentUserDetails().getId(), page),
                                                    ContractResponse::of);
