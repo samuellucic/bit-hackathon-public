@@ -31,7 +31,6 @@ public class ReservationController {
 
     @PostMapping("/reservations")
     @ResponseStatus(HttpStatus.CREATED)
-    @HasAuthority(AuthoritiesConstants.CUSTOMER)
     public ResponseEntity<Void> createReservation(@RequestBody ReservationRequest reservationRequest) {
         Long id = reservationService.createReservation(reservationRequest);
         return Util.getCreateResponse(id);

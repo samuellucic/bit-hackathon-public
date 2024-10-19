@@ -29,4 +29,8 @@ public class SecurityUtils {
         return AppUserDetails.fromJwtToken((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
 
+    public static boolean isUserLoggedOut() {
+        return SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser");
+    }
+
 }

@@ -1,5 +1,6 @@
 package hr.bithackathon.rental.service;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
@@ -16,9 +17,12 @@ public class AvailabilityService {
 
     public List<TimeRange> findAllOccupiedTimeRanges(Long communityHomeId, Instant start, Instant end) {
         var contracts = contractService.findAllBetweenStartAndEnd(communityHomeId, start, end);
+
+        // TODO: If it overlaps, connect it
         return contracts.stream()
                         .map(Contract::getReservation)
-                        .map(reservation -> new TimeRange(reservation.getDatetimeFrom(), reservation.getDatetimeTo()))
+                        .map(reservation -> new TimeRange(reservation.getDatetimeFrom().minus(Duration.ofHours(1)),
+                                                          reservation.getDatetimeTo().plus(Duration.ofHours(1))))
                         .toList();
     }
 

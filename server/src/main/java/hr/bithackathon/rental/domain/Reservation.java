@@ -3,6 +3,7 @@ package hr.bithackathon.rental.domain;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,6 +29,9 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(columnDefinition = "uuid")
+    private UUID key;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")

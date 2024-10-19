@@ -33,6 +33,16 @@ public class AppUserService {
         return appUserRepository.save(appUser).getId();
     }
 
+    public AppUser getUserById(Long id) {
+        return appUserRepository.findById(id)
+                                .orElseThrow(() -> new RentalException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    public AppUser registerUser(AppUserRequest appUserRequest) {
+        var appUserId = createUser(appUserRequest);
+        return getUserById(appUserId);
+    }
+
     public AppUser getCurrentAppUser() {
         return appUserRepository.findById(SecurityUtils.getCurrentUserDetails().getId())
                                 .orElseThrow(() -> new RentalException(ErrorCode.INTERNAL_SERVER_ERROR));

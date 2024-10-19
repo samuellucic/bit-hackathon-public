@@ -146,7 +146,7 @@ public class ContractService {
         contract.setStatus(ContractStatus.PAYMENT_PENDING);
         contractRepository.save(contract);
 
-        notificationService.notifyFinancesAndMinstry(contractId);
+        notificationService.notifyFinancesAndMinistry(contractId);
     }
 
     public void finalizeContract(Long contractId) {

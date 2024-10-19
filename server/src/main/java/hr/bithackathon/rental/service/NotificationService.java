@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ public class NotificationService {
         mockCall();
     }
 
-    public void notifyGospodarstvo(Long contractId) {
+    public void notifyMinistry(Long contractId) {
         mockCall();
     }
 
@@ -32,9 +33,13 @@ public class NotificationService {
         mockCall();
     }
 
-    public void notifyFinancesAndMinstry(Long contractId) {
+    public void sendUUIDReservationEmail(String email, UUID uuid) {
+        mockCall();
+    }
+
+    public void notifyFinancesAndMinistry(Long contractId) {
         notifyFinances(contractId);
-        notifyGospodarstvo(contractId);
+        notifyMinistry(contractId);
     }
 
     private void mockCall() {
