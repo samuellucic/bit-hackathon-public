@@ -30,10 +30,9 @@ public class ReservationService {
     private final NotificationService notificationService;
 
     public Long createReservation(ReservationRequest request) {
-        checkPassword(request.user().password());
-
-        AppUser appUser = null;
+        AppUser appUser;
         if (SecurityUtils.isUserLoggedOut()) {
+            checkPassword(request.user().password());
             appUser = appUserService.registerUser(request.user());
         } else {
             appUser = appUserService.getCurrentAppUser();
