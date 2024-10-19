@@ -6,6 +6,7 @@ import { Container, Typography } from '@mui/material';
 import { hr } from 'date-fns/locale/hr';
 import { Reservation } from '@/app/components/Reservation/helper';
 import CustomToolbar from '@/app/components/Reservation/CustomToolbar';
+import styles from './ReservationsCalendar.module.css';
 
 const locales = {
   hr,
@@ -23,7 +24,7 @@ interface CalendarProps {
   reservations: Reservation[];
 }
 
-const MyCalendar = ({ reservations }: CalendarProps) => {
+const ReservationsCalendar = ({ reservations }: CalendarProps) => {
   const [view, setView] = useState<View>('month');
   const [date, setDate] = useState(new Date());
 
@@ -46,7 +47,7 @@ const MyCalendar = ({ reservations }: CalendarProps) => {
   }, []);
 
   return (
-    <Container>
+    <Container className={styles.container}>
       <Typography variant="h4" gutterBottom>
         Dostupnost doma
       </Typography>
@@ -71,4 +72,4 @@ const MyCalendar = ({ reservations }: CalendarProps) => {
   );
 };
 
-export default MyCalendar;
+export default ReservationsCalendar;

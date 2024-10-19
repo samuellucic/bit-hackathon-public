@@ -33,7 +33,7 @@ const Home = () => {
       <Typography variant="h3" gutterBottom className={styles.title}>
         Društveni domovi Bjelovar
       </Typography>
-      <Typography variant="body1" className={styles.description}>
+      <Typography variant="subtitle1" className={styles.description}>
         Pregledajte društvene domove grada Bjelovara i u svega nekoliko klikova rezervirajte dom za Vaš događaj
       </Typography>
       <Stack direction="row" spacing={2} className={styles.buttonsContainer}>

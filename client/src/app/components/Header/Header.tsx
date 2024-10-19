@@ -19,17 +19,17 @@ type HeaderItem = {
 };
 
 const headerItems: HeaderItem[] = [
-  { url: '/home', label: 'Home' },
+  { url: '/home', label: 'Početna' },
   {
     url: '/about',
-    label: 'About',
+    label: 'O nama',
     submenu: [
-      { url: '/about/team', label: 'Team' },
-      { url: '/about/history', label: 'History' },
+      { url: '/about/team', label: 'Tim' },
+      { url: '/about/history', label: 'Povijest' },
     ],
   },
-  { url: '/contact', label: 'Contact' },
-  { url: '/bithack', label: 'B:IT Hack' },
+  { url: '/contact', label: 'Kontakt' },
+  { url: '/bithack', label: 'B:IT.hack' },
 ];
 
 export type HeaderProps = {
@@ -60,15 +60,10 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
   }, [onThemeChange]);
 
   return (
-    <AppBar
-      sx={{
-        backgroundColor: '#282c34',
-      }}
-      position={'sticky'}
-      className={styles.appBar}>
+    <AppBar position={'sticky'} className={styles.appBar}>
       <Toolbar>
         <Typography variant="h6" className={styles.title}>
-          Welcome to Our Hackathon Project
+          Rezervacija domova grada Bjelovara
         </Typography>
 
         <IconButton onClick={toggleTheme} color="inherit" sx={{ marginLeft: 'auto' }}>

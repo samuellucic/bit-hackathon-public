@@ -1,7 +1,8 @@
 'use client';
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
-import { Box, Button, Divider, Paper, Typography } from '@mui/material';
+import { Box, Button, Container, Divider, Paper, Typography } from '@mui/material';
 import SearchBar from '../../components/SearchList/SearchList';
+import styles from './page.module.css';
 
 type Contract = {
   id: number;
@@ -100,7 +101,7 @@ export default function ContractManagement() {
   );
 
   return (
-    <Box display="flex" height="100vh">
+    <Container className={styles.container}>
       <Paper elevation={2} sx={{ width: '30%', overflowY: 'auto' }}>
         <SearchBar
           value={searchTerm}
@@ -113,7 +114,6 @@ export default function ContractManagement() {
       <Box p={2} flex={1}>
         {selectedContract && (
           <Box display="flex" justifyContent="space-between" alignItems="center">
-            {/* Contract details on the left */}
             <Box>
               <Typography variant="h6">Customer: {selectedContract.customer}</Typography>
               <Typography variant="subtitle1">Lease Amount: ${selectedContract.lease}</Typography>
@@ -124,16 +124,12 @@ export default function ContractManagement() {
               <Typography variant="body2">Status: {selectedContract.status}</Typography>
             </Box>
 
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleDownload}
-              sx={{ height: '40px', backgroundColor: 'blue' }}>
+            <Button variant="contained" onClick={handleDownload}>
               Download Contract
             </Button>
           </Box>
         )}
       </Box>
-    </Box>
+    </Container>
   );
 }
