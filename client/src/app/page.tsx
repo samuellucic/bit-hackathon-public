@@ -10,10 +10,12 @@ import styles from './page.module.css';
 import bjelovarRotor from '../../public/images/bjelovar-rotor.jpeg';
 import bjelovarZima from '../../public/images/Bjelovar-zima.jpeg';
 import bjelovarPark from '../../public/images/bjelovar-park.jpg';
+import { useRouter } from 'next/navigation';
 
 const Home = () => {
   const images = [bjelovarRotor, bjelovarZima, bjelovarPark];
   const [currentIndex, setCurrentIndex] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -22,6 +24,14 @@ const Home = () => {
 
     return () => clearInterval(interval);
   }, [images.length]);
+
+  const handleReservationButtonClick = () => {
+    router.push('/homes');
+  };
+
+  const handleViewReservationButtonClick = () => {
+    router.push('/login');
+  };
 
   return (
     <Container className={styles.container}>
@@ -34,10 +44,18 @@ const Home = () => {
       </Typography>
 
       <Stack direction="row" spacing={2} className={styles.buttonsContainer}>
-        <Button variant="contained" className={styles.button} startIcon={<SearchIcon />}>
+        <Button
+          variant="contained"
+          className={styles.button}
+          startIcon={<SearchIcon />}
+          onClick={handleReservationButtonClick}>
           Rezervirajte dom
         </Button>
-        <Button variant="contained" className={styles.button} startIcon={<HomeIcon />}>
+        <Button
+          variant="contained"
+          className={styles.button}
+          startIcon={<HomeIcon />}
+          onClick={handleViewReservationButtonClick}>
           Imate rezervaciju?
         </Button>
       </Stack>
