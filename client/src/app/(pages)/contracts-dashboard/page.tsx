@@ -13,6 +13,7 @@ type Contract = {
   customer: string;
   lease: number;
   downPayment: number;
+  amenities: number;
   total: number;
   vat: number;
   status: ContractType;

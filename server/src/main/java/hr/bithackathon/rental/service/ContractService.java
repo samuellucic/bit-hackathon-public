@@ -1,5 +1,11 @@
 package hr.bithackathon.rental.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
+
 import hr.bithackathon.rental.config.FreeReservationConfiguration;
 import hr.bithackathon.rental.domain.Contract;
 import hr.bithackathon.rental.domain.ContractStatus;
@@ -11,14 +17,9 @@ import hr.bithackathon.rental.repository.ContractRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -40,15 +41,23 @@ public class ContractService {
 
     public Contract getContractForCustodian(Long contractId) {
         return contractRepository.findByContractIdAndCustodianIdForCommunityHome(contractId, appUserService.getCurrentAppUser())
-                .orElseThrow(() -> new RentalException(ErrorCode.CONTRACT_NOT_FOUND));
+                                 .orElseThrow(() -> new RentalException(ErrorCode.CONTRACT_NOT_FOUND));
     }
 
-    public List<Contract> findAllContractsByCustomerId(Long customerId) {
-        return contractRepository.findAllByCustomerId(customerId);
+    public Page<Contract> findAllContractsByCustomerIdAndPage(Long customerId, Pageable page) {
+        return contractRepository.findAllByCustomerId(customerId, page);
     }
 
-    public List<Contract> findAllContractsByCustomerIdAndPage(Long customerId, int page, int size) {
-        return contractRepository.findAllByCustomerId(customerId, PageRequest.of(page, size));
+    public Page<Contract> findAllContractsByCustomerIdAndStatusAndPage(ContractStatus status, Long customerId, Pageable page) {
+        return contractRepository.findAllByCustomerIdAndStatus(status, customerId, page);
+    }
+
+    public Page<Contract> findAllContractsByPage(Pageable page) {
+        return contractRepository.findAll(page);
+    }
+
+    public Page<Contract> findAllContractsByStatus(ContractStatus status, Pageable page) {
+        return contractRepository.findAllByStatus(status, page);
     }
 
     public Contract saveContract(Contract contract) {
