@@ -1,10 +1,10 @@
 package hr.bithackathon.rental.repository;
 
+import java.util.Optional;
+
 import hr.bithackathon.rental.domain.AppUser;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.Optional;
 
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
@@ -12,4 +12,5 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     @EntityGraph(attributePaths = "authority")
     Optional<AppUser> findOneWithAuthorityByEmail(String email);
+
 }

@@ -1,7 +1,16 @@
 package hr.bithackathon.rental.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Builder
@@ -10,6 +19,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppUser {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,16 +48,17 @@ public class AppUser {
 
     public static AppUser dummy() {
         return AppUser.builder()
-                .id(1L)
-                .firstName("Sam")
-                .lastName("Amuel")
-                .email("sam@amuel.com")
-                .password("admin.")
-                .city("San Francisco")
-                .address("123 Main St")
-                .postalCode("10430")
-                .OIB("97123123")
-                .phone("+7(978)123")
-                .build();
+                      .id(1L)
+                      .firstName("Sam")
+                      .lastName("Amuel")
+                      .email("sam@amuel.com")
+                      .password("admin.")
+                      .city("San Francisco")
+                      .address("123 Main St")
+                      .postalCode("10430")
+                      .OIB("97123123")
+                      .phone("+7(978)123")
+                      .build();
     }
+
 }

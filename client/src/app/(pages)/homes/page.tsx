@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Card, CardContent, CardActions, Typography, Grid } from '@mui/material';
+import { Card, CardActions, CardContent, Grid, Typography } from '@mui/material';
 import styles from './page.module.css';
 
 type House = {

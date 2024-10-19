@@ -160,6 +160,7 @@
             <column name="inspection_date" type="date">
                 <constraints nullable="true"/>
             </column>
+            <column name="status " type="varchar(255)"/>
             <column name="contract_id" type="bigint"/>
             <column name="custodian_id" type="bigint"/>
         </createTable>
@@ -180,5 +181,24 @@
         <loadData tableName="authority"
                   file="./db/changelog/data/authorities.csv"
                   usePreparedStatements="true"/>
+    </changeSet>
+
+    <changeSet id="20241019-1-samuel" author="samuellucic">
+        <createTable tableName="custodian_access_community_home">
+            <column name="custodian_id" type="bigint" />
+            <column name="community_home_id" type="bigint" />
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="custodian_access_community_home"
+                                 baseColumnNames="custodian_id"
+                                 constraintName="fk_custodian_access_community_home__custodian_id"
+                                 referencedTableName="app_user"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="custodian_access_community_home"
+                                 baseColumnNames="community_home_id"
+                                 constraintName="fk_custodian_access_community_home__community_home_id"
+                                 referencedTableName="community_home"
+                                 referencedColumnNames="id"/>
+        <addPrimaryKey tableName="custodian_access_community_home" columnNames="custodian_id,community_home_id"/>
     </changeSet>
 </databaseChangeLog>

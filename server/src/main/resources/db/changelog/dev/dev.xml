@@ -2,10 +2,12 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
-    <changeSet id="20241017-1-samuel-dev" author="samuellucic" context="dev">
-        <!--        EXAMPLE DELETE    -->
-        <sql>
-            SELECT 1;
-        </sql>
+    <changeSet id="20241019-7-filip-dev"
+               author="fpankretic"
+               context="dev">
+        <loadData tableName="community_home"
+                  file="./db/changelog/data/community_home.csv" />
+        <loadData tableName="community_home_plan"
+                  file="./db/changelog/data/community_home_plan.csv" />
     </changeSet>
 </databaseChangeLog>

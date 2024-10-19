@@ -3,6 +3,8 @@ package hr.bithackathon.rental.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Builder
 @Getter
@@ -10,6 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RecordBook {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,15 +29,21 @@ public class RecordBook {
     private String stateAfter;
     @Column
     private String damage;
+    @Column
+    private LocalDate inspectionDate;
+    @Column
+    private RecordBookStatus status;
 
     public static RecordBook dummy() {
         return RecordBook.builder()
-                .id(0L)
-                .contract(Contract.dummy())
-                .custodian(AppUser.dummy())
-                .stateBefore("before")
-                .stateAfter("after")
-                .damage("damage")
-                .build();
+                         .id(0L)
+                         .contract(Contract.dummy())
+                         .custodian(AppUser.dummy())
+                         .stateBefore("before")
+                         .stateAfter("after")
+                         .damage("damage")
+                         .inspectionDate(LocalDate.now())
+                         .build();
     }
+
 }

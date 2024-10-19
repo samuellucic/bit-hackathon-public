@@ -1,4 +1,4 @@
-package hr.bithackathon.rental.common;
+package hr.bithackathon.rental.controller;
 
 import hr.bithackathon.rental.domain.dto.LoginRequest;
 import hr.bithackathon.rental.security.JwtToken;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @AllArgsConstructor
 public class AuthController {
 

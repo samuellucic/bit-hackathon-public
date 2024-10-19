@@ -11,4 +11,5 @@ public final class AuthoritiesConstants {
     public static final String CUSTODIAN = "CUSTODIAN";
     public static final String OFFICIAL = "OFFICIAL";
     public static final String MAYOR = "MAYOR";
+
 }
