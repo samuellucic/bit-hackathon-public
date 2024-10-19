@@ -1,7 +1,8 @@
 'use client';
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
-import SearchBar from '../../components/SearchList/SearchList'; // Import the reusable SearchBar component
-import { Box, Button, Divider, Paper, Typography } from '@mui/material';
+import SearchBar from '../../components/SearchList/SearchList';
+import { Box, Button, Container, Divider, Paper, Typography } from '@mui/material';
+import styles from './page.module.css';
 
 type Reservation = {
   id: number;
@@ -91,7 +92,7 @@ export default function CommunityHomeReservations() {
   );
 
   return (
-    <Box display="flex" height="100vh">
+    <Container className={styles.container}>
       <Paper elevation={2} sx={{ width: '30%', overflowY: 'auto' }}>
         <SearchBar
           value={searchTerm}
@@ -125,6 +126,6 @@ export default function CommunityHomeReservations() {
           </Box>
         )}
       </Box>
-    </Box>
+    </Container>
   );
 }
