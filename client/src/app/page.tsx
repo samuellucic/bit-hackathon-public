@@ -30,7 +30,8 @@ const Home = () => {
   }, [router]);
 
   const handleViewReservationButtonClick = useCallback(() => {
-    router.push('/homes');
+    // todo: if already logged in, redirect to appropriate page
+    router.push('/login');
   }, [router]);
 
   return (
