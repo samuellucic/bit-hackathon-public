@@ -1,5 +1,7 @@
 package hr.bithackathon.rental.domain;
 
+import java.time.Instant;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,27 +31,26 @@ public class CommunityHomePlan {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "community_home_id")
     private CommunityHome communityHome;
+
     @Column
     private Double leaseCostPerHour;
+
     @Column
     private Double downPayment;
+
     @Column
     private Double amenitiesCostPerHour;
+
     @Column
     private Double utilitiesCostPerHour;
+
     @Column
     private Integer availableHourFrom;
+
     @Column
     private Integer availableHourTo;
 
-    public static CommunityHomePlan dummy() {
-        return CommunityHomePlan.builder()
-                                .id(1L)
-                                .communityHome(CommunityHome.dummy())
-                                .leaseCostPerHour(1000.0)
-                                .downPayment(2.0)
-                                .amenitiesCostPerHour(50.0)
-                                .build();
-    }
+    @Column
+    private Instant createdAt;
 
 }

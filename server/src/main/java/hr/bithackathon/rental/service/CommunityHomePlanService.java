@@ -14,13 +14,12 @@ public class CommunityHomePlanService {
 
     private final CommunityHomePlanRepository communityHomePlanRepository;
 
-    public Reservation createCommunityHomePlan() {
-        // TODO nije jos moj posao
-        return null;
-    }
-
     public CommunityHomePlan getCommunityHomePlan(Long communityHomePlanId) {
         return communityHomePlanRepository.findById(communityHomePlanId).orElseThrow(() -> new RentalException(ErrorCode.COMMUNITY_HOME_NOT_FOUND));
+    }
+
+    public CommunityHomePlan getLatestCommunityHomePlan(Long communityHomeId) {
+        return communityHomePlanRepository.findB
     }
 
 }

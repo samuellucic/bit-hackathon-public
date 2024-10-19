@@ -9,7 +9,7 @@ import hr.bithackathon.rental.domain.ReservationType;
 
 public record ReservationRequest(
     AppUserRequest user,
-    Long communityHomePlanId,
+    Long communityHomeId,
     Long customerId,
     String reason,
     Instant datetimeFrom,

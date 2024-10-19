@@ -26,8 +26,10 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final CommunityHomePlanService communityHomePlanService;
+    private final CommunityHomeService communityHomeService;
     private final AppUserService appUserService;
     private final NotificationService notificationService;
+    private final ContractService contractService;
 
     public Long createReservation(ReservationRequest request) {
         AppUser appUser;
@@ -38,9 +40,11 @@ public class ReservationService {
             appUser = appUserService.getCurrentAppUser();
         }
 
-        var communityHomePlan = communityHomePlanService.getCommunityHomePlan(request.communityHomePlanId());
+        var communityHome = communityHomeService.getCommunityHome(request.communityHomeId());
+        var communityHomePlan += communityHomePlanService.
+        // TODO: Get latest communityHomePlan
 
-        var reservation = ReservationRequest.toReservation(request, communityHomePlan, appUser);
+        var reservation = ReservationRequest.toReservation(request, communityHome.getCom, appUser);
         reservation.setCreationDate(LocalDate.now());
         reservation.setKey(UUID.randomUUID());
         reservation = reservationRepository.save(reservation);

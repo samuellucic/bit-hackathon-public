@@ -47,16 +47,4 @@ public class CommunityHome {
         inverseJoinColumns = @JoinColumn(name = "custodian_id"))
     private List<AppUser> custodians;
 
-    public static CommunityHome dummy() {
-        return CommunityHome.builder()
-                            .id(1L)
-                            .name("Dom 1")
-                            .address("Dom 1, BJ")
-                            .postalCode("10430")
-                            //                .city("BJ")
-                            .area(100.0)
-                            .capacity(25)
-                            .build();
-    }
-
 }
