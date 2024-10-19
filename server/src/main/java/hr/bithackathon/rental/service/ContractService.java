@@ -1,9 +1,16 @@
 package hr.bithackathon.rental.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
+
 import hr.bithackathon.rental.config.FreeReservationConfiguration;
 import hr.bithackathon.rental.domain.Contract;
 import hr.bithackathon.rental.domain.ContractStatus;
 import hr.bithackathon.rental.domain.Reservation;
+import hr.bithackathon.rental.domain.TimeRange;
 import hr.bithackathon.rental.exception.ErrorCode;
 import hr.bithackathon.rental.exception.RentalException;
 import hr.bithackathon.rental.repository.ContractRepository;
@@ -13,11 +20,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
-import java.time.Duration;
-import java.util.List;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -26,7 +28,6 @@ public class ContractService {
     private final FreeReservationConfiguration freeReservationConfiguration;
     private final ContractRepository contractRepository;
     private final NotificationService notificationService;
-    private final BankService bankService;
     private final ResourceLoader resourceLoader;
     private final ReservationService reservationService;
 
@@ -48,6 +49,14 @@ public class ContractService {
         return contractRepository.save(contract);
     }
 
+    public List<TimeRange> findAllOccupiedTimeRanges(Long communityHomeId, Instant start, Instant end) {
+        var contracts = contractRepository.findAllBetweenStartAndEnd(communityHomeId, start, end);
+        return contracts.stream()
+                        .map(Contract::getReservation)
+                        .map(reservation -> new TimeRange(reservation.getDatetimeFrom(), reservation.getDatetimeTo()))
+                        .toList();
+    }
+
     // TODO: Later when you are ready to implement this logic, extract to its own service
     public File getContractDocument() {
         var document = resourceLoader.getResource("classpath:template_ugovor.doc");
@@ -60,6 +69,10 @@ public class ContractService {
     }
 
     public Long createContract(Long reservationId) {
+        if (contractRepository.existsContractByReservationId(reservationId)) {
+            throw new RentalException(ErrorCode.CONTRACT_ALREADY_EXISTS);
+        }
+
         var reservation = reservationService.getReservation(reservationId);
 
         if (freeReservationConfiguration.isFreeReservationType(reservation.getType())) {
@@ -88,30 +101,26 @@ public class ContractService {
                                .build();
 
         var contractId = contractRepository.save(contract).getId();
+
         notificationService.notifyMajor(contractId);
 
         return contractId;
     }
 
-    // TODO: Call this when fetching contracts, and later add scheduled task
-    public boolean isContractPaid(Long contractId) {
-        var contract = getContract(contractId);
-
-        return switch (contract.getStatus()) {
-            case PAYMENT_PENDING -> bankService.isPaid();
-            case FINALIZED -> true;
-            default -> false;
-        };
-    }
-
     public void signContractByMajor(Long contractId) {
         var contract = getContract(contractId);
+        if (contract.getStatus() != ContractStatus.CREATED) {
+            throw new RentalException(ErrorCode.CONTRACT_ALREADY_SIGNED);
+        }
+
         // TODO: Add real validation
         //        if (!Objects.equals(contract.getReservation().getCustomer().getId(), customerId)) {
         //            throw new RentalException(ErrorCode.CONTRACT_CUSTOMER_MISMATCH);
         //        }
 
         contract.setStatus(ContractStatus.MAJOR_SIGNED);
+        contractRepository.save(contract);
+
         notificationService.notifyCustomer(contractId, contract.getReservation().getCustomer().getEmail());
     }
 
@@ -121,18 +130,24 @@ public class ContractService {
         //            throw new RentalException(ErrorCode.CONTRACT_CUSTOMER_MISMATCH);
         //        }
 
-        notificationService.notifyFinancesAndGospodarstvo(contractId);
+        if (contract.getStatus() != ContractStatus.MAJOR_SIGNED) {
+            throw new RentalException(ErrorCode.CONTRACT_NOT_SIGNED_BY_MAYOR);
+        }
 
         contract.setStatus(ContractStatus.PAYMENT_PENDING);
+        contractRepository.save(contract);
+
+        notificationService.notifyFinancesAndMinstry(contractId);
     }
 
     public void finalizeContract(Long contractId) {
         var contract = getContract(contractId);
         if (contract.getStatus() != ContractStatus.PAYMENT_PENDING) {
-            throw new RentalException(ErrorCode.CONTRACT_NOT_PENDING_PAYMENT);
+            throw new RentalException(ErrorCode.CONTRACT_NOT_SIGNED_BY_CUSTOMER);
         }
 
         contract.setStatus(ContractStatus.FINALIZED);
+        contractRepository.save(contract);
     }
 
     private Long createFreeContract(Reservation reservation) {

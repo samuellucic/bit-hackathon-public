@@ -1,24 +1,32 @@
 package hr.bithackathon.rental.controller;
 
-import hr.bithackathon.rental.domain.Reservation;
 import hr.bithackathon.rental.domain.dto.PaginationResponse;
 import hr.bithackathon.rental.domain.dto.ReservationRequest;
 import hr.bithackathon.rental.domain.dto.ReservationResponse;
 import hr.bithackathon.rental.security.AuthoritiesConstants;
 import hr.bithackathon.rental.security.aspect.HasAuthority;
+import hr.bithackathon.rental.service.ContractService;
 import hr.bithackathon.rental.service.ReservationService;
 import hr.bithackathon.rental.util.Util;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ReservationController {
 
-    private ReservationService reservationService;
+    private final ReservationService reservationService;
+    private final ContractService contractService;
 
     @PostMapping("/reservations")
     @ResponseStatus(HttpStatus.CREATED)
@@ -49,15 +57,18 @@ public class ReservationController {
 
     @PutMapping("/reservations/{id}")
     @HasAuthority(AuthoritiesConstants.CUSTOMER)
-    public ResponseEntity<Void> editReservation(@PathVariable("id") Long id, @RequestBody ReservationRequest reservationRequest) {
-        Reservation reservation = reservationService.editReservation(id, reservationRequest);
+    public ResponseEntity<Void> editReservation(@PathVariable("id") Long id, ReservationRequest reservationRequest) {
+        reservationService.editReservation(id, reservationRequest);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping(value ="/reservations/{id}", params = { "approve" })
+    @PatchMapping(value = "/reservations/{id}", params = { "approve" })
     @HasAuthority(AuthoritiesConstants.OFFICIAL)
-    public void approveReservation(@PathVariable("id") Long id, @RequestParam("approve") Boolean approve) {
-        reservationService.approveReservation(id, approve);
+    public void approveReservation(@PathVariable("id") Long reservationId) {
+        reservationService.approveReservation(reservationId);
+        //TODO: notify about successful reservation approval
+        //TODO: Disapprove other reservations for the same time
+        contractService.createContract(reservationId);
     }
 
 }

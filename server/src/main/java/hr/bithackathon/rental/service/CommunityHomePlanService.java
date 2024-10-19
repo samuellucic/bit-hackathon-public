@@ -2,6 +2,8 @@ package hr.bithackathon.rental.service;
 
 import hr.bithackathon.rental.domain.CommunityHomePlan;
 import hr.bithackathon.rental.domain.Reservation;
+import hr.bithackathon.rental.exception.ErrorCode;
+import hr.bithackathon.rental.exception.RentalException;
 import hr.bithackathon.rental.repository.CommunityHomePlanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,7 @@ public class CommunityHomePlanService {
     }
 
     public CommunityHomePlan getCommunityHomePlan(Long communityHomePlanId) {
-        return communityHomePlanRepository.findById(communityHomePlanId).orElseThrow();
+        return communityHomePlanRepository.findById(communityHomePlanId).orElseThrow(() -> new RentalException(ErrorCode.COMMUNITY_HOME_NOT_FOUND));
     }
 
 }

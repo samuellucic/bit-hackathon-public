@@ -10,7 +10,12 @@ public enum ErrorCode {
     CONTRACT_CUSTOMER_MISMATCH(400, 40003, "Contract customer mismatch."),
     RESERVATION_NOT_FOUND(400, 40004, "Reservation not found."),
     CONTRACT_NOT_PENDING_PAYMENT(400, 40005, "Contract is not pending payment."),
-    RECORD_BOOK_NOT_FOUND(400, 40006, "Record Book not found."),
+    COMMUNITY_HOME_NOT_FOUND(400, 40006, "Community home not found."),
+    CONTRACT_ALREADY_EXISTS(400, 40007, "Contract already exists."),
+    CONTRACT_ALREADY_SIGNED(400, 40008, "Contract already signed."),
+    CONTRACT_NOT_SIGNED_BY_MAYOR(400, 40009, "Contract not signed by mayor."),
+    CONTRACT_NOT_SIGNED_BY_CUSTOMER(400, 40010, "Contract not signed by customer."),
+    RECORD_BOOK_NOT_FOUND(400, 40011, "Record Book not found."),
 
     UNAUTHORIZED(401, 40101, "Unauthorized"),
 
@@ -20,6 +25,7 @@ public enum ErrorCode {
     CANT_CREATE_CONTRACT(500, 50002, "Couldn't crate contract."),
 
     SERVICE_UNAVAILABLE(503, 50301, "Service Unavailable.");
+
     private final int httpStatus;
     private final int code;
     private final String message;

@@ -32,7 +32,7 @@ public class NotificationService {
         mockCall();
     }
 
-    public void notifyFinancesAndGospodarstvo(Long contractId) {
+    public void notifyFinancesAndMinstry(Long contractId) {
         notifyFinances(contractId);
         notifyGospodarstvo(contractId);
     }
@@ -40,7 +40,7 @@ public class NotificationService {
     private void mockCall() {
         try (var httpClient = HttpClient.newHttpClient()) {
             var mockRequest = HttpRequest.newBuilder()
-                                         .uri(new URI("www.example.com"))
+                                         .uri(new URI("https://www.example.com"))
                                          .GET()
                                          .build();
             httpClient.send(mockRequest, HttpResponse.BodyHandlers.ofString());
