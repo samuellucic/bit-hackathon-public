@@ -4,7 +4,7 @@ import { Box, Button, Container, Divider, Paper, Typography } from '@mui/materia
 import ScrollBar from '../../components/ScrollBar/ScrollBar';
 import usePaginated from '../../hooks/usePaginated';
 import { defaultPageSize } from '../../lib/constants';
-import { ContractType, Pageable } from '../../types/types';
+import { ContractStatus, Pageable } from '../../types/types';
 import { getContracts } from '../../api/api';
 import styles from './page.module.css';
 
@@ -15,27 +15,31 @@ type Contract = {
   downPayment: number;
   total: number;
   vat: number;
-  status: ContractType;
+  status: ContractStatus;
 };
 
 export default function ContractManagement() {
+  const [status, _] = useState<ContractStatus>('CREATED');
   const [selectedContract, setSelectedContract] = useState<Contract>();
 
-  const fetch = useCallback(async (pageable: Pageable) => {
-    const { items, ...rest } = await getContracts(pageable);
-    return {
-      ...rest,
-      items: items.map(({ id, customerFirstName, customerLastName, lease, downPayment, total, vat, status }) => ({
-        id,
-        customer: `${customerFirstName} ${customerLastName}`,
-        lease,
-        downPayment,
-        total,
-        vat,
-        status,
-      })),
-    };
-  }, []);
+  const fetch = useCallback(
+    async (pageable: Pageable) => {
+      const { items, ...rest } = await getContracts(pageable, status);
+      return {
+        ...rest,
+        items: items.map(({ id, customerFirstName, customerLastName, lease, downPayment, total, vat, status }) => ({
+          id,
+          customer: `${customerFirstName} ${customerLastName}`,
+          lease,
+          downPayment,
+          total,
+          vat,
+          status,
+        })),
+      };
+    },
+    [status]
+  );
 
   const [contracts, getNext, hasMore] = usePaginated<Contract>({ fetch, size: defaultPageSize });
 

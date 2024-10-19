@@ -1,6 +1,6 @@
 import api from './instance';
 import {
-  ContractType,
+  ContractStatus,
   CreateReservation,
   LoginResponse,
   Pageable,
@@ -72,12 +72,16 @@ export type ContractResponse = {
   amenities: number;
   total: number;
   vat: number;
-  status: ContractType;
+  status: ContractStatus;
 };
 
-export const getContracts = async (pageable: Pageable) => {
+export const getContracts = async (pageable: Pageable, status: ContractStatus) => {
+  const params = {
+    ...pageable,
+    status,
+  };
   const res = await api.get<PageResponse<ContractResponse>>(endpoints.getContracts, {
-    params: pageable,
+    params,
   });
   return res.data;
 };

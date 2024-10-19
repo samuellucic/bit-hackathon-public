@@ -13,7 +13,7 @@ export type LoginResponse = {
 
 export type ReservationType = 'NORMAL' | 'FUNERAL' | 'FIRE_DEPARTMENT' | 'OTHER';
 
-export type ContractType = 'CREATED' | 'MAJOR_SIGNED' | 'PAYMENT_PENDING' | 'FINALIZED' | 'DECLINED';
+export type ContractStatus = 'CREATED' | 'MAJOR_SIGNED' | 'PAYMENT_PENDING' | 'FINALIZED' | 'DECLINED';
 
 export type CreateReservation = {
   communityHomePlanId: number;
