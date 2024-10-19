@@ -20,7 +20,7 @@ public class ReservationService {
     private final CommunityHomePlanService communityHomePlanService;
     private final AppUserService appUserService;
 
-    public Reservation createReservation(ReservationRequest request) {
+    public Long createReservation(ReservationRequest request) {
         // TODO uncomment
         // CommunityHomePlan communityHomePlan = communityHomePlanService.getCommunityHomePlan(request.communityHomePlanId());
         CommunityHomePlan communityHomePlan = CommunityHomePlan.dummy();
@@ -28,7 +28,7 @@ public class ReservationService {
         Reservation reservation = ReservationRequest.toReservation(request, communityHomePlan, customer);
         reservation.setCreationDate(LocalDate.now());
         reservation = reservationRepository.save(reservation);
-        return reservation;
+        return reservation.getId();
     }
 
     public Page<Reservation> getAllReservationsByUser(Long appUserId, int page, int size) {

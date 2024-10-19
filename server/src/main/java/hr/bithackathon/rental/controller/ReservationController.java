@@ -1,13 +1,16 @@
 package hr.bithackathon.rental.controller;
 
+import hr.bithackathon.rental.domain.Reservation;
 import hr.bithackathon.rental.domain.dto.PaginationResponse;
 import hr.bithackathon.rental.domain.dto.ReservationRequest;
 import hr.bithackathon.rental.domain.dto.ReservationResponse;
 import hr.bithackathon.rental.security.AuthoritiesConstants;
 import hr.bithackathon.rental.security.aspect.HasAuthority;
 import hr.bithackathon.rental.service.ReservationService;
+import hr.bithackathon.rental.util.Util;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,8 +22,9 @@ public class ReservationController {
     @PostMapping("/reservations")
     @ResponseStatus(HttpStatus.CREATED)
     @HasAuthority(AuthoritiesConstants.CUSTOMER)
-    public ReservationResponse createReservation(@RequestBody ReservationRequest reservationRequest) {
-        return ReservationResponse.fromReservation(reservationService.createReservation(reservationRequest));
+    public ResponseEntity<Void> createReservation(@RequestBody ReservationRequest reservationRequest) {
+        Long id = reservationService.createReservation(reservationRequest);
+        return Util.getCreateResponse(id);
     }
 
     @GetMapping(value = "/user/{userId}/reservations", params = { "page", "size" })
@@ -46,8 +50,9 @@ public class ReservationController {
 
     @PutMapping("/reservations/{id}")
     @HasAuthority(AuthoritiesConstants.CUSTOMER)
-    public void editReservation(@PathVariable("id") Long id, ReservationRequest reservationRequest) {
+    public ResponseEntity<Void> editReservation(@PathVariable("id") Long id, ReservationRequest reservationRequest) {
         reservationService.editReservation(id, reservationRequest);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/reservations/{reservationId}/approve")
