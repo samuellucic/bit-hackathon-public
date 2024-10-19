@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { AppBar, Button, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
 import Link from 'next/link';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
 import styles from './Header.module.css';
-import { ThemeType } from '../../types/types';
 import { UserContext } from '../../contexts/UserContext';
 import { useRouter } from 'next/navigation';
+import { ThemeType } from '@/app/types/types';
 
 type SubmenuItem = {
   url: string;
@@ -33,6 +33,9 @@ const headerItems: HeaderItem[] = [
       { url: 'https://www.linkedin.com/in/vatroslav-jakopec-a83b3229b/', label: 'Vatroslav' },
     ],
   },
+  { url: '/reservations-dashboard', label: 'Rezervacije' },
+  { url: '/contracts-dashboard', label: 'Ugovori' },
+  { url: '/record-books-dashboard', label: 'Zapisnici' },
   { url: 'https://bithack.tpbj.hr/', label: 'B:IT Hack' },
 ];
 
@@ -63,10 +66,13 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
 
   const toggleTheme = useCallback(() => {
     setIsDarkMode((isDarkMode) => {
-      onThemeChange(!isDarkMode ? 'light' : 'dark');
       return !isDarkMode;
     });
-  }, [onThemeChange]);
+  }, []);
+
+  useEffect(() => {
+    onThemeChange(!isDarkMode ? 'light' : 'dark');
+  }, [isDarkMode, onThemeChange]);
 
   const logoutUser = useCallback(() => {
     logout();
@@ -81,7 +87,7 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
         </Typography>
 
         <IconButton onClick={toggleTheme} color="inherit" sx={{ marginLeft: 'auto' }}>
-          {isDarkMode ? <Brightness7 /> : <Brightness4 />}
+          {isDarkMode ? <Brightness4 /> : <Brightness7 />}
         </IconButton>
 
         {headerItems.map(({ label, url, submenu }) => (

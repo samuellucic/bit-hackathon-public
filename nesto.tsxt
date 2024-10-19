@@ -1,0 +1,41 @@
+Rezervacija domova i termina preko aplikacije
+Domena bi trebala obuhvaćat entitet "Dom" i entitet "Rezervacija" 
+Domena treba entitet Soba koja referencira Dom
+termin će biti degenerirani entitet, tj. dio primarnog ključa
+
+Korisniku se nakon odabira termina otvara forma za popunjavanje zahtjeva za zakup
+Potreban je entitet Zahtjev.
+
+Gradski službenik mora moći pristupiti zahtjevima i mora moći kreirati ugovor 
+Potreban je entitet ugovor.
+
+Vidjet cemo s vremenom jel potreban entitet Stranka (Tj. osoba koja šalje zahtjev) 
+ili to ide u Zahtjev
+
+Nakon što službenik izradi ugovor, onda gradonačelnik 
+ili zamjenik MORA MOĆI pristupiti izrađenim ugovorima.
+
+Ugovor mora imati statuse, potrebno je definirati barem 3 statusa:
+ - Kreiran od strane službenika
+ - Potpisan od strane gradske vlasti
+ - Potpisan od strane stranke
+
+Status ugovora ovisi o tome kome se može u danom trenutku prikazati.
+Frontend mora imati page za svaki od od tih pristupa različitih službenika
+
+Domar mora moći kreirati zapisnik, novi entiteti: ZAPISNIK i možda DOMAR ili ROLA
+Domar mora moći uređivati zapisnik
+
+Kada se zahtjev preda službeniku označiti ntorku iz DOM kao zauzet (boolean)
+Pod pretpostavkom da se zahtjev može odbit definirati procese odbijanja i prihvaćanja
+Odbijanje vraća ntorku iz DOM zauzeto=false, a prihvaćanju kreira ntorku Ugovor
+
+
+Dodatne napomene:
+ - Vidjeti dalje što s ugovorom nakon potpisivanja, kako prikazati i platiti ugovor, s obzirom da su podatci
+   za uplatu dostupni preko UGOVOR
+ - Stranka možda ipak kao zaseban entitet čisto da je lakše koristiti
+ - Gradski službenici imaju 3 tipa definirana: SLUŽBENIK, GRADONAČELNIK, ZAMJENA
+   - vidjeti može li kao zaseban entitet s rolama ili ne, pretpostavka je da se može
+
+

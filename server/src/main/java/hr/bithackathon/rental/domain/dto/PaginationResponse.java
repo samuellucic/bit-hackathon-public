@@ -1,10 +1,10 @@
 package hr.bithackathon.rental.domain.dto;
 
-import java.util.List;
-import java.util.function.Function;
-
 import lombok.Builder;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
+import java.util.function.Function;
 
 @Builder
 public record PaginationResponse<T>(List<T> items, long totalElements, long totalPages) {
@@ -17,4 +17,11 @@ public record PaginationResponse<T>(List<T> items, long totalElements, long tota
                                  .build();
     }
 
+    public static <T> PaginationResponse<T> fromPage(Page<T> page) {
+        return PaginationResponse.<T>builder()
+                .items(page.getContent())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .build();
+    }
 }
