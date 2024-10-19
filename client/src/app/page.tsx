@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Container, Stack, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
@@ -25,13 +25,13 @@ const Home = () => {
     return () => clearInterval(interval);
   }, [images.length]);
 
-  const handleReservationButtonClick = () => {
+  const handleReservationButtonClick = useCallback(() => {
     router.push('/homes');
-  };
+  }, [router]);
 
-  const handleViewReservationButtonClick = () => {
-    router.push('/login');
-  };
+  const handleViewReservationButtonClick = useCallback(() => {
+    router.push('/homes');
+  }, [router]);
 
   return (
     <Container className={styles.container}>
