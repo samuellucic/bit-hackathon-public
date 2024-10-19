@@ -15,3 +15,14 @@ export type CreateReservation = {
   iban: string;
   type: ReservationType;
 };
+
+export type Pageable = {
+  size: number;
+  page: number;
+};
+
+export type PageResponse<T> = {
+  items: T[];
+  totalElements: number;
+  totalPages: number;
+};

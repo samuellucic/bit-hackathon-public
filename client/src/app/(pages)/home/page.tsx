@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Button, Container, Stack, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
@@ -10,8 +10,11 @@ import bjelovarRotor from '../../../../public/images/bjelovar-rotor.jpeg';
 import bjelovarZima from '../../../../public/images/Bjelovar-zima.jpeg';
 import bjelovarPark from '../../../../public/images/bjelovar-park.jpg';
 import { useRouter } from 'next/navigation';
+import { UserContext } from '../../contexts/UserContext';
 
 const Home = () => {
+  const { isLoggedIn } = useContext(UserContext);
+
   const images = [bjelovarRotor, bjelovarZima, bjelovarPark];
   const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
@@ -21,12 +24,17 @@ const Home = () => {
     }, 3000);
     return () => clearInterval(interval);
   }, [images.length]);
+
   const handleReservationButtonClick = useCallback(() => {
     router.push('/homes');
   }, [router]);
   const handleViewReservationButtonClick = useCallback(() => {
-    router.push('/login');
-  }, [router]);
+    if (isLoggedIn) {
+      router.push('/reservations-dashboard');
+    } else {
+      router.push('/login');
+    }
+  }, [isLoggedIn, router]);
 
   return (
     <Container className={styles.container}>

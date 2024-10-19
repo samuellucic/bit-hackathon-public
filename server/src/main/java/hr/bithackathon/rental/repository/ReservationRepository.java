@@ -18,11 +18,14 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     Optional<Reservation> findByIdAndCustomerId(Long id, Long customerId);
 
+    Page<Reservation> findAllByApproved(Boolean approved, Pageable pageable);
+
     @Query("SELECT r FROM Reservation r " +
-        "WHERE r.communityHomePlan.communityHome.id = :communityHomeId " +
-        "AND r.approved = null " +
-        "AND ((r.datetimeFrom BETWEEN :start AND :end) OR (r.datetimeTo BETWEEN :start AND :end))")
-    List<Reservation> findAllNotApprovedForCommunityHomePlanAndBetween(@Param("communityHomeId") Long communityHomeId, Instant start, Instant end);
+            "WHERE r.communityHomePlan.communityHome.id = :communityHomeId " +
+            "AND r.approved = null " +
+            "AND ((r.datetimeFrom BETWEEN :start AND :end) OR (r.datetimeTo BETWEEN :start AND :end))")
+    List<Reservation> findAllNotApprovedForCommunityHomePlanAndBetween(@Param("communityHomeId") Long communityHomeId,
+            Instant start, Instant end);
 
     Optional<Reservation> findByKey(UUID key);
 

@@ -1,18 +1,26 @@
 'use client';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { Box, Button, Link, Paper, TextField, Typography } from '@mui/material';
+import { authenticate } from '../../api/api';
+import { useRouter } from 'next/navigation';
+import { UserContext } from '../../contexts/UserContext';
 
 export default function Page() {
+  const { setIsLoggedIn } = useContext(UserContext);
+  const router = useRouter();
+
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleSubmit = useCallback(
-    (e: { preventDefault: () => void }) => {
+    async (e: { preventDefault: () => void }) => {
       e.preventDefault();
       if (isLoginMode) {
-        console.log('Login - Email:', email, 'Password:', password);
+        await authenticate({ email, password });
+        setIsLoggedIn(true);
+        router.push('/home');
       } else {
         if (password !== confirmPassword) {
           console.log("Passwords don't match");

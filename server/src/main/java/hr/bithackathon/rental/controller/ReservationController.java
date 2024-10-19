@@ -44,8 +44,8 @@ public class ReservationController {
 
     @GetMapping(value = "/reservations", params = { "page", "size" })
     @HasAuthority(AuthoritiesConstants.OFFICIAL)
-    public PaginationResponse<ReservationResponse> getAllReservations(Pageable pageable) {
-        return PaginationResponse.fromPage(reservationService.getAllReservations(pageable), ReservationResponse::fromReservation);
+    public PaginationResponse<ReservationResponse> getAllReservations(Pageable pageable, @RequestParam(required = false) Boolean approved) {
+        return PaginationResponse.fromPage(reservationService.getAllReservations(pageable, approved), ReservationResponse::fromReservation);
     }
 
     @GetMapping("/reservations/{id}")
