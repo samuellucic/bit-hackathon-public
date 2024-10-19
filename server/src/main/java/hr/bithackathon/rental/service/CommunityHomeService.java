@@ -15,9 +15,8 @@ public class CommunityHomeService {
 
     private final CommunityHomeRepository communityHomeRepository;
 
-    public Reservation createCommunityHome() {
-        // TODO
-        return null;
+    public List<CommunityHome> getCommunityHomes() {
+        return communityHomeRepository.findAll();
     }
 
     public CommunityHome getCommunityHome(Long communityHomeId) {
