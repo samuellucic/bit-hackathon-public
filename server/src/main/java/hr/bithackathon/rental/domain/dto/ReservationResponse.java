@@ -11,6 +11,8 @@ import lombok.Builder;
 public record ReservationResponse(
     Long reservationId,
     Long customerId,
+    String customerFirstName,
+    String customerLastName,
     Long communityHomePlanId,
     LocalDate creationDate,
     String reason,
@@ -26,6 +28,8 @@ public record ReservationResponse(
         return ReservationResponse.builder()
                                   .reservationId(reservation.getId())
                                   .customerId(reservation.getCustomer().getId())
+                                  .customerFirstName(reservation.getCustomer().getFirstName())
+                                  .customerLastName(reservation.getCustomer().getLastName())
                                   .communityHomePlanId(reservation.getCommunityHomePlan().getId())
                                   .creationDate(reservation.getCreationDate())
                                   .reason(reservation.getReason())

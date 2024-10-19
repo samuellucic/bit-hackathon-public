@@ -1,6 +1,7 @@
 'use client';
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
-import { Box, Button, Divider, List, ListItem, ListItemText, Paper, TextField, Typography } from '@mui/material';
+import SearchBar from '../../components/SearchList/SearchList'; // Import the reusable SearchBar component
+import { Box, Button, Divider, Paper, Typography } from '@mui/material';
 
 type Reservation = {
   id: number;
@@ -52,16 +53,22 @@ const reservations: Reservation[] = [
 ];
 
 export default function CommunityHomeReservations() {
-  const [selectedReservation, setSelectedReservation] = useState<Reservation>(reservations[0]);
+  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(reservations[0]);
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearchChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   }, []);
 
-  const handleReservationClick = useCallback((reservation: Reservation) => {
-    setSelectedReservation(reservation);
-  }, []);
+  const handleReservationClick = useCallback(
+    (reservationItem: { id: number; primaryText: string; secondaryText?: string }) => {
+      const reservation = reservations.find((r) => r.id === reservationItem.id);
+      if (reservation) {
+        setSelectedReservation(reservation);
+      }
+    },
+    []
+  );
 
   const filteredReservations = useMemo(
     () =>
@@ -73,22 +80,25 @@ export default function CommunityHomeReservations() {
     [searchTerm]
   );
 
+  const reservationItems = useMemo(
+    () =>
+      filteredReservations.map((reservation) => ({
+        id: reservation.id,
+        primaryText: reservation.name,
+        secondaryText: `${reservation.cause} - ${reservation.date} - ${reservation.startTime} to ${reservation.endTime}`,
+      })),
+    [filteredReservations]
+  );
+
   return (
     <Box display="flex" height="100vh">
       <Paper elevation={2} sx={{ width: '30%', overflowY: 'auto' }}>
-        <Box p={2}>
-          <TextField label="Search" variant="outlined" fullWidth value={searchTerm} onChange={handleSearchChange} />
-        </Box>
-        <List>
-          {filteredReservations.map((reservation) => (
-            <ListItem key={reservation.id} onClick={() => handleReservationClick(reservation)} component={'li'}>
-              <ListItemText
-                primary={reservation.name}
-                secondary={`${reservation.cause} - ${reservation.date} - ${reservation.startTime} to ${reservation.endTime}`}
-              />
-            </ListItem>
-          ))}
-        </List>
+        <SearchBar
+          value={searchTerm}
+          onChange={handleSearchChange}
+          items={reservationItems}
+          onItemClick={handleReservationClick}
+        />
       </Paper>
       <Divider orientation="vertical" flexItem />
       <Box p={2} flex={1} display="flex" justifyContent="space-between" alignItems="flex-start">

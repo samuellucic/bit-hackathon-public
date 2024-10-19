@@ -3,11 +3,8 @@ package hr.bithackathon.rental.controller;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import hr.bithackathon.rental.domain.dto.CreateContractRequest;
 import hr.bithackathon.rental.exception.ErrorCode;
 import hr.bithackathon.rental.exception.RentalException;
-import hr.bithackathon.rental.security.AuthoritiesConstants;
-import hr.bithackathon.rental.security.aspect.HasAuthority;
 import hr.bithackathon.rental.service.ContractService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
@@ -15,8 +12,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,11 +22,11 @@ public class ContractController {
 
     private final ContractService contractService;
 
-    @PostMapping
-    @HasAuthority(AuthoritiesConstants.OFFICIAL)
-    public Long createContract(@RequestBody CreateContractRequest request) {
-        return contractService.createContract(request.reservationId());
-    }
+    //    @PostMapping
+    //    @HasAuthority(AuthoritiesConstants.OFFICIAL)
+    //    public Long createContract(@RequestBody CreateContractRequest request) {
+    //        return contractService.createContract(request.reservationId());
+    //    }
 
     @GetMapping("/doc")
     public ResponseEntity<InputStreamResource> file() {

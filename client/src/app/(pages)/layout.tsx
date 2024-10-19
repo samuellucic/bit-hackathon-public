@@ -3,7 +3,7 @@
 import React, { ReactNode, useCallback, useState } from 'react';
 import { ThemeType } from '../types/types';
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import { darkTheme, lightTheme } from '../../theme/theme';
+import { darkTheme, lightTheme } from '@/theme/theme';
 import Header from '../components/Header/Header';
 import styles from './page.module.css';
 
