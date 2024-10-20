@@ -51,6 +51,7 @@ public class RecordBookService {
         var recordBook = getRecordBookForCustodian(recordBookId);
         recordBook.setStateAfter(recordBookAfterEditRequest.stateAfter());
         recordBook.setDamage(recordBookAfterEditRequest.damage());
+        recordBook.setStatus(RecordBookStatus.FILLED_AFTER);
         recordBook.setInspectionDate(LocalDate.now());
         var updatedRecordBook = recordBookRepository.save(recordBook);
         notificationService.notifyCustomerForRecord(recordBook.getId());
@@ -60,7 +61,7 @@ public class RecordBookService {
     public RecordBook updateRecordBookBefore(Long recordBookId, RecordBookBeforeEditRequest recordBookBeforeEditRequest) {
         var recordBook = getRecordBookForCustodian(recordBookId);
         recordBook.setStateBefore(recordBookBeforeEditRequest.stateBefore());
-        recordBook.setStatus(RecordBookStatus.FILLED);
+        recordBook.setStatus(RecordBookStatus.FILLED_BEFORE);
         var updatedRecordBook = recordBookRepository.save(recordBook);
         notificationService.notifyCustomerForRecord(recordBook.getId());
         return updatedRecordBook;
