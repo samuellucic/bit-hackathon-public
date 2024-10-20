@@ -1,6 +1,6 @@
 first_name,last_name,email,password,oib,phone,address,postal_code,city,authority_id
-Vinko,Francisković,ivan.horvat@mail.com,$2a$10$wvfbFVHbi0kiy/LxCXlfwOxj.YsMcDR8af9F2jOTlP3N2o2u0Hf9y,03063761139,044812356,Nikole Jurišića 1,23000,Zadar,1
-Renato,Bošnjaković,lukas.herceg@mail.com,$2a$10$wvfbFVHbi0kiy/LxCXlfwOxj.YsMcDR8af9F2jOTlP3N2o2u0Hf9y,59849932543,034255067,Ljudevita Gaja 2,10430,Samobor,2
+Vinko,Francisković,vinko.franciskovic@mail.com,$2a$10$wvfbFVHbi0kiy/LxCXlfwOxj.YsMcDR8af9F2jOTlP3N2o2u0Hf9y,03063761139,044812356,Nikole Jurišića 1,23000,Zadar,1
+Renato,Bošnjaković,renato.bosnjakovic@mail.com,$2a$10$wvfbFVHbi0kiy/LxCXlfwOxj.YsMcDR8af9F2jOTlP3N2o2u0Hf9y,59849932543,034255067,Ljudevita Gaja 2,10430,Samobor,2
 Mladen,Sabljak,mladen.sabljak@mail.com,$2a$10$wvfbFVHbi0kiy/LxCXlfwOxj.YsMcDR8af9F2jOTlP3N2o2u0Hf9y,07292863217,052662991,Mletačka 12,52100,Pula,2
 Tamara,Barbalić,tamara.barbalic@mail.com,$2a$10$wvfbFVHbi0kiy/LxCXlfwOxj.YsMcDR8af9F2jOTlP3N2o2u0Hf9y,84991214395,051325173,Gažanski trg 1,47000,Karlovac,3
 Marija,Šestak,marija.sestak@mail.com,$2a$10$wvfbFVHbi0kiy/LxCXlfwOxj.YsMcDR8af9F2jOTlP3N2o2u0Hf9y,50063141818,049550118,Boškovićeva 20,10000,Zagreb,4
