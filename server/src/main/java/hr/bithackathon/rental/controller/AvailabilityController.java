@@ -26,7 +26,7 @@ public class AvailabilityController {
     public List<TimeRange> getOccupation(@PathVariable("communityHomeId") Long communityHomeId,
                                          @RequestParam("from") LocalDate from,
                                          @RequestParam("to") LocalDate to) {
-        if (to.isAfter(from)) {
+        if (from.isAfter(to)) {
             throw new RentalException(ErrorCode.INVALID_DATE_RANGE);
         }
 
@@ -40,10 +40,10 @@ public class AvailabilityController {
     public boolean isAvailable(@PathVariable("communityHomeId") Long communityHomeId,
                                @RequestParam("from") LocalDate from,
                                @RequestParam("to") LocalDate to) {
-        if (to.isAfter(from)) {
+        if (from.isAfter(to)) {
             throw new RentalException(ErrorCode.INVALID_DATE_RANGE);
         }
-        
+
         var fromTimestamp = from.atStartOfDay(ZoneId.systemDefault()).toInstant();
         var toTimestamp = to.atStartOfDay(ZoneId.systemDefault()).toInstant();
 
