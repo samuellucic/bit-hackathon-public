@@ -110,6 +110,7 @@ export default function ContractManagement() {
       await signContractUser(selectedContract?.id);
     }
     await refresh();
+    setSelectedContract(undefined);
   }, [refresh, selectedContract]);
 
   const onCustomerPay = useCallback(async () => {
@@ -117,6 +118,7 @@ export default function ContractManagement() {
       await payContractUser(selectedContract?.id);
     }
     await refresh();
+    setSelectedContract(undefined);
   }, [refresh, selectedContract]);
 
   const contractItems = useMemo(

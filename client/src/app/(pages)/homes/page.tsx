@@ -1,65 +1,33 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Card, CardActions, CardContent, Container, Grid, Typography } from '@mui/material';
 import styles from './page.module.css';
-
-type House = {
-  id: number;
-  name: string;
-  address: string;
-  postalCode: string;
-  city: string;
-  area: number;
-  capacity: number;
-};
-
-const mockHouses: House[] = [
-  {
-    id: 1,
-    name: 'DVD Bjelovar',
-    address: 'Vatroslava Velikog 62',
-    postalCode: '43000',
-    city: 'Bjelovar',
-    area: 2500.0,
-    capacity: 8,
-  },
-  {
-    id: 2,
-    name: 'Crkva Sv. Siniše',
-    address: 'Nikole Tesle 321',
-    postalCode: '43000',
-    city: 'Bjelovar',
-    area: 1200.0,
-    capacity: 4,
-  },
-  {
-    id: 3,
-    name: 'Villa Glamour',
-    address: 'Bez imena',
-    postalCode: '43000',
-    city: 'Bjelovar',
-    area: 5000.0,
-    capacity: 12,
-  },
-  {
-    id: 4,
-    name: 'Litra i voda',
-    address: 'Samuela Velikog 232',
-    postalCode: '43000',
-    city: 'Bjelovar',
-    area: 5000.0,
-    capacity: 12,
-  },
-];
+import { CommunityHomeResponse, getCommunityHomes } from '@/app/api/api';
 
 const ListOfHomes = () => {
+  const [homes, setHomes] = useState<CommunityHomeResponse[]>([]);
+
+  useEffect(() => {
+    const fetchHomes = async () => {
+      try {
+        const data = await getCommunityHomes();
+        setHomes(data);
+      } catch (error) {
+        console.error('Error fetching community homes:', error);
+      }
+    };
+    fetchHomes();
+  }, []);
+
   return (
     <Container className={styles.container}>
       <Typography variant="h3" gutterBottom>
         Dostupni društveni domovi
       </Typography>
       <Grid container spacing={2}>
-        {mockHouses.map((house) => (
+        {homes.map((house) => (
           <Grid item xs={12} sm={6} md={4} key={house.id}>
             <Link href={`/homes/${house.id}`} passHref>
               <Card variant="outlined" className={styles.card}>
