@@ -1,8 +1,20 @@
 'use client';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './page.module.css';
-import ScrollBar from '../../components/ScrollBar/ScrollBar'; // Import the reusable SearchBar component
-import { Box, Button, Container, Divider, Paper, Typography } from '@mui/material';
+import ScrollBar from '../../components/ScrollBar/ScrollBar'; // Import the reusable ScrollBar component
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  Typography,
+} from '@mui/material';
 import usePaginated from '../../hooks/usePaginated';
 import { Pageable, ReservationType } from '../../types/types';
 import { decideReservation, getReservations } from '../../api/api';
@@ -21,37 +33,52 @@ type Reservation = {
 
 export default function CommunityHomeReservations() {
   const [selectedReservation, setSelectedReservation] = useState<Reservation>();
+  const [filterStatus, setFilterStatus] = useState<string>('notDecided');
 
-  const fetch = useCallback(async (pageable: Pageable) => {
-    const { items, ...rest } = await getReservations(pageable);
-    return {
-      ...rest,
-      items: items.map(
-        ({
-          reservationId,
-          customerFirstName,
-          customerLastName,
-          reason,
-          creationDate,
-          datetimeFrom,
-          datetimeTo,
-          type,
-          approved,
-        }) => ({
-          id: reservationId,
-          name: `${customerFirstName} ${customerLastName}`,
-          cause: reason,
-          date: creationDate,
-          startTime: datetimeFrom,
-          endTime: datetimeTo,
-          type: type,
-          status: approved === null ? 'Not decided' : approved ? 'Approved' : 'Denied',
-        })
-      ),
-    };
-  }, []);
+  const fetch = useCallback(
+    async (pageable: Pageable) => {
+      let approved;
+      if (filterStatus === 'approved') {
+        approved = true;
+      } else if (filterStatus === 'denied') {
+        approved = false;
+      }
+
+      const { items, ...rest } = await getReservations(pageable, approved);
+      return {
+        ...rest,
+        items: items.map(
+          ({
+            reservationId,
+            customerFirstName,
+            customerLastName,
+            reason,
+            creationDate,
+            datetimeFrom,
+            datetimeTo,
+            type,
+            approved,
+          }) => ({
+            id: reservationId,
+            name: `${customerFirstName} ${customerLastName}`,
+            cause: reason,
+            date: creationDate,
+            startTime: datetimeFrom,
+            endTime: datetimeTo,
+            type: type,
+            status: approved === null ? 'Not decided' : approved ? 'Approved' : 'Denied',
+          })
+        ),
+      };
+    },
+    [filterStatus]
+  );
 
   const [reservations, getNext, hasMore, refresh] = usePaginated<Reservation>({ fetch, size: defaultPageSize });
+
+  useEffect(() => {
+    refresh();
+  }, [filterStatus]);
 
   const handleReservationClick = useCallback(
     (reservationItem: { id: number; primaryText: string; secondaryText?: string }) => {
@@ -87,12 +114,33 @@ export default function CommunityHomeReservations() {
     [reservations]
   );
 
+  const handleFilterChange = (event: SelectChangeEvent<string>) => {
+    setFilterStatus(event.target.value);
+    setSelectedReservation(undefined);
+  };
+
   return (
     <Container className={styles.container}>
-      <Paper elevation={2} sx={{ width: '30%', overflowY: 'auto' }}>
-        <ScrollBar items={reservationItems} onItemClick={handleReservationClick} onNext={getNext} hasMore={hasMore} />
-      </Paper>
+      {/* Filter and Scrollable List */}
+      <Box display="flex" flexDirection="column" width="30%" height="100vh" mb={2}>
+        {/* Filter Dropdown */}
+        <FormControl sx={{ minWidth: 200, mb: 2 }}>
+          <InputLabel>Status Filter</InputLabel>
+          <Select value={filterStatus} label="Status Filter" onChange={handleFilterChange} variant="outlined">
+            <MenuItem value="approved">Approved</MenuItem>
+            <MenuItem value="denied">Denied</MenuItem>
+            <MenuItem value="notDecided">Not decided</MenuItem>
+          </Select>
+        </FormControl>
+
+        {/* Scrollable List */}
+        <Paper elevation={2} sx={{ overflowY: 'auto', flexGrow: 1 }}>
+          <ScrollBar items={reservationItems} onItemClick={handleReservationClick} onNext={getNext} hasMore={hasMore} />
+        </Paper>
+      </Box>
+
       <Divider orientation="vertical" flexItem />
+
       <Box p={2} flex={1} display="flex" justifyContent="space-between" alignItems="flex-start">
         {selectedReservation && (
           <Box flexGrow={1}>
@@ -107,7 +155,8 @@ export default function CommunityHomeReservations() {
           </Box>
         )}
 
-        {selectedReservation && (
+        {/* Conditionally render Approve/Deny buttons only when filterStatus is 'notDecided' */}
+        {selectedReservation && filterStatus === 'notDecided' && (
           <Box display="flex" flexDirection="column" alignItems="flex-end" ml={2}>
             <Button
               onClick={onApprove}
