@@ -1,5 +1,7 @@
 state_before,state_after,damage,inspection_date,status,contract_id,custodian_id
-čisto,čisto,nema,2023-10-19,CREATED,1,2
+,,,,CREATED,1,2
+čisto,,,,FILLED_BEFORE,9,2
+čisto,čisto,nema,2023-10-19,FILLED_AFTER,10,2
 čisto,pristojno,nema,2023-10-19,SIGNED,2,2
 pristojno,čisto,nema,2023-10-19,DOWN_PAYMENT_RETURNED,3,3
-čisto,jako neuredno,radijator,2023-10-19,DOWN_PAYMENT_FORFEITED,4,3
+čisto,jako neuredno,radijator,2023-10-19,DOWN_PAYMENT_FORFEITED,11,3

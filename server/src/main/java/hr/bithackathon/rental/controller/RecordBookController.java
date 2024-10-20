@@ -48,7 +48,6 @@ public class RecordBookController {
     }
 
     @GetMapping(value = "/record-books/{id}")
-    @HasAuthority({ AuthoritiesConstants.CUSTODIAN, AuthoritiesConstants.CUSTOMER })
     public RecordBookResponse getRecordBook(@PathVariable("id") Long id) {
         if (SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.CUSTODIAN)) {
             return RecordBookResponse.from(recordBookService.getRecordBookForCustodian(id));
@@ -58,7 +57,6 @@ public class RecordBookController {
     }
 
     @GetMapping(value = "/record-books", params = { "page", "size", "status" })
-    @HasAuthority({ AuthoritiesConstants.CUSTODIAN, AuthoritiesConstants.CUSTOMER })
     public PaginationResponse<RecordBookResponse> getAllRecordBooks(@RequestParam(value = "status", required = false) RecordBookStatus status,
                                                                     Pageable pageable) {
         var appUser = SecurityUtils.getCurrentUserDetails();
