@@ -60,6 +60,7 @@ public class RecordBookService {
     public RecordBook updateRecordBookBefore(Long recordBookId, RecordBookBeforeEditRequest recordBookBeforeEditRequest) {
         var recordBook = getRecordBookForCustodian(recordBookId);
         recordBook.setStateBefore(recordBookBeforeEditRequest.stateBefore());
+        recordBook.setStatus(RecordBookStatus.FILLED);
         var updatedRecordBook = recordBookRepository.save(recordBook);
         notificationService.notifyCustomerForRecord(recordBook.getId());
         return updatedRecordBook;
