@@ -1,13 +1,8 @@
 package hr.bithackathon.rental.service;
 
-import java.time.LocalDate;
-
 import hr.bithackathon.rental.domain.RecordBook;
 import hr.bithackathon.rental.domain.RecordBookStatus;
-import hr.bithackathon.rental.domain.dto.HandleDownPaymentRequest;
-import hr.bithackathon.rental.domain.dto.RecordBookAddRequest;
-import hr.bithackathon.rental.domain.dto.RecordBookEditRequest;
-import hr.bithackathon.rental.domain.dto.SignRecordBookRequest;
+import hr.bithackathon.rental.domain.dto.*;
 import hr.bithackathon.rental.exception.ErrorCode;
 import hr.bithackathon.rental.exception.RentalException;
 import hr.bithackathon.rental.repository.RecordBookRepository;
@@ -16,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 
 @Service
 @Transactional
@@ -50,15 +47,24 @@ public class RecordBookService {
         return recordBookRepository.findById(recordBookId).orElseThrow(() -> new RentalException(ErrorCode.RECORD_BOOK_NOT_FOUND));
     }
 
-    public RecordBook updateRecordBook(Long recordBookId, RecordBookEditRequest recordBookEditRequest) {
+    public RecordBook updateRecordBookAfter(Long recordBookId, RecordBookAfterEditRequest recordBookAfterEditRequest) {
         var recordBook = getRecordBookForCustodian(recordBookId);
-        recordBook.setStateAfter(recordBookEditRequest.stateAfter());
-        recordBook.setDamage(recordBookEditRequest.damage());
+        recordBook.setStateAfter(recordBookAfterEditRequest.stateAfter());
+        recordBook.setDamage(recordBookAfterEditRequest.damage());
         recordBook.setInspectionDate(LocalDate.now());
         var updatedRecordBook = recordBookRepository.save(recordBook);
         notificationService.notifyCustomerForRecord(recordBook.getId());
         return updatedRecordBook;
     }
+
+    public RecordBook updateRecordBookBefore(Long recordBookId, RecordBookBeforeEditRequest recordBookBeforeEditRequest) {
+        var recordBook = getRecordBookForCustodian(recordBookId);
+        recordBook.setStateBefore(recordBookBeforeEditRequest.stateBefore());
+        var updatedRecordBook = recordBookRepository.save(recordBook);
+        notificationService.notifyCustomerForRecord(recordBook.getId());
+        return updatedRecordBook;
+    }
+
 
     public Page<RecordBook> getAllRecordBooks(Pageable pageable) {
         return recordBookRepository.findAll(pageable);
