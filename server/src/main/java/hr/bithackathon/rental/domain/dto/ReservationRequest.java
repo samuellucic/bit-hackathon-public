@@ -6,13 +6,16 @@ import hr.bithackathon.rental.domain.AppUser;
 import hr.bithackathon.rental.domain.CommunityHomePlan;
 import hr.bithackathon.rental.domain.Reservation;
 import hr.bithackathon.rental.domain.ReservationType;
+import jakarta.annotation.Nullable;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public record ReservationRequest(
 
-    @NotNull
+    @Valid
+    @Nullable
     AppUserRequest user,
 
     @Positive

@@ -1,9 +1,11 @@
 package hr.bithackathon.rental.domain.dto;
 
 import hr.bithackathon.rental.domain.AppUser;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 
 public record AppUserRequest(
 

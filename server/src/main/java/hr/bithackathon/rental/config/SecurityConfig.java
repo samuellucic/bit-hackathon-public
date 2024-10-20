@@ -39,7 +39,7 @@ public class SecurityConfig {
                                              "/action/reservations/view/**",
                                              "/test/mail",
                                              "/action/availability/community-homes/**",
-                                             "/action/occupation/community-homes/",
+                                             "/action/occupation/community-homes/**",
                                              "/community-homes", "/community-homes/**").permitAll()
                             .requestMatchers("/**").authenticated())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
