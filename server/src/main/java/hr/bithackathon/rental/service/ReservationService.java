@@ -111,7 +111,7 @@ public class ReservationService {
                                                                                                   startPadded, endPadded);
 
         reservations.stream()
-                    .filter(r -> this.isTouchingEnds(new TimeRange(r.getDatetimeFrom(), r.getDatetimeTo()), startPadded,
+                    .filter(r -> !this.isTouchingEnds(new TimeRange(r.getDatetimeFrom(), r.getDatetimeTo()), startPadded,
                                                      endPadded))
                     .forEach(r -> {
                         r.setApproved(false);

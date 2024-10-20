@@ -22,7 +22,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query("SELECT r FROM Reservation r " +
         "WHERE r.communityHomePlan.communityHome.id = :communityHomeId " +
-        "AND r.approved = null " +
+        "AND r.approved IS null " +
         "AND ((r.datetimeFrom BETWEEN :start AND :end) OR (r.datetimeTo BETWEEN :start AND :end))")
     List<Reservation> findAllNotApprovedForCommunityHomePlanAndBetween(@Param("communityHomeId") Long communityHomeId,
                                                                        Instant start, Instant end);
