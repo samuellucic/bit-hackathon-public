@@ -7,12 +7,16 @@ import hr.bithackathon.rental.repository.RecordBookRepository;
 import hr.bithackathon.rental.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
+
+    @Value("${email.enabled}")
+    private Boolean enabled;
 
     private final MailService mailService;
     private final SmsService smsService;
@@ -21,6 +25,9 @@ public class NotificationService {
     private final ReservationRepository reservationRepository;
 
     public void notifyMajor(Long contractId) {
+        if (!enabled) {
+            return;
+        }
         var contract = contractRepository.findById(contractId).get();
         var communityHomeLocation = contract.getReservation().getCommunityHomePlan().getCommunityHome().getAddress();
 
@@ -33,6 +40,9 @@ public class NotificationService {
     }
 
     public void notifyCustomerReservationApproval(Long reservationId) {
+        if (!enabled) {
+            return;
+        }
         var reservation = reservationRepository.findById(reservationId).get();
         var text = "Your reservation has been approved for a community home at " + reservation.getCommunityHomePlan().getCommunityHome().getAddress() + ".";
 
@@ -40,6 +50,9 @@ public class NotificationService {
     }
 
     public void notifyCustomerForContract(Long contractId) {
+        if (!enabled) {
+            return;
+        }
         var contract = contractRepository.findById(contractId).get();
         var communityHomeLocation = contract.getReservation().getCommunityHomePlan().getCommunityHome().getAddress();
 
@@ -52,6 +65,9 @@ public class NotificationService {
     }
 
     public void notifyCustomerForRecord(Long recordBookId) {
+        if (!enabled) {
+            return;
+        }
         var recordBook = recordBookRepository.findById(recordBookId).get();
         var communityHomeLocation = recordBook.getContract().getReservation().getCommunityHomePlan().getCommunityHome().getAddress();
 
@@ -64,6 +80,9 @@ public class NotificationService {
     }
 
     public void notifyReservationDeclinedEmail(Long reservationId) {
+        if (!enabled) {
+            return;
+        }
         var reservation = reservationRepository.findById(reservationId).get();
         var communityHomeLocation = reservation.getCommunityHomePlan().getCommunityHome().getAddress();
 
@@ -76,6 +95,9 @@ public class NotificationService {
     }
 
     public void sendUUIDReservationEmail(String email, UUID uuid) {
+        if (!enabled) {
+            return;
+        }
         var customerEmail = "dotne.dotne@gmail.com";
 
         mailService.sendSimpleMessage(customerEmail,
@@ -84,6 +106,9 @@ public class NotificationService {
     }
 
     public void notifyMinistryAndFinances(Long contractId) {
+        if (!enabled) {
+            return;
+        }
         var contract = contractRepository.findById(contractId).get();
         var communityHomeLocation = contract.getReservation().getCommunityHomePlan().getCommunityHome().getAddress();
 

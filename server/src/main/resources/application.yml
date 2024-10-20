@@ -39,6 +39,8 @@ service:
       - FIRE_DEPARTMENT
 sms:
   enabled: false
+email:
+  enabled: false
 ---
 spring:
   config:

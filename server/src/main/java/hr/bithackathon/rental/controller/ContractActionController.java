@@ -1,10 +1,12 @@
 package hr.bithackathon.rental.controller;
 
 import hr.bithackathon.rental.domain.dto.PayContractRequest;
+import hr.bithackathon.rental.domain.dto.RecordBookAddRequest;
 import hr.bithackathon.rental.domain.dto.SignContractRequest;
 import hr.bithackathon.rental.security.AuthoritiesConstants;
 import hr.bithackathon.rental.security.aspect.HasAuthority;
 import hr.bithackathon.rental.service.ContractService;
+import hr.bithackathon.rental.service.RecordBookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ContractActionController {
 
     private final ContractService contractService;
+    private final RecordBookService recordBookService;
 
     @PostMapping("/sign-user")
     @HasAuthority(AuthoritiesConstants.CUSTOMER)
@@ -35,6 +38,9 @@ public class ContractActionController {
     @HasAuthority(AuthoritiesConstants.CUSTOMER)
     public void payContract(@Valid @RequestBody PayContractRequest request) {
         contractService.finalizeContract(request.contractId());
+
+        var recordBookRequest = new RecordBookAddRequest(request.contractId(), null);
+        recordBookService.createRecordBook(recordBookRequest);
     }
 
 }
