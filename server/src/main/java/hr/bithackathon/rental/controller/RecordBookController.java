@@ -1,12 +1,7 @@
 package hr.bithackathon.rental.controller;
 
 import hr.bithackathon.rental.domain.RecordBookStatus;
-import hr.bithackathon.rental.domain.dto.HandleDownPaymentRequest;
-import hr.bithackathon.rental.domain.dto.PaginationResponse;
-import hr.bithackathon.rental.domain.dto.RecordBookAddRequest;
-import hr.bithackathon.rental.domain.dto.RecordBookEditRequest;
-import hr.bithackathon.rental.domain.dto.RecordBookResponse;
-import hr.bithackathon.rental.domain.dto.SignRecordBookRequest;
+import hr.bithackathon.rental.domain.dto.*;
 import hr.bithackathon.rental.security.AuthoritiesConstants;
 import hr.bithackathon.rental.security.SecurityUtils;
 import hr.bithackathon.rental.security.aspect.HasAuthority;
@@ -40,10 +35,16 @@ public class RecordBookController {
         return Util.getCreateResponse(id);
     }
 
-    @PatchMapping(value = "/record-books/{id}")
+    @PatchMapping("/record-books/{id}/before")
     @HasAuthority(AuthoritiesConstants.CUSTODIAN)
-    public RecordBookResponse updateRecordBook(@PathVariable("id") Long id, @Valid @RequestBody RecordBookEditRequest recordBookEditRequest) {
-        return RecordBookResponse.from(recordBookService.updateRecordBook(id, recordBookEditRequest));
+    public RecordBookResponse updateRecordBookBefore(@PathVariable("id") Long id, @Valid @RequestBody RecordBookBeforeEditRequest recordBookBeforeEditRequest) {
+        return RecordBookResponse.from(recordBookService.updateRecordBookBefore(id, recordBookBeforeEditRequest));
+    }
+
+    @PatchMapping(value = "/record-books/{id}/after")
+    @HasAuthority(AuthoritiesConstants.CUSTODIAN)
+    public RecordBookResponse updateRecordBook(@PathVariable("id") Long id, @Valid @RequestBody RecordBookAfterEditRequest recordBookAfterEditRequest) {
+        return RecordBookResponse.from(recordBookService.updateRecordBookAfter(id, recordBookAfterEditRequest));
     }
 
     @GetMapping(value = "/record-books/{id}")
