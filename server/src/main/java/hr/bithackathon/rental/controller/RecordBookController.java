@@ -59,7 +59,6 @@ public class RecordBookController {
     }
 
     @GetMapping(value = "/record-books")
-    @HasAuthority({ AuthoritiesConstants.CUSTODIAN, AuthoritiesConstants.CUSTOMER })
     public PaginationResponse<RecordBookResponse> getAllRecordBooks(
             @RequestParam(value = "status", required = false) RecordBookStatus status,
             Pageable pageable) {
