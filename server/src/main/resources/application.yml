@@ -37,6 +37,8 @@ service:
     freeReservationTypes:
       - FUNERAL
       - FIRE_DEPARTMENT
+sms:
+  enabled: false
 ---
 spring:
   config:

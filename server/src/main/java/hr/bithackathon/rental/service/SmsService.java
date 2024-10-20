@@ -29,7 +29,14 @@ public class SmsService {
     @Value("${sms.recipient}")
     private String recipient;
 
+    @Value("${sms.enabled}")
+    private Boolean enabled;
+
     public void sendSms(String phoneNumber, String text) {
+        if (!enabled) {
+            return;
+        }
+
         var apiClient = ApiClient.forApiKey(ApiKey.from(apiKey)).withBaseUrl(BaseUrl.from(baseUrl)).build();
         var smsApi = new SmsApi(apiClient);
 
