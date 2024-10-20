@@ -160,8 +160,6 @@ public class ContractService {
 
     public void finalizeContract(Long contractId) {
         var contract = getContract(contractId);
-        var loggedInUserId = SecurityUtils.getCurrentUserDetails().getId();
-
         if (contract.getStatus() != ContractStatus.PAYMENT_PENDING) {
             throw new RentalException(ErrorCode.CONTRACT_NOT_SIGNED_BY_CUSTOMER);
         }
