@@ -10,7 +10,6 @@ public record HandleDownPaymentRequest(
     Long recordBookId,
 
     @NotNull
-    @Positive
     Boolean returnDownPayment
 
 ) {
