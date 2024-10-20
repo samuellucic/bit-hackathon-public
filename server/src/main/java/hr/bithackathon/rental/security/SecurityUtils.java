@@ -37,4 +37,8 @@ public class SecurityUtils {
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("CUSTOMER"));
     }
 
+    public static boolean isAdmin() {
+        return hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.ADMIN);
+    }
+
 }

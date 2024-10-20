@@ -21,9 +21,6 @@ public record ReservationRequest(
     @Positive
     Long communityHomeId,
 
-    @Positive
-    Long customerId,
-
     @Size(min = 1, max = 255)
     String reason,
 

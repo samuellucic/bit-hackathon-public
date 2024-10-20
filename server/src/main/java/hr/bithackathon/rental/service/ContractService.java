@@ -10,7 +10,6 @@ import hr.bithackathon.rental.config.FreeReservationConfiguration;
 import hr.bithackathon.rental.domain.Contract;
 import hr.bithackathon.rental.domain.ContractStatus;
 import hr.bithackathon.rental.domain.Reservation;
-import hr.bithackathon.rental.domain.TimeRange;
 import hr.bithackathon.rental.exception.ErrorCode;
 import hr.bithackathon.rental.exception.RentalException;
 import hr.bithackathon.rental.repository.ContractRepository;
@@ -162,9 +161,6 @@ public class ContractService {
     public void finalizeContract(Long contractId) {
         var contract = getContract(contractId);
         var loggedInUserId = SecurityUtils.getCurrentUserDetails().getId();
-        if (contract.getReservation().getCustomer().getId() != loggedInUserId) {
-            throw new RentalException(ErrorCode.UNAUTHORIZED);
-        }
 
         if (contract.getStatus() != ContractStatus.PAYMENT_PENDING) {
             throw new RentalException(ErrorCode.CONTRACT_NOT_SIGNED_BY_CUSTOMER);
