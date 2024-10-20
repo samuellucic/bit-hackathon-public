@@ -91,7 +91,7 @@ public class RecordBookService {
     public void signRecordBook(SignRecordBookRequest signRecordBookRequest) {
         var recordBook = recordBookRepository.findByIdAndCustomerIdAndStatus(signRecordBookRequest.recordBookId(),
                                                                              appUserService.getCurrentAppUser().getId(),
-                                                                             RecordBookStatus.CREATED)
+                                                                             RecordBookStatus.FILLED_AFTER)
                                              .orElseThrow(() -> new RentalException(ErrorCode.RECORD_BOOK_NOT_FOUND));
         recordBook.setStatus(RecordBookStatus.SIGNED);
         recordBookRepository.save(recordBook);
