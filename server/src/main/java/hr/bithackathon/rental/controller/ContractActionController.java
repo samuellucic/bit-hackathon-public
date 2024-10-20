@@ -1,7 +1,6 @@
 package hr.bithackathon.rental.controller;
 
 import hr.bithackathon.rental.config.FreeReservationConfiguration;
-import hr.bithackathon.rental.domain.ReservationType;
 import hr.bithackathon.rental.domain.dto.PayContractRequest;
 import hr.bithackathon.rental.domain.dto.RecordBookAddRequest;
 import hr.bithackathon.rental.domain.dto.SignContractRequest;

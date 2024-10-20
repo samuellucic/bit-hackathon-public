@@ -160,6 +160,11 @@ public class ContractService {
 
     public void finalizeContract(Long contractId) {
         var contract = getContract(contractId);
+
+        if (contract.getStatus() == ContractStatus.FINALIZED) {
+            throw new RentalException(ErrorCode.CONTRACT_ALREADY_FINALIZED);
+        }
+
         if (contract.getStatus() != ContractStatus.PAYMENT_PENDING) {
             throw new RentalException(ErrorCode.CONTRACT_NOT_SIGNED_BY_CUSTOMER);
         }

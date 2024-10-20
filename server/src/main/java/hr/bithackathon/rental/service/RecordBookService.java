@@ -29,8 +29,8 @@ public class RecordBookService {
     private final NotificationService notificationService;
 
     public Long createRecordBook(RecordBookAddRequest recordBookAddRequest) {
-        var contract = contractService.getContractForCustodian(recordBookAddRequest.contractId());
-        var custodian = appUserService.getCurrentAppUser();
+        var contract = contractService.getContract(recordBookAddRequest.contractId());
+        var custodian = contract.getReservation().getCommunityHomePlan().getCommunityHome().getCustodians().get(0);
         var recordBook = RecordBookAddRequest.toRecordBook(recordBookAddRequest, contract, custodian);
         recordBook = recordBookRepository.save(recordBook);
         return recordBook.getId();
