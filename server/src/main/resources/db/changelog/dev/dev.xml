@@ -2,18 +2,61 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
-    <changeSet id="20241019-7-filip-dev"
-               author="fpankretic"
-               context="dev">
-        <loadData tableName="community_home"
-                  file="./db/changelog/data/community_home.csv" />
-        <loadData tableName="community_home_plan"
-                  file="./db/changelog/data/community_home_plan.csv" />
-    </changeSet>
-    <changeSet id="20241019-1-matej-dev"
+<!--    <changeSet id="20241019-7-filip-dev"-->
+<!--               author="fpankretic"-->
+<!--               context="dev">-->
+<!--        <loadData tableName="community_home"-->
+<!--                  file="./db/changelog/data/community_home.csv" />-->
+<!--        <loadData tableName="community_home_plan"-->
+<!--                  file="./db/changelog/data/community_home_plan.csv" />-->
+<!--    </changeSet>-->
+<!--    <changeSet id="20241019-1-matej-dev"-->
+<!--               author="mistuk"-->
+<!--               context="dev">-->
+<!--        <loadData tableName="app_user"-->
+<!--                  file="./db/changelog/data/app_user.csv" />-->
+<!--    </changeSet>-->
+    <changeSet id="20241020-1-matej-dev"
                author="mistuk"
                context="dev">
         <loadData tableName="app_user"
-                  file="./db/changelog/data/app_user.csv" />
+                  file="./db/changelog/data/realistic/app_user.csv" />
     </changeSet>
+    <changeSet id="20241020-2-matej-dev"
+               author="mistuk"
+               context="dev">
+        <loadData tableName="community_home"
+                  file="./db/changelog/data/realistic/community_home.csv" />
+    </changeSet>
+    <changeSet id="20241020-3-matej-dev"
+               author="mistuk"
+               context="dev">
+        <loadData tableName="community_home_plan"
+                  file="./db/changelog/data/realistic/community_home_plan.csv" />
+    </changeSet>
+    <changeSet id="20241020-4-matej-dev"
+               author="mistuk"
+               context="dev">
+        <loadData tableName="custodian_access_community_home"
+                  file="./db/changelog/data/realistic/custodian_access_community_home.csv" />
+    </changeSet>
+    <changeSet id="20241020-5-matej-dev"
+               author="mistuk"
+               context="dev">
+        <loadData tableName="reservation"
+                  file="./db/changelog/data/realistic/reservation.csv" />
+    </changeSet>
+    <changeSet id="20241020-6-matej-dev"
+               author="mistuk"
+               context="dev">
+        <loadData tableName="contract"
+                  file="./db/changelog/data/realistic/contract.csv" />
+    </changeSet>
+<!--    <changeSet id="20241020-7-matej-dev"-->
+<!--               author="mistuk"-->
+<!--               context="dev">-->
+<!--        <loadData tableName="record_book"-->
+<!--                  file="./db/changelog/data/realistic/record_books.csv"/>-->
+<!--    </changeSet>-->
+
 </databaseChangeLog>
