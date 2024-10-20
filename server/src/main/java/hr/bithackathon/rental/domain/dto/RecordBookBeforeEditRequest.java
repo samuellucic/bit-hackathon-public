@@ -2,14 +2,11 @@ package hr.bithackathon.rental.domain.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 
-public record RecordBookEditRequest(
+public record RecordBookBeforeEditRequest(
 
     @NotEmpty
-    String stateAfter,
+    String stateBefore
 
-    @NotEmpty
-    String damage
-    
 ) {
 
 }
