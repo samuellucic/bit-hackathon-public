@@ -15,6 +15,8 @@ export type ReservationType = 'NORMAL' | 'FUNERAL' | 'FIRE_DEPARTMENT' | 'OTHER'
 
 export type ContractStatus = 'CREATED' | 'MAYOR_SIGNED' | 'PAYMENT_PENDING' | 'FINALIZED' | 'DECLINED';
 
+export type RecordBookStatus = 'CREATED' | 'SIGNED' | 'DOWN_PAYMENT_RETURNED' | 'DOWN_PAYMENT_FORFEITED';
+
 export type CreateReservation = {
   communityHomePlanId: number;
   reason: string;

@@ -3,6 +3,7 @@ const reservations = '/reservations';
 const contractAction = `/action/contract`;
 const contracts = '/contracts';
 const communityHomes = '/community-homes';
+const recordBooks = `/record-books`;
 
 const reservationEndpoints = {
   createReservation: reservations,
@@ -20,6 +21,10 @@ const contractsEndpoints = {
   signContractUser: `${contractAction}/sign-user`,
 };
 
+const recordBooksEndpoints = {
+  getRecordBooks: recordBooks,
+};
+
 const communityHomesEndpoints = {
   getCommunityHomes: communityHomes,
 };
@@ -34,6 +39,7 @@ export const endpoints = {
   ...contractsEndpoints,
   ...communityHomesEndpoints,
   ...availabilityEndpoints,
+  ...recordBooksEndpoints,
 } as const;
 
 export type EndpointKey = (typeof endpoints)[keyof typeof endpoints];

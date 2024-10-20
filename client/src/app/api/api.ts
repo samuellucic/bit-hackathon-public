@@ -5,6 +5,7 @@ import {
   LoginResponse,
   Pageable,
   PageResponse,
+  RecordBookStatus,
   ReservationType,
 } from '../types/types';
 import { setItem } from './local-storage';
@@ -135,4 +136,40 @@ export const getOccupation = async (id: number, from: Date, to: Date) => {
     params,
   });
   return res.data;
+};
+
+export type UsernameResponse = {
+  firstName: string;
+  lastName: string;
+};
+
+export type RecordBookResponse = {
+  id: number;
+  contractId: number;
+  custodianId: number;
+  stateBefore: string;
+  stateAfter: string;
+  damage: string;
+  inspectionDate: string;
+  custodian: UsernameResponse;
+  customer: UsernameResponse;
+  reservationStart: string;
+  reservationEnd: string;
+  status: RecordBookStatus;
+  communityHomeName: string;
+};
+
+export const getRecordsBooks = async (pageable: Pageable, status: RecordBookStatus | undefined) => {
+  const params = {
+    ...pageable,
+    status,
+  };
+  const res = await api.get<PageResponse<RecordBookResponse>>(endpoints.getRecordBooks, {
+    params,
+  });
+  return res.data;
+};
+
+export const updateRecordBook = async (attribute: string) => {
+  return api.patch();
 };

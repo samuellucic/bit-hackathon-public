@@ -52,11 +52,15 @@
         <loadData tableName="contract"
                   file="./db/changelog/data/realistic/contract.csv" />
     </changeSet>
-<!--    <changeSet id="20241020-7-matej-dev"-->
-<!--               author="mistuk"-->
-<!--               context="dev">-->
-<!--        <loadData tableName="record_book"-->
-<!--                  file="./db/changelog/data/realistic/record_books.csv"/>-->
-<!--    </changeSet>-->
+    <changeSet id="20241020-7-matej-dev"
+               author="mistuk"
+               context="dev">
+        <loadData tableName="record_book"
+                  file="./db/changelog/data/realistic/record_books.csv">
+            <column name="state_before" type="text"/>
+            <column name="state_after" type="text"/>
+            <column name="damage" type="text"/>
+        </loadData>
+    </changeSet>
 
 </databaseChangeLog>

@@ -37,13 +37,15 @@ public class RecordBookController {
 
     @PatchMapping("/record-books/{id}/before")
     @HasAuthority(AuthoritiesConstants.CUSTODIAN)
-    public RecordBookResponse updateRecordBookBefore(@PathVariable("id") Long id, @Valid @RequestBody RecordBookBeforeEditRequest recordBookBeforeEditRequest) {
+    public RecordBookResponse updateRecordBookBefore(@PathVariable("id") Long id,
+            @Valid @RequestBody RecordBookBeforeEditRequest recordBookBeforeEditRequest) {
         return RecordBookResponse.from(recordBookService.updateRecordBookBefore(id, recordBookBeforeEditRequest));
     }
 
     @PatchMapping(value = "/record-books/{id}/after")
     @HasAuthority(AuthoritiesConstants.CUSTODIAN)
-    public RecordBookResponse updateRecordBook(@PathVariable("id") Long id, @Valid @RequestBody RecordBookAfterEditRequest recordBookAfterEditRequest) {
+    public RecordBookResponse updateRecordBook(@PathVariable("id") Long id,
+            @Valid @RequestBody RecordBookAfterEditRequest recordBookAfterEditRequest) {
         return RecordBookResponse.from(recordBookService.updateRecordBookAfter(id, recordBookAfterEditRequest));
     }
 
@@ -56,21 +58,29 @@ public class RecordBookController {
         }
     }
 
-    @GetMapping(value = "/record-books", params = { "page", "size", "status" })
-    public PaginationResponse<RecordBookResponse> getAllRecordBooks(@RequestParam(value = "status", required = false) RecordBookStatus status,
-                                                                    Pageable pageable) {
+    @GetMapping(value = "/record-books")
+    @HasAuthority({ AuthoritiesConstants.CUSTODIAN, AuthoritiesConstants.CUSTOMER })
+    public PaginationResponse<RecordBookResponse> getAllRecordBooks(
+            @RequestParam(value = "status", required = false) RecordBookStatus status,
+            Pageable pageable) {
         var appUser = SecurityUtils.getCurrentUserDetails();
         if (SecurityUtils.isLoggedInCustomer()) {
             if (status == null) {
-                return PaginationResponse.fromPage(recordBookService.findAllByCustomerId(appUser.getId(), pageable), RecordBookResponse::from);
+                return PaginationResponse.fromPage(recordBookService.findAllByCustomerId(appUser.getId(), pageable),
+                        RecordBookResponse::from);
             } else {
-                return PaginationResponse.fromPage(recordBookService.findAllByCustomerIdAndStatus(appUser.getId(), status, pageable), RecordBookResponse::from);
+                return PaginationResponse.fromPage(
+                        recordBookService.findAllByCustomerIdAndStatus(appUser.getId(), status, pageable),
+                        RecordBookResponse::from);
             }
         }
         if (status == null) {
-            return PaginationResponse.fromPage(recordBookService.findAllByCustodianId(appUser.getId(), pageable), RecordBookResponse::from);
+            return PaginationResponse.fromPage(recordBookService.findAllByCustodianId(appUser.getId(), pageable),
+                    RecordBookResponse::from);
         } else {
-            return PaginationResponse.fromPage(recordBookService.findAllByCustodianIdAndStatus(appUser.getId(), status, pageable), RecordBookResponse::from);
+            return PaginationResponse.fromPage(
+                    recordBookService.findAllByCustodianIdAndStatus(appUser.getId(), status, pageable),
+                    RecordBookResponse::from);
         }
     }
 
