@@ -10,6 +10,7 @@ import {
 import { setItem } from './local-storage';
 import { authorityKey, tokenKey } from '../lib/constants';
 import { endpoints } from './constants';
+import { formatDate } from '@/app/api/utils';
 
 export type Credentials = {
   email: string;
@@ -103,4 +104,35 @@ export const signContractMayor = async (contractId: number) => {
 
 export const signContractUser = async (contractId: number) => {
   return await api.post(endpoints.signContractUser, { contractId });
+};
+
+export type CommunityHomeResponse = {
+  id: number;
+  name: string;
+  address: string;
+  postalCode: string;
+  city: string;
+  area: number;
+  capacity: number;
+};
+
+export const getCommunityHomes = async () => {
+  const res = await api.get<CommunityHomeResponse[]>(endpoints.getCommunityHomes);
+  return res.data;
+};
+
+export type ReservationTimeRange = {
+  start: string;
+  end: string;
+};
+
+export const getOccupation = async (id: number, from: Date, to: Date) => {
+  const params = {
+    from: formatDate(from),
+    to: formatDate(to),
+  };
+  const res = await api.get<ReservationTimeRange[]>(endpoints.getOccupation(id), {
+    params,
+  });
+  return res.data;
 };

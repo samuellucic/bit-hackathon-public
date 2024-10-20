@@ -3,4 +3,5 @@
     width: 100%;
     min-width: 100%;
     overflow-y: auto;
+    padding: 1rem;
 }

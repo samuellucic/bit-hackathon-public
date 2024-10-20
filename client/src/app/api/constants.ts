@@ -2,6 +2,7 @@ const users = '/users';
 const reservations = '/reservations';
 const contractAction = `/action/contract`;
 const contracts = '/contracts';
+const communityHomes = '/community-homes';
 
 const reservationEndpoints = {
   createReservation: reservations,
@@ -19,10 +20,20 @@ const contractsEndpoints = {
   signContractUser: `${contractAction}/sign-user`,
 };
 
+const communityHomesEndpoints = {
+  getCommunityHomes: communityHomes,
+};
+
+const availabilityEndpoints = {
+  getOccupation: (id: number) => `/action/occupation${communityHomes}/${id}`,
+};
+
 export const endpoints = {
   login: '/auth/authenticate',
   ...reservationEndpoints,
   ...contractsEndpoints,
+  ...communityHomesEndpoints,
+  ...availabilityEndpoints,
 } as const;
 
 export type EndpointKey = (typeof endpoints)[keyof typeof endpoints];
