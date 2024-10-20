@@ -80,14 +80,6 @@ public class ContractService {
         return contractRepository.findAllBetweenStartAndEnd(communityHomeId, start, end);
     }
 
-    public List<TimeRange> findAllOccupiedTimeRanges(Long communityHomeId, Instant start, Instant end) {
-        var contracts = contractRepository.findAllBetweenStartAndEnd(communityHomeId, start, end);
-        return contracts.stream()
-                        .map(Contract::getReservation)
-                        .map(reservation -> new TimeRange(reservation.getDatetimeFrom(), reservation.getDatetimeTo()))
-                        .toList();
-    }
-
     // TODO: Later when you are ready to implement this logic, extract to its own service
     public File getContractDocument() {
         var document = resourceLoader.getResource("classpath:template_ugovor.doc");

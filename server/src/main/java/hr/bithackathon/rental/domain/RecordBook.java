@@ -38,7 +38,7 @@ public class RecordBook {
     @JoinColumn(name = "custodian_id")
     private AppUser custodian;
 
-    @Column(nullable = false)
+    @Column
     private String stateBefore;
 
     @Column

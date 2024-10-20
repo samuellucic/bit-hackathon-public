@@ -180,9 +180,7 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="state_before" type="text">
-                <constraints nullable="false"/>
-            </column>
+            <column name="state_before" type="text"/>
             <column name="state_after" type="text"/>
             <column name="damage" type="text"/>
             <column name="inspection_date" type="date"/>
