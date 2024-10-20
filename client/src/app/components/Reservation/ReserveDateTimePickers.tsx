@@ -5,16 +5,19 @@ import { Controller, useForm } from 'react-hook-form';
 import { DatePicker, DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Grid, Button } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ReserveDateTimeData, schema } from '@/app/components/Reservation/helper';
 import { useRouter } from 'next/navigation';
 
 type Props = {
+  onDateOfIssueChange: (date: Date) => void;
+  onTimeFromChange: (date: Date) => void;
+  onTimeToChange: (date: Date) => void;
   id: string;
 };
 
-const ReserveDateTimePickers = ({ id }: Props) => {
+const ReserveDateTimePickers = ({ id, onTimeToChange, onTimeFromChange, onDateOfIssueChange }: Props) => {
   const {
     control,
     handleSubmit,
@@ -51,6 +54,9 @@ const ReserveDateTimePickers = ({ id }: Props) => {
                   label="Početak korištenja"
                   value={field.value ? dayjs(field.value) : null}
                   onChange={(newValue) => {
+                    if (newValue) {
+                      onTimeFromChange(newValue.toDate());
+                    }
                     field.onChange(newValue ? newValue.toDate() : null);
                   }}
                   format="DD/MM/YYYY HH:mm"
@@ -75,6 +81,9 @@ const ReserveDateTimePickers = ({ id }: Props) => {
                   label="Kraj korištenja"
                   value={field.value ? dayjs(field.value) : null}
                   onChange={(newValue) => {
+                    if (newValue) {
+                      onTimeToChange(newValue.toDate());
+                    }
                     field.onChange(newValue ? newValue.toDate() : null);
                   }}
                   format="DD/MM/YYYY HH:mm"
@@ -99,6 +108,9 @@ const ReserveDateTimePickers = ({ id }: Props) => {
                   label="Datum izdavanja"
                   value={field.value ? dayjs(field.value) : null}
                   onChange={(newValue) => {
+                    if (newValue) {
+                      onDateOfIssueChange(newValue.toDate());
+                    }
                     field.onChange(newValue ? newValue.toDate() : null);
                   }}
                   format="DD/MM/YYYY"

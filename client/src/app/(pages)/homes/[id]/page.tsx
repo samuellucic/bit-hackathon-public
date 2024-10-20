@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Container, Typography } from '@mui/material';
 import ReservationCalendar from '@/app/components/Reservation/ReservationsCalendar';
 import ReserveDateTimePickers from '@/app/components/Reservation/ReserveDateTimePickers';
@@ -8,8 +8,10 @@ import { useParams } from 'next/navigation';
 import styles from './page.module.css';
 import { getOccupation, ReservationTimeRange } from '@/app/api/api';
 import { Reservation } from '@/app/components/Reservation/helper';
+import { ReservationContext } from '../../../contexts/ReservationContext';
 
 const CommunityHome = () => {
+  const { setDateOfIssue, setTimeFrom, setTimeTo } = useContext(ReservationContext);
   const [reservations, setReservations] = useState<Reservation[]>([]);
 
   const { id } = useParams();
@@ -40,7 +42,12 @@ const CommunityHome = () => {
       <Typography variant="h4" sx={{ marginBottom: '2rem' }}>
         Detalji društvenog doma
       </Typography>
-      <ReserveDateTimePickers id={usableId} />
+      <ReserveDateTimePickers
+        id={usableId}
+        onTimeToChange={setTimeTo}
+        onTimeFromChange={setTimeFrom}
+        onDateOfIssueChange={setDateOfIssue}
+      />
       <ReservationCalendar reservations={reservations} />
     </Container>
   );
