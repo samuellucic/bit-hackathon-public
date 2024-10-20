@@ -144,7 +144,7 @@ export type UsernameResponse = {
 };
 
 export type RecordBookResponse = {
-  id: number;
+  recordBookId: number;
   contractId: number;
   custodianId: number;
   stateBefore: string;
@@ -170,6 +170,6 @@ export const getRecordsBooks = async (pageable: Pageable, status: RecordBookStat
   return res.data;
 };
 
-export const updateRecordBook = async (attribute: string) => {
-  return api.patch();
+export const updateRecordBook = async (id: number, data: object, type: 'before' | 'after') => {
+  return await api.patch(endpoints.updateRecordBooks(id, type), data);
 };

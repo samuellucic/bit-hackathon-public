@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
   Accordion,
   AccordionDetails,
@@ -12,9 +12,10 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Pageable, RecordBookStatus } from '../../types/types';
-import { getRecordsBooks } from '../../api/api';
+import { getRecordsBooks, updateRecordBook } from '../../api/api';
 import usePaginated from '../../hooks/usePaginated';
 import { defaultPageSize } from '../../lib/constants';
+import { UserContext } from '../../contexts/UserContext';
 
 type RecordBook = {
   id: number;
@@ -25,23 +26,31 @@ type RecordBook = {
   status: RecordBookStatus;
   conditionBefore?: string;
   conditionAfter?: string;
-  communityHomeName: string;
   damage?: string;
+  communityHomeName: string;
 };
 
 type SelectItem = { status: RecordBookStatus | undefined; label: string };
 
 const selectItems: SelectItem[] = [
-  { status: 'CREATED', label: 'Created' },
-  { status: 'DOWN_PAYMENT_FORFEITED', label: 'Down payment forfeited' },
-  { status: 'SIGNED', label: 'Signed' },
-  { status: 'DOWN_PAYMENT_RETURNED', label: 'Down payment returned' },
+  { status: 'CREATED', label: 'Stvoreno' },
+  { status: 'FILLED_BEFORE', label: 'Ispunio korisnik' },
+  { status: 'FILLED_AFTER', label: 'Ispunio domar' },
+  { status: 'SIGNED', label: 'Potpisano' },
+  { status: 'DOWN_PAYMENT_RETURNED', label: 'Jamčevina vraćenja' },
+  { status: 'DOWN_PAYMENT_FORFEITED', label: 'Jamčevina zadržana' },
   { status: undefined, label: 'All' },
 ];
 
 const RecordBooksPage: React.FC = () => {
+  const { authority } = useContext(UserContext);
+
   const [status, setStatus] = useState<RecordBookStatus>();
   const [expanded, setExpanded] = useState<number | false>(false);
+
+  const [conditionBefore, setConditionBefore] = useState<string>();
+  const [conditionAfter, setConditionAfter] = useState<string>();
+  const [damage, setDamage] = useState<string>();
 
   const toggleViewingStatus = useCallback(
     (status: RecordBookStatus | undefined) => {
@@ -56,10 +65,13 @@ const RecordBooksPage: React.FC = () => {
       const { items, ...rest } = await getRecordsBooks(pageable, status);
       return {
         ...rest,
-        items: items.map(({ customer, custodian, ...rest }) => ({
+        items: items.map(({ recordBookId, customer, custodian, stateBefore, stateAfter, ...rest }) => ({
           ...rest,
+          id: recordBookId,
           customerName: `${customer.firstName} ${customer.lastName}`,
           custodianName: `${custodian.firstName} ${custodian.lastName}`,
+          conditionBefore: stateBefore,
+          conditionAfter: stateAfter,
         })),
       };
     },
@@ -68,13 +80,55 @@ const RecordBooksPage: React.FC = () => {
 
   const [recordBooks, getNext, hasMore, refresh] = usePaginated<RecordBook>({ fetch, size: defaultPageSize });
 
+  const onConditionBeforeChange = useCallback((conditionBefore: string) => {
+    setConditionBefore(conditionBefore);
+  }, []);
+  const onConditionAfterChange = useCallback((conditionAfter: string) => {
+    setConditionAfter(conditionAfter);
+  }, []);
+  const onDamageChange = useCallback((damage: string) => {
+    setDamage(damage);
+  }, []);
+
+  const resetFormField = useCallback(() => {
+    setDamage(undefined);
+    setConditionAfter(undefined);
+    setConditionBefore(undefined);
+  }, []);
+
+  const handleBeforeSubmit = useCallback(
+    async (id: number) => {
+      await updateRecordBook(
+        id,
+        {
+          stateBefore: conditionBefore,
+        },
+        'before'
+      );
+      await refresh();
+      resetFormField();
+    },
+    [conditionBefore, refresh, resetFormField]
+  );
+  const handleAfterSubmit = useCallback(
+    async (id: number) => {
+      await updateRecordBook(
+        id,
+        {
+          stateAfter: conditionAfter,
+          damage,
+        },
+        'after'
+      );
+      await refresh();
+      resetFormField();
+    },
+    [conditionAfter, damage, refresh, resetFormField]
+  );
+
   useEffect(() => {
     refresh();
   }, [status]);
-
-  const handleSubmitCondition = useCallback((id: number, field: string) => {
-    console.log(`Submitted ${field} for record book ID: ${id}`);
-  }, []);
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" height="100vh" bgcolor="#f0f0f0">
@@ -107,22 +161,80 @@ const RecordBooksPage: React.FC = () => {
               <Typography variant="body1">
                 <strong>Rezervacija:</strong> {`${recordBook.reservationStart} to ${recordBook.reservationEnd}`}
               </Typography>
-              <TextareaAutosize
-                minRows={4}
-                placeholder="Enter Condition Before"
-                onChange={(e) => handleInputChange(recordBook.id, 'conditionBefore', e.target.value)}
-                style={{
-                  width: '100%',
-                  resize: 'none',
-                  fontSize: '1rem',
-                  padding: '0.5rem',
-                  border: '1px solid #ccc',
-                  borderRadius: '0.25rem',
-                }}
-              />
-              <Button variant="contained" onClick={() => handleSubmitCondition(recordBook.id, 'Condition Before')}>
-                Submit Condition Before
-              </Button>
+              {recordBook.status !== 'CREATED' && (
+                <>
+                  <Typography variant="body1">
+                    <strong>Stanje prije preuzimanja:</strong> {`${recordBook.conditionBefore}`}
+                  </Typography>
+                </>
+              )}
+              {!['CREATED', 'FILLED_BEFORE'].includes(recordBook.status) && (
+                <>
+                  <Typography variant="body1">
+                    <strong>Stanje poslije preuzimanja:</strong> {`${recordBook.conditionBefore}`}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Šteta:</strong> {`${recordBook.damage}`}
+                  </Typography>
+                </>
+              )}
+              {authority !== 'CUSTOMER' && (
+                <>
+                  {recordBook.status === 'FILLED_BEFORE' && (
+                    <>
+                      <TextareaAutosize
+                        minRows={4}
+                        placeholder="Ispunite podatke o stanju poslije preuzimanja"
+                        onChange={(e) => onConditionAfterChange(e.target.value)}
+                        style={{
+                          width: '100%',
+                          resize: 'none',
+                          fontSize: '1rem',
+                          padding: '0.5rem',
+                          border: '1px solid #ccc',
+                          borderRadius: '0.25rem',
+                        }}
+                      />
+                      <TextareaAutosize
+                        minRows={4}
+                        placeholder="Ispunite podatke o potencijalnoj šteti"
+                        onChange={(e) => onDamageChange(e.target.value)}
+                        style={{
+                          width: '100%',
+                          resize: 'none',
+                          fontSize: '1rem',
+                          padding: '0.5rem',
+                          border: '1px solid #ccc',
+                          borderRadius: '0.25rem',
+                        }}
+                      />
+                      <Button variant="contained" onClick={() => handleAfterSubmit(recordBook.id)}>
+                        Prijavi stanje poslije
+                      </Button>
+                    </>
+                  )}
+                </>
+              )}
+              {recordBook.status === 'CREATED' && (
+                <>
+                  <TextareaAutosize
+                    minRows={4}
+                    placeholder="Ispunite podatke o stanju prije preuzimanja"
+                    onChange={(e) => onConditionBeforeChange(e.target.value)}
+                    style={{
+                      width: '100%',
+                      resize: 'none',
+                      fontSize: '1rem',
+                      padding: '0.5rem',
+                      border: '1px solid #ccc',
+                      borderRadius: '0.25rem',
+                    }}
+                  />
+                  <Button variant="contained" onClick={() => handleBeforeSubmit(recordBook.id)}>
+                    Prijavi stanje prije
+                  </Button>
+                </>
+              )}
             </AccordionDetails>
           </Accordion>
         ))}

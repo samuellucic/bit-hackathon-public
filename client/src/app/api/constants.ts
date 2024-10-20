@@ -23,6 +23,7 @@ const contractsEndpoints = {
 
 const recordBooksEndpoints = {
   getRecordBooks: recordBooks,
+  updateRecordBooks: (id: number, type: 'before' | 'after') => `${recordBooks}/${id}/${type}`,
 };
 
 const communityHomesEndpoints = {

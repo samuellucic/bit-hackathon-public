@@ -21,7 +21,7 @@ const AUTHORITY_ROUTES: {
 } = {
   CUSTOMER: [...SHARED_ROUTES],
   OFFICIAL: [...SHARED_ROUTES, ...INTERNAL_ROUTES, /\/reservations-dashboard/],
-  CUSTODIAN: [...SHARED_ROUTES, ...INTERNAL_ROUTES],
+  CUSTODIAN: [...SHARED_ROUTES, ...INTERNAL_ROUTES, /\/record-books-dashboard/],
   MAYOR: [...SHARED_ROUTES, ...INTERNAL_ROUTES, /\/contracts-dashboard/],
 };
 
