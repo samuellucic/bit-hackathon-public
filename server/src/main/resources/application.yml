@@ -57,6 +57,12 @@ spring:
     contexts: dev
   jpa:
     show-sql: true
+  mail:
+    password: "afvf mmqu dczm dwqa"
+sms:
+  api-key: "222c03678abd68df3d599d9dde6487e3-ee722998-de9e-47fe-8e88-49519dd6a7e3"
+  base-url: "https://ejrvdn.api.infobip.com"
+  recipient: "385977791410"
 
 ---
 spring:
