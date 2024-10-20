@@ -43,9 +43,9 @@ export type ReservationResponse = {
   type: ReservationType;
 };
 
-export const getReservations = async (pageable: Pageable) => {
+export const getReservations = async (pageable: Pageable, approved?: boolean) => {
   const res = await api.get<PageResponse<ReservationResponse>>(endpoints.getReservations, {
-    params: pageable,
+    params: { ...pageable, approved },
   });
   return res.data;
 };
@@ -75,7 +75,7 @@ export type ContractResponse = {
   status: ContractStatus;
 };
 
-export const getContracts = async (pageable: Pageable, status: ContractStatus) => {
+export const getContracts = async (pageable: Pageable, status: ContractStatus | undefined) => {
   const params = {
     ...pageable,
     status,
@@ -87,10 +87,13 @@ export const getContracts = async (pageable: Pageable, status: ContractStatus) =
 };
 
 export const getContractDoc = async () => {
-  return await api.get(endpoints.getContractDocument);
+  const res = await api.get(endpoints.getContractDocument, {
+    responseType: 'arraybuffer',
+  });
+  return res.data;
 };
 
-export const payContract = async (contractId: number) => {
+export const payContractUser = async (contractId: number) => {
   return await api.post(endpoints.payContract, { contractId });
 };
 

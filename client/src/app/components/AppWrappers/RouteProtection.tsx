@@ -20,9 +20,9 @@ const AUTHORITY_ROUTES: {
   [key in BasicUser]: RegExp[];
 } = {
   CUSTOMER: [...SHARED_ROUTES],
-  OFFICIAL: [...SHARED_ROUTES, ...INTERNAL_ROUTES],
+  OFFICIAL: [...SHARED_ROUTES, ...INTERNAL_ROUTES, /\/reservations-dashboard/],
   CUSTODIAN: [...SHARED_ROUTES, ...INTERNAL_ROUTES],
-  MAYOR: [...SHARED_ROUTES, ...INTERNAL_ROUTES],
+  MAYOR: [...SHARED_ROUTES, ...INTERNAL_ROUTES, /\/contracts-dashboard/],
 };
 
 const HOME_URL = '/home';

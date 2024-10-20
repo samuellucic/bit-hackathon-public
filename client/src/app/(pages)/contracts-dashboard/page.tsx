@@ -1,12 +1,25 @@
 'use client';
-import React, { useCallback, useMemo, useState } from 'react';
-import { Box, Button, Container, Divider, Paper, Typography } from '@mui/material';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  Typography,
+} from '@mui/material';
 import ScrollBar from '../../components/ScrollBar/ScrollBar';
 import usePaginated from '../../hooks/usePaginated';
 import { defaultPageSize } from '../../lib/constants';
 import { ContractStatus, Pageable } from '../../types/types';
-import { getContracts } from '../../api/api';
+import { getContractDoc, getContracts, payContractUser, signContractMayor, signContractUser } from '../../api/api';
 import styles from './page.module.css';
+import { UserContext } from '../../contexts/UserContext';
 
 type Contract = {
   id: number;
@@ -18,8 +31,23 @@ type Contract = {
   status: ContractStatus;
 };
 
+type SelectItem = {
+  value: ContractStatus;
+  label: string;
+};
+
+const selectItems: SelectItem[] = [
+  { value: 'CREATED', label: 'Created' },
+  { value: 'DECLINED', label: 'Declined' },
+  { value: 'FINALIZED', label: 'Finalized' },
+  { value: 'PAYMENT_PENDING', label: 'Payment pending' },
+  { value: 'MAYOR_SIGNED', label: 'Major signed' },
+];
+
 export default function ContractManagement() {
-  const [status, _] = useState<ContractStatus>('CREATED');
+  const { authority } = useContext(UserContext);
+
+  const [status, setStatus] = useState<ContractStatus>();
   const [selectedContract, setSelectedContract] = useState<Contract>();
 
   const fetch = useCallback(
@@ -41,7 +69,7 @@ export default function ContractManagement() {
     [status]
   );
 
-  const [contracts, getNext, hasMore] = usePaginated<Contract>({ fetch, size: defaultPageSize });
+  const [contracts, getNext, hasMore, refresh] = usePaginated<Contract>({ fetch, size: defaultPageSize });
 
   const handleContractClick = useCallback(
     (contractItem: { id: number; primaryText: string; secondaryText?: string }) => {
@@ -53,9 +81,43 @@ export default function ContractManagement() {
     [contracts]
   );
 
-  const handleDownload = useCallback(() => {
-    alert('Download functionality goes here!');
+  const handleDownload = useCallback(async () => {
+    const doc = await getContractDoc();
+
+    const url = window.URL.createObjectURL(new Blob([doc]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `Document.doc`);
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode!.removeChild(link);
   }, []);
+
+  const handleFilterChange = useCallback((e: SelectChangeEvent) => {
+    setStatus(e.target.value as ContractStatus);
+  }, []);
+
+  const onMayorSign = useCallback(async () => {
+    if (selectedContract) {
+      await signContractMayor(selectedContract?.id);
+    }
+    await refresh();
+    setSelectedContract(undefined);
+  }, [refresh, selectedContract]);
+
+  const onCustomerSign = useCallback(async () => {
+    if (selectedContract) {
+      await signContractUser(selectedContract?.id);
+    }
+    await refresh();
+  }, [refresh, selectedContract]);
+
+  const onCustomerPay = useCallback(async () => {
+    if (selectedContract) {
+      await payContractUser(selectedContract?.id);
+    }
+    await refresh();
+  }, [refresh, selectedContract]);
 
   const contractItems = useMemo(
     () =>
@@ -69,9 +131,21 @@ export default function ContractManagement() {
 
   return (
     <Container className={styles.container}>
-      <Paper elevation={2} sx={{ width: '30%', overflowY: 'auto' }}>
-        <ScrollBar items={contractItems} onItemClick={handleContractClick} onNext={getNext} hasMore={hasMore} />
-      </Paper>
+      <Box sx={{ display: 'flex', flexDirection: 'column', width: '30%' }}>
+        <FormControl sx={{ mb: 2 }}>
+          <InputLabel>Status Filter</InputLabel>
+          <Select value={status} label="Status Filter" onChange={handleFilterChange} variant="outlined">
+            {selectItems.map(({ label, value }) => (
+              <MenuItem key={label} value={value}>
+                {label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Paper elevation={2} sx={{ overflowY: 'auto' }}>
+          <ScrollBar items={contractItems} onItemClick={handleContractClick} onNext={getNext} hasMore={hasMore} />
+        </Paper>
+      </Box>
       <Divider orientation="vertical" flexItem />
       <Box p={2} flex={1}>
         {selectedContract && (
@@ -85,9 +159,28 @@ export default function ContractManagement() {
               <Typography variant="body2">Status: {selectedContract.status}</Typography>
             </Box>
 
-            <Button variant="contained" onClick={handleDownload}>
-              Download Contract
-            </Button>
+            <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+              {authority && ['MAYOR', 'ADMIN'].includes(authority) && selectedContract.status === 'CREATED' && (
+                <Button variant="contained" onClick={onMayorSign}>
+                  Sign contract
+                </Button>
+              )}
+              {authority && ['CUSTOMER', 'ADMIN'].includes(authority) && selectedContract.status === 'MAYOR_SIGNED' && (
+                <Button variant="contained" onClick={onCustomerSign}>
+                  Sign contract
+                </Button>
+              )}
+              {authority &&
+                ['CUSTOMER', 'ADMIN'].includes(authority) &&
+                selectedContract.status === 'PAYMENT_PENDING' && (
+                  <Button variant="contained" onClick={onCustomerPay}>
+                    Pay
+                  </Button>
+                )}
+              <Button variant="contained" onClick={handleDownload}>
+                Download Contract
+              </Button>
+            </Box>
           </Box>
         )}
       </Box>
