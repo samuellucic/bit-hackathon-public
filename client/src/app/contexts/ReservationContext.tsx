@@ -12,9 +12,9 @@ export type ReservationContextType = {
 };
 
 export const ReservationContext = createContext<ReservationContextType>({
-  dateOfIssue: new Date(0),
-  timeFrom: new Date(0),
-  timeTo: new Date(0),
+  dateOfIssue: new Date(2024, 10, 10),
+  timeFrom: new Date(2024, 10, 23),
+  timeTo: new Date(2024, 10, 25),
   setDateOfIssue: () => {},
   setTimeFrom: () => {},
   setTimeTo: () => {},
@@ -25,9 +25,9 @@ type Props = {
 };
 
 export const ReservationContextProvider = ({ children }: Props) => {
-  const [dateOfIssue, setDateOfIssue] = useState<Date>(new Date(0));
-  const [timeFrom, setTimeFrom] = useState<Date>(new Date(0));
-  const [timeTo, setTimeTo] = useState<Date>(new Date(0));
+  const [dateOfIssue, setDateOfIssue] = useState<Date>(new Date(2024, 10, 10));
+  const [timeFrom, setTimeFrom] = useState<Date>(new Date(2024, 10, 23));
+  const [timeTo, setTimeTo] = useState<Date>(new Date(2024, 10, 25));
 
   return (
     <ReservationContext.Provider

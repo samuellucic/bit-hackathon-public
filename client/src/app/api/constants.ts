@@ -35,6 +35,7 @@ const communityHomesEndpoints = {
 
 const availabilityEndpoints = {
   getOccupation: (id: number) => `/action/occupation${communityHomes}/${id}`,
+  checkAvailability: (id: number) => `/action/availability${communityHomes}/${id}`,
 };
 
 export const endpoints = {

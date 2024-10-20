@@ -1,13 +1,13 @@
 package hr.bithackathon.rental.service;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.util.List;
-
 import hr.bithackathon.rental.domain.Contract;
 import hr.bithackathon.rental.domain.TimeRange;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +34,7 @@ public class AvailabilityService {
         var numOfOverlappingContracts = contracts.stream()
                                                  .map(Contract::getReservation)
                                                  .map(reservation -> new TimeRange(reservation.getDatetimeFrom(), reservation.getDatetimeTo()))
-                                                 .filter(timeRange -> this.isTouchingEnds(timeRange, startPadded, endPadded)).count();
+                                                 .filter(timeRange -> !this.isTouchingEnds(timeRange, startPadded, endPadded)).count();
 
         return numOfOverlappingContracts == 0;
     }

@@ -174,6 +174,17 @@ export const updateRecordBook = async (id: number, data: object, type: 'before' 
   return await api.patch(endpoints.updateRecordBooks(id, type), data);
 };
 
+export const checkAvailability = async (id: number, from: Date, to: Date) => {
+  const params = {
+    from: formatDate(from),
+    to: formatDate(to),
+  };
+  const res = await api.get<boolean>(endpoints.checkAvailability(id), {
+    params,
+  });
+  return res.data;
+};
+
 export const signRecordBook = async (id: number) => {
   return await api.post(endpoints.signRecordBook, {
     recordBookId: id,

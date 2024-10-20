@@ -23,13 +23,27 @@ export type RecordBookStatus =
   | 'DOWN_PAYMENT_RETURNED'
   | 'DOWN_PAYMENT_FORFEITED';
 
+export type UserReservation = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  OIB: string;
+  phone: string;
+  city: string;
+  address: string;
+  postalCode: string;
+};
+
 export type CreateReservation = {
-  communityHomePlanId: number;
+  // treba dodati optional AppUserRequest parametar u slucaju da user nije ulogiran
+  user?: UserReservation;
+  communityHomeId: number;
   reason: string;
   datetimeFrom: string;
   datetimeTo: string;
-  bank: string;
-  iban: string;
+  bank?: string;
+  iban?: string;
   type: ReservationType;
 };
 

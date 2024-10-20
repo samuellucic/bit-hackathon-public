@@ -9,6 +9,7 @@ import { Button, Grid } from '@mui/material';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ReserveDateTimeData, schema } from '@/app/components/Reservation/helper';
 import { useRouter } from 'next/navigation';
+import { checkAvailability } from '../../api/api';
 
 type Props = {
   onDateOfIssueChange: (date: Date) => void;
@@ -33,13 +34,17 @@ const ReserveDateTimePickers = ({ id, onTimeToChange, onTimeFromChange, onDateOf
 
   const router = useRouter();
 
-  const onSubmit = useCallback((data: ReserveDateTimeData) => {
-    console.log(data);
-    // add validation if selected date is available
-    if (true) {
-      router.push(`/homes/${id}/reserve`);
-    }
-  }, []);
+  const onSubmit = useCallback(
+    async (data: ReserveDateTimeData) => {
+      console.log(data);
+      // add validation if selected date is available
+
+      if (await checkAvailability(+id, data.timeFrom, data.timeTo)) {
+        router.push(`/homes/${id}/reserve`);
+      }
+    },
+    [id, router]
+  );
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
