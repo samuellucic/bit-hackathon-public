@@ -11,6 +11,7 @@ import lombok.Builder;
 public record RecordBookResponse(
     Long contractId,
     Long custodianId,
+    Long recordBookId,
     String stateBefore,
     String stateAfter,
     String damage,
@@ -26,6 +27,7 @@ public record RecordBookResponse(
     public static RecordBookResponse from(RecordBook recordBook) {
         var customer = recordBook.getContract().getReservation().getCustomer();
         return RecordBookResponse.builder()
+                                 .recordBookId(recordBook.getId())
                                  .contractId(recordBook.getContract().getId())
                                  .custodianId(recordBook.getCustodian().getId())
                                  .stateBefore(recordBook.getStateBefore())
