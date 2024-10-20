@@ -9,7 +9,7 @@ spring:
     enabled: true
     contexts: dev
   datasource:
-    url: jdbc:postgresql://localhost:5432/bit
+    url: jdbc:postgresql://192.168.1.120:5432/bit
     username: bituser
     password: bituser
   jpa:
@@ -39,6 +39,11 @@ service:
       - FIRE_DEPARTMENT
 email:
   enabled: false
+
+sms:
+  api-key: ${SMS_API_KEY:123}
+  base-url: ${SMS_BASE_URL:123}
+  recipient: ${SMS_RECIPIENT:123}
 ---
 spring:
   config:
@@ -57,7 +62,6 @@ spring:
     contexts: dev
   jpa:
     show-sql: true
-
 ---
 spring:
   config:
@@ -67,7 +71,6 @@ spring:
     contexts: dev
   jpa:
     show-sql: true
-
 ---
 spring:
   config:

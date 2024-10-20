@@ -68,8 +68,8 @@ public class RecordBookService {
     }
 
 
-    public Page<RecordBook> getAllRecordBooks(Pageable pageable) {
-        return recordBookRepository.findAll(pageable);
+    public Page<RecordBook> getAllRecordBooks(RecordBookStatus status, Pageable pageable) {
+        return recordBookRepository.findAllByStatus(status, pageable);
     }
 
     public Page<RecordBook> findAllByCustomerId(Long customerId, Pageable pageable) {

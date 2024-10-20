@@ -86,7 +86,7 @@ public class RecordBookController {
                         RecordBookResponse::from);
             }
         }
-        return PaginationResponse.fromPage(recordBookService.getAllRecordBooks(pageable), RecordBookResponse::from);
+        return PaginationResponse.fromPage(recordBookService.getAllRecordBooks(status, pageable), RecordBookResponse::from);
     }
 
     @PostMapping("/action/record-books/sign")
