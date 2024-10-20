@@ -15,27 +15,67 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 type RecordBook = {
   id: number;
   date: string;
-  customerName: string;
+  custodianFirstName: string;
+  custodianLastName: string;
+  customerFirstName: string;
+  customerLastName: string;
+  communityHomeName: string;
+  reservationStart: string;
+  reservationEnd: string;
   status: 'upcoming' | 'completed';
   conditionBefore?: string;
   conditionAfter?: string;
 };
 
 const recordBooksData: RecordBook[] = [
-  { id: 1, date: '2024-10-20', customerName: 'John Doe', status: 'upcoming' },
+  {
+    id: 1,
+    date: '2024-10-20',
+    custodianFirstName: 'Michael',
+    custodianLastName: 'Johnson',
+    customerFirstName: 'John',
+    customerLastName: 'Doe',
+    communityHomeName: 'Sunrise Villas',
+    reservationStart: '2024-10-20',
+    reservationEnd: '2024-10-21',
+    status: 'upcoming',
+  },
   {
     id: 2,
     date: '2024-10-21',
-    customerName: 'Jane Smith',
+    custodianFirstName: 'Sarah',
+    custodianLastName: 'Williams',
+    customerFirstName: 'Jane',
+    customerLastName: 'Smith',
+    communityHomeName: 'Oceanview Estates',
+    reservationStart: '2024-10-21',
+    reservationEnd: '2024-10-22',
     status: 'completed',
     conditionBefore: 'Some wear and tear.',
     conditionAfter: 'Clean and tidy.',
   },
-  { id: 3, date: '2024-10-22', customerName: 'Alice Johnson', status: 'upcoming' },
+  {
+    id: 3,
+    date: '2024-10-22',
+    custodianFirstName: 'James',
+    custodianLastName: 'Brown',
+    customerFirstName: 'Alice',
+    customerLastName: 'Johnson',
+    communityHomeName: 'Lakeside Retreat',
+    reservationStart: '2024-10-22',
+    reservationEnd: '2024-10-23',
+    status: 'upcoming',
+  },
   {
     id: 4,
     date: '2024-10-23',
-    customerName: 'Bob Brown',
+    custodianFirstName: 'Emma',
+    custodianLastName: 'Davis',
+    customerFirstName: 'Bob',
+    customerLastName: 'Brown',
+    communityHomeName: 'Mountainview Lodge',
+    reservationStart: '2024-10-23',
+    reservationEnd: '2024-10-24',
     status: 'completed',
     conditionBefore: 'Very clean.',
     conditionAfter: 'Left it in great shape.',
@@ -106,9 +146,20 @@ const RecordBooksPage: React.FC = () => {
                 expanded={expanded === recordBook.id}
                 onChange={() => setExpanded(expanded === recordBook.id ? false : recordBook.id)}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography>{`${recordBook.date} - ${recordBook.customerName} (${recordBook.status})`}</Typography>
+                  <Typography>
+                    {`${recordBook.date} - ${recordBook.customerFirstName} ${recordBook.customerLastName} (${recordBook.status})`}
+                  </Typography>
                 </AccordionSummary>
                 <AccordionDetails style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <Typography variant="body1">
+                    <strong>Community Home:</strong> {recordBook.communityHomeName}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Custodian:</strong> {`${recordBook.custodianFirstName} ${recordBook.custodianLastName}`}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Reservation:</strong> {`${recordBook.reservationStart} to ${recordBook.reservationEnd}`}
+                  </Typography>
                   <TextareaAutosize
                     minRows={4}
                     placeholder="Enter Condition Before"
@@ -134,9 +185,20 @@ const RecordBooksPage: React.FC = () => {
                 expanded={expanded === recordBook.id}
                 onChange={() => setExpanded(expanded === recordBook.id ? false : recordBook.id)}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography>{`${recordBook.date} - ${recordBook.customerName} (${recordBook.status})`}</Typography>
+                  <Typography>
+                    {`${recordBook.date} - ${recordBook.customerFirstName} ${recordBook.customerLastName} (${recordBook.status})`}
+                  </Typography>
                 </AccordionSummary>
                 <AccordionDetails style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <Typography variant="body1">
+                    <strong>Community Home:</strong> {recordBook.communityHomeName}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Custodian:</strong> {`${recordBook.custodianFirstName} ${recordBook.custodianLastName}`}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Reservation:</strong> {`${recordBook.reservationStart} to ${recordBook.reservationEnd}`}
+                  </Typography>
                   <Typography variant="body1">
                     <strong>Condition Before:</strong> {recordBook.conditionBefore}
                   </Typography>
