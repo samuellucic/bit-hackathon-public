@@ -50,15 +50,18 @@ public class RecordBookController {
     }
 
     @GetMapping(value = "/record-books/{id}")
+    @HasAuthority({ AuthoritiesConstants.CUSTODIAN, AuthoritiesConstants.CUSTOMER, AuthoritiesConstants.OFFICIAL })
     public RecordBookResponse getRecordBook(@PathVariable("id") Long id) {
         if (SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.CUSTODIAN)) {
             return RecordBookResponse.from(recordBookService.getRecordBookForCustodian(id));
-        } else {
+        } else if (SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.CUSTODIAN)) {
             return RecordBookResponse.from(recordBookService.getRecordBookForCustomer(id));
         }
+        return RecordBookResponse.from(recordBookService.getRecordBook(id));
     }
 
     @GetMapping(value = "/record-books")
+    @HasAuthority({ AuthoritiesConstants.CUSTODIAN, AuthoritiesConstants.CUSTOMER, AuthoritiesConstants.OFFICIAL })
     public PaginationResponse<RecordBookResponse> getAllRecordBooks(
             @RequestParam(value = "status", required = false) RecordBookStatus status,
             Pageable pageable) {
@@ -73,14 +76,17 @@ public class RecordBookController {
                         RecordBookResponse::from);
             }
         }
-        if (status == null) {
-            return PaginationResponse.fromPage(recordBookService.findAllByCustodianId(appUser.getId(), pageable),
-                    RecordBookResponse::from);
-        } else {
-            return PaginationResponse.fromPage(
-                    recordBookService.findAllByCustodianIdAndStatus(appUser.getId(), status, pageable),
-                    RecordBookResponse::from);
+        if (SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.CUSTODIAN)) {
+            if (status == null) {
+                return PaginationResponse.fromPage(recordBookService.findAllByCustodianId(appUser.getId(), pageable),
+                        RecordBookResponse::from);
+            } else {
+                return PaginationResponse.fromPage(
+                        recordBookService.findAllByCustodianIdAndStatus(appUser.getId(), status, pageable),
+                        RecordBookResponse::from);
+            }
         }
+        return PaginationResponse.fromPage(recordBookService.getAllRecordBooks(pageable), RecordBookResponse::from);
     }
 
     @PostMapping("/action/record-books/sign")
