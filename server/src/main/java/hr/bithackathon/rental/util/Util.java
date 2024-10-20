@@ -19,4 +19,10 @@ public class Util {
         return ResponseEntity.created(Util.getCreateURI(id)).build();
     }
 
+    public static void runAsync(boolean enabled, Runnable runnable) {
+        if (enabled) {
+            Thread.startVirtualThread(runnable);
+        }
+    }
+
 }

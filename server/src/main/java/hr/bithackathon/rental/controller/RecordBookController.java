@@ -1,5 +1,6 @@
 package hr.bithackathon.rental.controller;
 
+import hr.bithackathon.rental.domain.RecordBookStatus;
 import hr.bithackathon.rental.domain.dto.HandleDownPaymentRequest;
 import hr.bithackathon.rental.domain.dto.PaginationResponse;
 import hr.bithackathon.rental.domain.dto.RecordBookAddRequest;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,24 +42,37 @@ public class RecordBookController {
 
     @PatchMapping(value = "/record-books/{id}")
     @HasAuthority(AuthoritiesConstants.CUSTODIAN)
-    public RecordBookResponse updateRecordBook(@PathVariable("id") Long id, @Valid  @RequestBody RecordBookEditRequest recordBookEditRequest) {
-        return RecordBookResponse.fromRecordBook(recordBookService.updateRecordBook(id, recordBookEditRequest));
+    public RecordBookResponse updateRecordBook(@PathVariable("id") Long id, @Valid @RequestBody RecordBookEditRequest recordBookEditRequest) {
+        return RecordBookResponse.from(recordBookService.updateRecordBook(id, recordBookEditRequest));
     }
 
     @GetMapping(value = "/record-books/{id}")
     @HasAuthority({ AuthoritiesConstants.CUSTODIAN, AuthoritiesConstants.CUSTOMER })
     public RecordBookResponse getRecordBook(@PathVariable("id") Long id) {
         if (SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.CUSTODIAN)) {
-            return RecordBookResponse.fromRecordBook(recordBookService.getRecordBookForCustodian(id));
+            return RecordBookResponse.from(recordBookService.getRecordBookForCustodian(id));
         } else {
-            return RecordBookResponse.fromRecordBook(recordBookService.getRecordBookForCustomer(id));
+            return RecordBookResponse.from(recordBookService.getRecordBookForCustomer(id));
         }
     }
 
-    @GetMapping(value = "/record-books", params = { "page", "size" })
-    @HasAuthority(AuthoritiesConstants.CUSTODIAN)
-    public PaginationResponse<RecordBookResponse> getAllRecordBooks(Pageable pageable) {
-        return PaginationResponse.fromPage(recordBookService.getAllRecordBooks(pageable), RecordBookResponse::fromRecordBook);
+    @GetMapping(value = "/record-books", params = { "page", "size", "status" })
+    @HasAuthority({ AuthoritiesConstants.CUSTODIAN, AuthoritiesConstants.CUSTOMER })
+    public PaginationResponse<RecordBookResponse> getAllRecordBooks(@RequestParam(value = "status", required = false) RecordBookStatus status,
+                                                                    Pageable pageable) {
+        var appUser = SecurityUtils.getCurrentUserDetails();
+        if (SecurityUtils.isLoggedInCustomer()) {
+            if (status == null) {
+                return PaginationResponse.fromPage(recordBookService.findAllByCustomerId(appUser.getId(), pageable), RecordBookResponse::from);
+            } else {
+                return PaginationResponse.fromPage(recordBookService.findAllByCustomerIdAndStatus(appUser.getId(), status, pageable), RecordBookResponse::from);
+            }
+        }
+        if (status == null) {
+            return PaginationResponse.fromPage(recordBookService.findAllByCustodianId(appUser.getId(), pageable), RecordBookResponse::from);
+        } else {
+            return PaginationResponse.fromPage(recordBookService.findAllByCustodianIdAndStatus(appUser.getId(), status, pageable), RecordBookResponse::from);
+        }
     }
 
     @PostMapping("/action/record-books/sign")

@@ -23,4 +23,12 @@ public interface RecordBookRepository extends JpaRepository<RecordBook, Long> {
 
     Page<RecordBook> findAllByCustodianId(Long custodianId, Pageable pageable);
 
+    Page<RecordBook> findAllByCustodianIdAndStatus(Long custodianId, RecordBookStatus status, Pageable pageable);
+
+    @Query("SELECT r FROM RecordBook r WHERE r.contract.reservation.customer.id = :customerId")
+    Page<RecordBook> findAllByCustomerId(Long customerId, Pageable pageable);
+
+    @Query("SELECT r FROM RecordBook r WHERE r.contract.reservation.customer.id = :customerId AND r.status = :status")
+    Page<RecordBook> findAllByCustomerIdAndStatus(Long customerId, RecordBookStatus status, Pageable pageable);
+
 }

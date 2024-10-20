@@ -37,8 +37,6 @@ service:
     freeReservationTypes:
       - FUNERAL
       - FIRE_DEPARTMENT
-sms:
-  enabled: false
 email:
   enabled: false
 ---

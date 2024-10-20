@@ -64,8 +64,20 @@ public class RecordBookService {
         return recordBookRepository.findAll(pageable);
     }
 
-    public Page<RecordBook> getAllRecordBooksByCustodian(Pageable pageable) {
-        return recordBookRepository.findAllByCustodianId(appUserService.getCurrentAppUser().getId(), pageable);
+    public Page<RecordBook> findAllByCustomerId(Long customerId, Pageable pageable) {
+        return recordBookRepository.findAllByCustomerId(customerId, pageable);
+    }
+
+    public Page<RecordBook> findAllByCustomerIdAndStatus(Long customerId, RecordBookStatus status, Pageable pageable) {
+        return recordBookRepository.findAllByCustomerIdAndStatus(customerId, status, pageable);
+    }
+
+    public Page<RecordBook> findAllByCustodianId(Long custodianId, Pageable pageable) {
+        return recordBookRepository.findAllByCustodianId(custodianId, pageable);
+    }
+
+    public Page<RecordBook> findAllByCustodianIdAndStatus(Long custodianId, RecordBookStatus status, Pageable pageable) {
+        return recordBookRepository.findAllByCustodianIdAndStatus(custodianId, status, pageable);
     }
 
     public void signRecordBook(SignRecordBookRequest signRecordBookRequest) {
