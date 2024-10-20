@@ -173,3 +173,16 @@ export const getRecordsBooks = async (pageable: Pageable, status: RecordBookStat
 export const updateRecordBook = async (id: number, data: object, type: 'before' | 'after') => {
   return await api.patch(endpoints.updateRecordBooks(id, type), data);
 };
+
+export const signRecordBook = async (id: number) => {
+  return await api.post(endpoints.signRecordBook, {
+    recordBookId: id,
+  });
+};
+
+export const downPaymentRecordBook = async (id: number, returnDownPayment: boolean) => {
+  return await api.post(endpoints.downPaymentRecordBook, {
+    recordBookId: id,
+    returnDownPayment,
+  });
+};

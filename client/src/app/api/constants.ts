@@ -4,6 +4,7 @@ const contractAction = `/action/contract`;
 const contracts = '/contracts';
 const communityHomes = '/community-homes';
 const recordBooks = `/record-books`;
+const recordBookAction = `/action/record-books`;
 
 const reservationEndpoints = {
   createReservation: reservations,
@@ -24,6 +25,8 @@ const contractsEndpoints = {
 const recordBooksEndpoints = {
   getRecordBooks: recordBooks,
   updateRecordBooks: (id: number, type: 'before' | 'after') => `${recordBooks}/${id}/${type}`,
+  signRecordBook: `${recordBookAction}/sign`,
+  downPaymentRecordBook: `${recordBookAction}/down-payment`,
 };
 
 const communityHomesEndpoints = {

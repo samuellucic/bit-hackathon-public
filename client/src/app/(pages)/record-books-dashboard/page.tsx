@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Pageable, RecordBookStatus } from '../../types/types';
-import { getRecordsBooks, updateRecordBook } from '../../api/api';
+import { downPaymentRecordBook, getRecordsBooks, signRecordBook, updateRecordBook } from '../../api/api';
 import usePaginated from '../../hooks/usePaginated';
 import { defaultPageSize } from '../../lib/constants';
 import { UserContext } from '../../contexts/UserContext';
@@ -125,6 +125,23 @@ const RecordBooksPage: React.FC = () => {
     },
     [conditionAfter, damage, refresh, resetFormField]
   );
+  const handleSignRecordBook = useCallback(
+    async (id: number) => {
+      await signRecordBook(id);
+      await refresh();
+      resetFormField();
+    },
+    [refresh, resetFormField]
+  );
+
+  const handleReturnDownPayment = useCallback(
+    async (id: number, returned: boolean) => {
+      await downPaymentRecordBook(id, returned);
+      await refresh();
+      resetFormField();
+    },
+    [refresh, resetFormField]
+  );
 
   useEffect(() => {
     refresh();
@@ -234,6 +251,21 @@ const RecordBooksPage: React.FC = () => {
                     Prijavi stanje prije
                   </Button>
                 </>
+              )}
+              {authority === 'CUSTOMER' && recordBook.status === 'FILLED_AFTER' && (
+                <Button variant="contained" onClick={() => handleSignRecordBook(recordBook.id)}>
+                  Potpiši zapisnik
+                </Button>
+              )}
+              {authority === 'OFFICIAL' && recordBook.status === 'SIGNED' && (
+                <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+                  <Button variant="contained" onClick={() => handleReturnDownPayment(recordBook.id, true)}>
+                    Vrati jamčevinu
+                  </Button>
+                  <Button variant="contained" onClick={() => handleReturnDownPayment(recordBook.id, false)}>
+                    Zadrži jamčevinu
+                  </Button>
+                </Box>
               )}
             </AccordionDetails>
           </Accordion>

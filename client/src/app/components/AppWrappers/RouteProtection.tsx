@@ -13,7 +13,7 @@ type BasicUser = Exclude<Authority, 'ADMIN'>;
 
 const AUTH_ROUTES = [/\/login/];
 const NO_AUTH_ROUTES = [/\/home/, /\/homes/];
-const SHARED_ROUTES: RegExp[] = [];
+const SHARED_ROUTES: RegExp[] = [/\/record-books-dashboard/];
 const INTERNAL_ROUTES: RegExp[] = [];
 
 const AUTHORITY_ROUTES: {
@@ -21,7 +21,7 @@ const AUTHORITY_ROUTES: {
 } = {
   CUSTOMER: [...SHARED_ROUTES],
   OFFICIAL: [...SHARED_ROUTES, ...INTERNAL_ROUTES, /\/reservations-dashboard/],
-  CUSTODIAN: [...SHARED_ROUTES, ...INTERNAL_ROUTES, /\/record-books-dashboard/],
+  CUSTODIAN: [...SHARED_ROUTES, ...INTERNAL_ROUTES],
   MAYOR: [...SHARED_ROUTES, ...INTERNAL_ROUTES, /\/contracts-dashboard/],
 };
 
