@@ -1,13 +1,15 @@
-# Backend Application
+# Hackathon
 
 Ovo je naš jako kul B:IT.hack projekt. :) 
 
-## Pokretanje backenda
-potrebno je napraviti:
-`mvn clean install`
+## Pokretanje
 
-pokrenuti bazu:
-`docker run --name bithack -e POSTGRES_PASSWORD=bituser -e POSTGRES_USER=bituser -e POSTGRES_DB=bit -p 5432:5432 -d postgres`
+`docker-compose up --build -d`
 
-pokrenuti aplikaciju (najakse preko Intellij-a)
-
+Potrebno je i postaviti varijable okoline u `.env`:
+```
+SMS_API_KEY=
+SMS_BASE_URL=
+SMS_RECIPIENT=
+SPRING_MAIL_PASSWORD=
+```

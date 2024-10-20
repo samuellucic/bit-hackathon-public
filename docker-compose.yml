@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: bituser
+      POSTGRES_USER: bituser
+      POSTGRES_DB: bit
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    command: ["./mvnw", "spring-boot:run"]
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/bit
+      SPRING_DATASOURCE_USERNAME: bituser
+      SPRING_DATASOURCE_PASSWORD: bituser
+      SMS_API_KEY: "${SMS_API_KEY}"
+      SMS_BASE_URL: "${SMS_BASE_URL}"
+      SMS_RECIPIENT: "${SMS_RECIPIENT}"
+      SPRING_MAIL_PASSWORD: "${SPRING_MAIL_PASSWORD}"
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    command: ["npm", "run", "dev"]
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080
+
